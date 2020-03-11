@@ -57,17 +57,4 @@ fun <T> Collection<T>.filterBasedOnNeighborsCyclic(
     }
 }
 
-fun <T> filterBasedOnNeighborsCyclicTEST(
-    test: Collection<T>,
-    predicate: (T, T, T) -> Boolean
-): Collection<T> {
-    return test.filterIndexed { i, v ->
-        when {
-            i == 0 && test.size <= 1 -> predicate(v, v, v)
-            i == 0 -> predicate(test.last(), v, test.elementAt(i + 1))
-            i == test.size - 1 -> predicate(test.elementAt(i - 1), v, test.first())
-            else -> predicate(test.elementAt(i - 1), v, test.elementAt(i + 1))
-        }
-    }
-}
 

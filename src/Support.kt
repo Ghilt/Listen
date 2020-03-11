@@ -11,6 +11,20 @@ operator fun Number.plus(v: Int): Number {
     }
 }
 
+operator fun Number.times(v: Number): Number {
+    /*care*/
+    return when (this) {
+        is Byte -> this.toByte() * v.toByte()
+        is Int -> this.toInt() * v.toInt()
+        is Double -> this.toDouble() * v.toDouble()
+        is Long -> this.toLong() * v.toLong()
+        is Float -> this.toFloat() * v.toFloat()
+        is Short -> this.toShort() * v.toShort()
+        else -> this
+    }
+}
+
+
 fun <Receiver, A, B, C, D> bindArgs(f: Receiver.(A, B, C) -> D, a: A, b: B): Receiver.(C) -> D {
     return { c: C -> f(a, b, c) }
 }

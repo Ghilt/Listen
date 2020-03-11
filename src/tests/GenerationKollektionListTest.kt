@@ -3,6 +3,7 @@ package tests
 import extendEntries
 import growEntries
 import growEntriesBothDirections
+import growFractal
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -71,5 +72,17 @@ internal class GenerationKollektionListTest {
     fun `growEntriesBothDirections with different lengths ascending and descending`() {
         val result = listOf(10000, 10).growEntriesBothDirections(5, 1, 2)
         assertEquals(listOf(9990, 9992, 9994, 9996, 9998, 10000, 10002, 0, 2, 4, 6, 8, 10, 12), result)
+    }
+
+    @Test
+    fun `growFractal on int`() {
+        val result = listOf(1, 2, 1).growFractal(1)
+        assertEquals(listOf(1, 2, 1, 2, 4, 2, 1, 2, 1), result)
+    }
+
+    @Test
+    fun `growFractal on double`() {
+        val result = listOf(0.9, 1.5, 0.9).growFractal(1)
+        assertEquals(listOf(0.81, 1.35, 0.81, 1.35, 2.25, 1.35, 0.81, 1.35, 0.81), result)
     }
 }

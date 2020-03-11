@@ -43,5 +43,10 @@ fun String.growEntriesBothDirections(
     step: Int = 1
 ): String = growEntriesBothDirections(length, length, step)
 
+fun List<Number>.growFractal(
+    steps: Int = 1
+): List<Number> = if (steps == 0) this else flatMap { x -> List(size) { i -> (x * this[i]) } }.growFractal(steps - 1)
+
+
 
 
