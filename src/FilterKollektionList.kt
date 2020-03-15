@@ -1,3 +1,17 @@
+fun <T> Collection<T>.filterSectioned(predicate: (T) -> Boolean) : List<List<T>> {
+    var newSection = true
+    return fold(mutableListOf<MutableList<T>>()) { acc, v ->
+        if (newSection && predicate(v)) {
+            acc.add(mutableListOf(v))
+            newSection = false
+        } else if (predicate(v)) {
+            acc.last().add(v)
+        } else {
+            newSection = true
+        }
+        acc
+    }
+}
 fun <T> Collection<T>.filterWithNeighbors(
     neighborhoodSizeLeft: Int,
     neighborhoodSizeRight: Int,

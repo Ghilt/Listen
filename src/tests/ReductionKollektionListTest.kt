@@ -4,8 +4,24 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reduceBasedOnNeighbors
 import reduceBasedOnNeighborsCyclic
+import reduceConsecutive
 
 internal class ReductionKollektionListTest {
+
+    @Test
+    fun `reduceBasedOnNeighbors work on empty list`() {
+        val empty = listOf<Int>().reduceBasedOnNeighbors { prev, v, next -> v == prev && v == next }
+
+        assertEquals(listOf<Int>(), empty)
+    }
+
+    @Test
+    fun `reduceBasedOnNeighborsCyclic work on empty list`() {
+        val empty = listOf<Int>().reduceBasedOnNeighborsCyclic { prev, v, next -> v == prev && v == next }
+
+        assertEquals(listOf<Int>(), empty)
+    }
+
 
     @Test
     fun `reduceBasedOnNeighbors reduces to single value`() {
@@ -49,5 +65,12 @@ internal class ReductionKollektionListTest {
             .reduceBasedOnNeighborsCyclic(maxIterations = 1) { prev, v, next -> v == prev && v == next }
 
         assertEquals(listOf(1, 2, 3, 3, 3), equalToNextValue)
+    }
+
+    @Test
+    fun `reduceConsecutive removes all consecutive digits`() {
+        val equalToNextValue = listOf(1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 1, 2, 3, 4, 4).reduceConsecutive()
+
+        assertEquals(listOf(1, 2, 3, 1, 2, 3, 4), equalToNextValue)
     }
 }

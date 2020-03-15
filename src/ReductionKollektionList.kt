@@ -1,3 +1,12 @@
+// TODO clean up generics to use list as return value
+
+fun <T> Collection<T>.reduceConsecutive() : Collection<T> { // Add possibility to exclude characters? or specify max consecs?
+    return fold(mutableListOf()) { acc, v ->
+        if (acc.isEmpty() || acc.last() != v) acc.add(v)
+        acc
+    }
+}
+
 fun <T> Collection<T>.reduceBasedOnNeighbors(
     finalSize: Int = 1,
     maxIterations: Int = Int.MAX_VALUE,

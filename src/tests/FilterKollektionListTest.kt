@@ -2,11 +2,40 @@ package tests
 
 import filterBasedOnNeighbors
 import filterBasedOnNeighborsCyclic
+import filterSectioned
 import filterWithNeighbors
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class FilterKollektionListTest {
+
+    @Test
+    fun `filterWithNeighbors work on empty list`() {
+        val empty = listOf<Int>().filterWithNeighbors(1, 2) { x -> x == 1 }
+
+        assertEquals(listOf<Int>(), empty)
+    }
+
+    @Test
+    fun `filterBasedOnNeighborsCyclic work on empty list`() {
+        val empty = listOf<Int>().filterWithNeighbors(1, 2) { x -> x == 1 }
+
+        assertEquals(listOf<Int>(), empty)
+    }
+
+    @Test
+    fun `filterSectioned work on empty list`() {
+        val empty = listOf<Int>().filterSectioned { it != 0 }
+
+        assertEquals(listOf<Int>(), empty)
+    }
+
+    @Test
+    fun `filterSectioned splits list into sections with filtered elements not present`() {
+        val empty = listOf(1, 2, 4, 0, 5, 0, 2, 6, 3, 0, 100, 0, 0, 0, 0).filterSectioned { it != 0 }
+
+        assertEquals(listOf(listOf(1, 2, 4), listOf(5), listOf(2, 6, 3), listOf(100)), empty)
+    }
 
     @Test
     fun `filterWithNeighbors on string`() {
