@@ -23,3 +23,15 @@ fun <T, R> Collection<T>.deferFlatMap(
     }
     return accumulator.finalize().flatten()
 }
+
+fun <T> Collection<T>.toGroupedStringList(
+    deferPredicateIsByToggle: Boolean = false,
+    deferPredicate: (T) -> Boolean
+): List<String> {
+    return deferMap(
+        deferPredicate = deferPredicate,
+        deferPredicateIsByToggle = deferPredicateIsByToggle,
+        transform = { v -> v.toString() },
+        transformDeferred = { items -> items.joinToString("") }
+    )
+}

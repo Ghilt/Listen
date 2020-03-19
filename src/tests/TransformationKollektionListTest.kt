@@ -4,6 +4,7 @@ import deferFlatMap
 import deferMap
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import toGroupedStringList
 
 internal class TransformationKollektionListTest {
 
@@ -32,6 +33,13 @@ internal class TransformationKollektionListTest {
         val empty = listOf<Int>().deferMap(p, p2, true)
 
         assertEquals(listOf<Int>(), empty)
+    }
+
+    @Test
+    fun `toGroupedStringList by toggle work on empty list`() {
+        val result = listOf<Int>().toGroupedStringList { item -> item == 0 || item == 9 }
+
+        assertEquals(listOf<Int>(), result)
     }
 
     @Test
@@ -92,5 +100,12 @@ internal class TransformationKollektionListTest {
             "abc|def|ghijk||lmn|o|pq".toList().deferFlatMap(predicate, deferredTransform, transform = transform)
 
         assertEquals("abcdefghijklmnopq", result.joinToString(""))
+    }
+
+    @Test
+    fun `toGroupedStringList groups items into strings`() {
+        val result = listOf(1, 0, 2, 3, 9, 8, 9, 9, 5, 4, 9, 0, 9).toGroupedStringList(true) { item -> item == 0 || item == 9 }
+
+        assertEquals("1, 0239, 8, 99, 5, 4, 90, 9", result.joinToString())
     }
 }
