@@ -1,0 +1,25 @@
+FFMMfa <- filter using prebuilt predicate
+
+fe"Helloworld" <- filter equals shorthand
+
+f$e"Helloworld" <- filter equals full form of equals built in
+
+f>i <- filter bigger than index
+
+f>i*(3+i) <- filter bigger than index
+
+
+fefa <- filter if element eguals to filtered list
+femxfa
+
+E_15p
+
+Strings
+Doubles
+Ints
+Function -> capital letters
+
+
+F>iF="hej"F<424.12 ==== F(>i)F(="hej")F(<424.12) ?? needed ??
+
+FF>0L=0
