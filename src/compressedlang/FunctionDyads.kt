@@ -16,9 +16,9 @@ val multiplicationDyad = Dyad<Double, Double, Double>(
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     default = indexNilad,
-    precedence = Precedence.MEDIUM,
+    precedence = Precedence.LOWEST,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
-    output = TYPE.BOOL
+    output = TYPE.BOOL,
 ) { a, b -> a > b }
 
 val smallerThanDyad = Dyad<Double, Double, Boolean>(
@@ -39,5 +39,6 @@ val filterDyad = Dyad<List<Any>, (Any) -> Boolean, List<Any>>(
     currentListNilad,
     dyadConsume = true,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
-    output = TYPE.LIST_TYPE
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.LOWEST
 ) { a, b -> a.filter { b(it) } }

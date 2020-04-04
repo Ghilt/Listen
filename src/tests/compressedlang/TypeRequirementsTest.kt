@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Test
 
 internal class TypeRequirementsTest {
 
+    private val PREVIOUS = -1
+    private val NEXT = 1
+
     @Test
     fun `basic requirement is recognized as fulfilled`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.INT, 1)
+            requiresByOther(TYPE.INT, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
@@ -27,7 +30,7 @@ internal class TypeRequirementsTest {
     fun `basic requirement is recognized as unfulfilled`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.INT, 1)
+            requiresByOther(TYPE.INT, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.STRING))
@@ -41,11 +44,11 @@ internal class TypeRequirementsTest {
     fun `two step requirement is recognized as fulfilled`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.INT, 1)
+            requiresByOther(TYPE.INT, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.STRING, 1)
+            requiresByOther(TYPE.STRING, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.STRING))
@@ -59,16 +62,16 @@ internal class TypeRequirementsTest {
     fun `three step requirement on item outside of list is recognized as unfulfilled`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.INT, 1)
+            requiresByOther(TYPE.INT, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.BOOL, 1)
+            requiresByOther(TYPE.BOOL, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.BOOL).apply {
-            requires(TYPE.LIST_TYPE, 1)
-            requires(TYPE.BOOL, 2)
+            requiresByOther(TYPE.LIST_TYPE, NEXT)
+            requiresByOther(TYPE.BOOL, 2)
         })
 
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
@@ -84,13 +87,13 @@ internal class TypeRequirementsTest {
         list.add(TypeRequirements(provides = TYPE.DOUBLE))
 
         list.add(TypeRequirements(provides = TYPE.BOOL).apply {
-            weakRequirement = TYPE.BOOL
+            isWeaklyRequired = TYPE.BOOL
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
             requiresWeaklyByOthers = TYPE.BOOL
-            requires(TYPE.BOOL, -1)
-            requires(TYPE.STRING, 1)
+            requiresByOther(TYPE.BOOL, PREVIOUS)
+            requiresByOther(TYPE.STRING, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.STRING))
@@ -105,20 +108,24 @@ internal class TypeRequirementsTest {
         assertEquals(TYPE.INT, result[1].provides)
         assertEquals(TYPE.DOUBLE, result[2].provides)
         assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].requiresByOthers)
-        assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].requires)
+        assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].isRequiredBy)
     }
 
     @Test
     fun `simplify ignores implicit receiver if wrong type`() {
         val list = mutableListOf<TypeRequirements>()
-        list.add(TypeRequirements(provides = TYPE.DOUBLE))
-
-        list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.BOOL, -1)
-            requires(TYPE.STRING, 1)
+        list.add(TypeRequirements(provides = TYPE.DOUBLE).apply {
+            isWeaklyRequired = TYPE.BOOL
         })
 
-        list.add(TypeRequirements(provides = TYPE.STRING))
+        list.add(TypeRequirements(provides = TYPE.INT).apply {
+           requiresWeaklyByOthers = TYPE.BOOL
+            requiresByOther(TYPE.STRING, NEXT)
+        })
+
+        list.add(TypeRequirements(provides = TYPE.STRING).apply {
+            isRequiredBy(TYPE.STRING, PREVIOUS)
+        })
 
 
         val target: IndexedValue<TypeRequirements> = list.withIndex().elementAt(1)
@@ -128,7 +135,7 @@ internal class TypeRequirementsTest {
         assertEquals(TYPE.DOUBLE, result[0].provides)
         assertEquals(TYPE.INT, result[1].provides)
         assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].requiresByOthers)
-        assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].requires)
+        assertEquals(mutableListOf<Pair<TYPE, Int>>(), result[1].isRequiredBy)
     }
 
     @Test
@@ -137,8 +144,8 @@ internal class TypeRequirementsTest {
         list.add(TypeRequirements(provides = TYPE.DOUBLE))
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requires(TYPE.BOOL, -1)
-            requires(TYPE.STRING, 1)
+            requiresByOther(TYPE.BOOL, PREVIOUS)
+            requiresByOther(TYPE.STRING, NEXT)
         })
 
         list.add(TypeRequirements(provides = TYPE.STRING))
@@ -158,11 +165,11 @@ internal class TypeRequirementsTest {
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
 
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE).apply {
-            requires(TYPE.BOOL, 1)
+            requiresByOther(TYPE.BOOL, NEXT)
         })
 
         list.add(TypeRequirements(provides = null).apply {
-            isRequiredOf(TYPE.BOOL, 1)
+            isRequiredBy(TYPE.BOOL, NEXT)
         })
 
         val result = list[2].isSimplifiable()

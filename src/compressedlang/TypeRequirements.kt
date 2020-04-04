@@ -7,15 +7,15 @@ class TypeRequirements(
     val provides: TYPE? = null
 ) {
     var requiresWeaklyByOthers: TYPE? = null
-    var weakRequirement: TYPE? = null
-    val requires: MutableList<Pair<TYPE, Int>> = mutableListOf()
+    var isWeaklyRequired: TYPE? = null
+    val isRequiredBy: MutableList<Pair<TYPE, Int>> = mutableListOf()
     val requiresByOthers: MutableList<Pair<TYPE, Int>> = mutableListOf()
 
-    fun isRequiredOf(type: TYPE, requirerIndex: Int) {
-        requires.add(type to requirerIndex)
+    fun isRequiredBy(type: TYPE, requirerIndex: Int) {
+        isRequiredBy.add(type to requirerIndex)
     }
 
-    fun requires(type: TYPE, requiredOfIndex: Int) {
+    fun requiresByOther(type: TYPE, requiredOfIndex: Int) {
         requiresByOthers.add(type to requiredOfIndex)
     }
 
@@ -65,7 +65,7 @@ fun MutableList<TypeRequirements>.placeRequirements(
     // Handle weak implicit requirement
     val previousIndex = startingPoint - 1
     val weakRequirement = inputs[0]
-    this[previousIndex].weakRequirement = weakRequirement
+    this[previousIndex].isWeaklyRequired = weakRequirement
     this[startingPoint].requiresWeaklyByOthers = weakRequirement
 
     // Skip first implicit input
@@ -73,11 +73,12 @@ fun MutableList<TypeRequirements>.placeRequirements(
         val absoluteIndex = startingPoint + relativeIndex
         val type = inputs[relativeIndex]
         if (absoluteIndex >= this.size) {
-            this.add(TypeRequirements().apply { isRequiredOf(type, startingPoint) })
+            //Requires stuff from outside of list
+            this.add(TypeRequirements().apply { isRequiredBy(type, startingPoint) })
         } else {
-            this[absoluteIndex].isRequiredOf(type, startingPoint - absoluteIndex)
+            this[absoluteIndex].isRequiredBy(type, relativeIndex)
         }
-        this[startingPoint].requires(type, relativeIndex)
+        this[startingPoint].requiresByOther(type, relativeIndex)
     }
 }
 
@@ -95,13 +96,12 @@ fun List<TypeRequirements>.simplifyFully(): List<TypeRequirements> {
 }
 
 // Finds a function with its input types present and accounted for and removes them
-// Todo will require precedence information and can then yield an ambiguousSyntax error
 fun List<TypeRequirements>.doSimplificationPass(): Pair<DidChange, List<TypeRequirements>> {
     val simplificationPossible: IndexedValue<TypeRequirements>? = this.getSimplificationTarget()
     return if (simplificationPossible != null) {
         val simplified = this.simplify(simplificationPossible)
         if (simplified.size == this.size) {
-            throw RuntimeException("Simplification error ${this.diagnosticsString()}")
+            throw DeveloperError("Simplification error ${this.diagnosticsString()}")
         }
         true to simplified
     } else {
@@ -110,16 +110,23 @@ fun List<TypeRequirements>.doSimplificationPass(): Pair<DidChange, List<TypeRequ
 }
 
 private fun List<TypeRequirements>.diagnosticsString(): String {
-    return "TODO"
+    return "TODO" // TODO
 }
 
 fun List<TypeRequirements>.getSimplificationTarget(): IndexedValue<TypeRequirements>? {
-    return this.withIndex().firstOrNull { (i, req) -> req.isSimplifiable() && req.isFulfilled(i, this) }
+    for (precedence in Precedence.values().reversed()) {
+        val target = this
+            .withIndex()
+            .filter { it.value.precedence == precedence }
+            .firstOrNull { (i, req) -> req.isSimplifiable() && req.isFulfilled(i, this) }
+        if (target != null) return target
+    }
+    return null
 }
 
 fun List<TypeRequirements>.areAllFulfilled(): Boolean {
     // impossible to read but correct, should be prettier somehow
-    return this.map { reqs -> reqs.requires.none { !it.first.isSatisfiedBy(reqs.provides) } }.all { it }
+    return this.map { reqs -> reqs.isRequiredBy.none { !it.first.isSatisfiedBy(reqs.provides) } }.all { it }
 //    this.map { reqs -> reqs.required.distinct().size <= 1 &&  }.all { it }
 }
 
@@ -132,7 +139,7 @@ fun List<TypeRequirements>.simplify(target: IndexedValue<TypeRequirements>): Lis
         return this
     }
 
-    val targetsForRemovalForwards = target.value.requiresByOthers.drop(1).map { it.second }
+    val targetsForRemovalForwards = target.value.requiresByOthers.map { it.second }
     return this.withIndex()
         .filterNot { (i, _) ->
             val consumeImplicit = i == indexOfPrevious && implicitInputCanBeConsumedInstead
@@ -150,11 +157,11 @@ fun List<TypeRequirements>.simplify(target: IndexedValue<TypeRequirements>): Lis
 
 private fun List<TypeRequirements>.recalculateRequiresInformation(): List<TypeRequirements> {
     for ((targetIndex, toBeUpdated) in this.withIndex()) {
-        toBeUpdated.requires.clear()
+        toBeUpdated.isRequiredBy.clear()
         for ((index, updateSource) in this.withIndex()) {
             val r = updateSource.requiresOf(targetIndex, index)
             if (r != null) {
-                toBeUpdated.requires.add(r to targetIndex - index)
+                toBeUpdated.isRequiredBy.add(r to targetIndex - index)
             }
         }
     }
