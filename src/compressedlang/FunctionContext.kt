@@ -11,6 +11,13 @@ class FunctionContext(
 
     private val elements: MutableList<Function> = mutableListOf(firstFunction)
     private val functions: MutableList<FunctionContext> = mutableListOf()
+    internal var isBuilt = false
+
+    private val listProvider
+        get() = elements[0] as Nilad
+
+    private val contextCreator
+        get() = elements[1]
 
     fun put(function: Function) {
         if (!willAccept(function)) {
@@ -46,22 +53,11 @@ class FunctionContext(
 
         if (elements.size <= 1) {
             // First element always a list provider which can't complete a context on its own, for now
+            // probably extract the list provider to its own variable rather than keeping in list
             return false
         }
 
-        val elementTypeRequirements = MutableList(elements.size) { TypeRequirements() }
-
-        elements.withIndex().forEach { (i, element) ->
-            when (element) {
-                is InnerFunction -> elementTypeRequirements[i].provides(element.output)
-                is Number, is StringLiteral, is Nilad -> elementTypeRequirements[i].provides(element.output)
-                is Monad<*, *>, is Dyad<*, *, *> -> {
-                    elementTypeRequirements[i].provides(element.output)
-                    elementTypeRequirements.placeRequirements(i, element.inputs)
-                }
-            }
-        }
-
+        val elementTypeRequirements = TypeRequirements.createFromElements(elements)
         return isReqsComplete(elementTypeRequirements)
     }
 
@@ -95,8 +91,7 @@ class FunctionContext(
     }
 
     fun build() {
-
-        val s = ""
+        isBuilt = true
     }
 
     fun diagnosticsString(): String {
@@ -109,6 +104,28 @@ class FunctionContext(
                 is Dyad<*, *, *> -> "D"
                 is InnerFunction -> "(${functions[functions.size - 1 - it.index].diagnosticsString()})"
             }
+        }
+    }
+
+    fun execute(): Du81List<*> {
+        val target = produceList(listProvider)
+
+        val result = mutableListOf<Any>()
+        for ((i, v) in target.list.withIndex()) {
+
+            val internalElements = List(elements.size) { elements[it] to false}
+
+
+//            internalElements.
+        }
+
+            return "".toListDu81List()
+    }
+
+    private fun produceList(provider: Nilad): Du81List<*> {
+        return when (provider.contextKey) {
+            ContextKey.CURRENT_LIST -> targets[0]
+            else -> throw DeveloperError("This is not a list producer")
         }
     }
 }

@@ -7,18 +7,20 @@ class Du81Program(
 ) {
     private val context = Context(input)
     private val functions = FunctionRepository()
-    private val tokensExecuted: MutableList<Boolean> = MutableList(tokens.size) { false }
 
 
     fun runForInput() {
         var instructionPointer = 0
         while (instructionPointer in tokens.indices) {
-            tokensExecuted[instructionPointer] = true
-            instructionPointer = execute(instructionPointer)
+            instructionPointer = loadToken(instructionPointer)
+
+            if (context.isReadyForExecution()) {
+                context.execute()
+            }
         }
     }
 
-    private fun execute(instructionPointer: Int): Int {
+    private fun loadToken(instructionPointer: Int): Int {
         when (val parsedElement = tokens[instructionPointer]) {
             is FunctionToken -> {
                 val f = functions.get(parsedElement)

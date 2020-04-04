@@ -1,15 +1,13 @@
 package compressedlang
 
-class TypeRequirements {
+class TypeRequirements(
+    val precedence: Precedence = Precedence.HIGHEST,
+    val provides: TYPE? = null
+) {
     var requiresWeaklyByOthers: TYPE? = null
     var weakRequirement: TYPE? = null
-    var provides: TYPE? = null
     val requires: MutableList<Pair<TYPE, Int>> = mutableListOf()
     val requiresByOthers: MutableList<Pair<TYPE, Int>> = mutableListOf()
-
-    fun provides(type: TYPE) {
-        provides = type
-    }
 
     fun isRequiredOf(type: TYPE, requirerIndex: Int) {
         requires.add(type to requirerIndex)
@@ -38,6 +36,21 @@ class TypeRequirements {
 
     fun requiresOf(targetIndex: Int, index: Int): TYPE? {
         return requiresByOthers.firstOrNull { it.second + index == targetIndex }?.first
+    }
+
+    companion object {
+        fun createFromElements(elements: List<Function>): List<TypeRequirements> {
+            val elementTypeRequirements = MutableList(elements.size) { TypeRequirements(elements[it].precedence, elements[it].output) }
+
+            elements.withIndex().forEach { (i, element) ->
+                when (element) {
+                    is Monad<*, *>, is Dyad<*, *, *> -> {
+                        elementTypeRequirements.placeRequirements(i, element.inputs)
+                    }
+                }
+            }
+            return elementTypeRequirements
+        }
     }
 }
 
@@ -87,7 +100,7 @@ fun List<TypeRequirements>.simplify(target: IndexedValue<TypeRequirements>): Lis
         }
         .map { (i, req) ->
             if (i == target.index) {
-                TypeRequirements().apply { provides = target.value.provides }
+                TypeRequirements(provides = target.value.provides)
                 // functions providing functions not allowed, for now
             } else {
                 req

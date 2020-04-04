@@ -18,7 +18,8 @@ class FunctionRepository {
         // DYADS - SINGLE VALUE
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
-        '*' to multiplyDyad,
+        '+' to additionDyad,
+        '*' to multiplicationDyad,
         '=' to equalToDyad
     )
 

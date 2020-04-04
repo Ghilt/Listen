@@ -96,4 +96,24 @@ internal class FunctionContextTest {
         //             F_ F_ F_ F>1 L>2 L>3 L>4
         assertEquals("_D(_D(_D(_DDN)MDN)MDN)MDN", functionContext.diagnosticsString())
     }
+
+    @Test
+    fun `functionContext creates inner functions and sequential functions`() {
+        val functionContext = FunctionContext(listOf("123".toListDu81List()), currentListNilad)
+        functionContext.put(filterDyad)
+
+        functionContext.put(currentListNilad)
+        functionContext.put(filterDyad)
+
+        functionContext.put(largerThanDyad)
+        functionContext.put(Number(1))
+
+        functionContext.put(lengthMonad)
+        functionContext.put(largerThanDyad)
+        functionContext.put(Number(2))
+
+        val willAcceptContextCreator = functionContext.willAccept(filterDyad)
+
+        assertEquals(false, willAcceptContextCreator)
+    }
 }
