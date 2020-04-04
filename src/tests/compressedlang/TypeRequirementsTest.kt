@@ -100,8 +100,7 @@ internal class TypeRequirementsTest {
 
         list.add(TypeRequirements(provides = TYPE.DOUBLE))
 
-        val target: IndexedValue<TypeRequirements> = list.withIndex().elementAt(2)
-        val result = list.simplify(target)
+        val result = list.simplify(2)
 
         assertEquals(3, result.size)
         assertEquals(TYPE.DOUBLE, result[0].provides)
@@ -128,8 +127,7 @@ internal class TypeRequirementsTest {
         })
 
 
-        val target: IndexedValue<TypeRequirements> = list.withIndex().elementAt(1)
-        val result = list.simplify(target)
+        val result = list.simplify(1)
 
         assertEquals(2, result.size)
         assertEquals(TYPE.DOUBLE, result[0].provides)
@@ -150,8 +148,7 @@ internal class TypeRequirementsTest {
 
         list.add(TypeRequirements(provides = TYPE.STRING))
 
-        val target: IndexedValue<TypeRequirements> = list.withIndex().elementAt(2)
-        val result = list.simplify(target)
+        val result = list.simplify(2)
 
         assertEquals(3, result.size)
         assertEquals(TYPE.DOUBLE, result[0].provides)
@@ -172,7 +169,7 @@ internal class TypeRequirementsTest {
             isRequiredBy(TYPE.BOOL, NEXT)
         })
 
-        val result = list[2].isSimplifiable()
+        val result = list[2].isSimplifiable(2, list)
 
         assertEquals(false, result)
     }
@@ -181,7 +178,7 @@ internal class TypeRequirementsTest {
     fun `list provider type requirement null provider is not simplifiable`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
-        val result = list[0].isSimplifiable()
+        val result = list[0].isSimplifiable(0, list)
 
         assertEquals(false, result)
     }

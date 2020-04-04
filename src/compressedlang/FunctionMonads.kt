@@ -5,5 +5,5 @@ val lengthMonad = Monad(
     default = currentListNilad,
     inputs =  listOf(TYPE.LIST_TYPE),
     output = TYPE.INT,
-    precedence = Precedence.LOWEST
+    precedence = Precedence.HIGHEST
 ) { list: List<*> -> list.size }

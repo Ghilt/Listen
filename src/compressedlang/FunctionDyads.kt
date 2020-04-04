@@ -16,21 +16,21 @@ val multiplicationDyad = Dyad<Double, Double, Double>(
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     default = indexNilad,
-    precedence = Precedence.LOWEST,
+    precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL,
 ) { a, b -> a > b }
 
 val smallerThanDyad = Dyad<Double, Double, Boolean>(
     default = indexNilad,
-    precedence = Precedence.MEDIUM,
+    precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL
 ) { a, b -> a < b }
 
 val equalToDyad = Dyad<Double, Double, Boolean>(
     default = indexNilad,
-    precedence = Precedence.MEDIUM,
+    precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL
 ) { a, b -> a == b }

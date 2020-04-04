@@ -28,10 +28,13 @@ class TypeRequirements(
         }
     }
 
-    fun isSimplifiable(): Boolean {
+    // TODO should be extension method on list
+    fun isSimplifiable(atIndex: Int, context: List<TypeRequirements>): Boolean {
         return when {
             provides == null -> false
-            requiresByOthers.size == 0 && requiresWeaklyByOthers == null -> false
+            requiresWeaklyByOthers == null -> false
+            context.canConsumeItsWeakRequirement(atIndex) -> true
+            requiresByOthers.size == 0 -> false
             else -> true
         }
     }
@@ -97,10 +100,12 @@ fun List<TypeRequirements>.simplifyFully(): List<TypeRequirements> {
 
 // Finds a function with its input types present and accounted for and removes them
 fun List<TypeRequirements>.doSimplificationPass(): Pair<DidChange, List<TypeRequirements>> {
-    val simplificationPossible: IndexedValue<TypeRequirements>? = this.getSimplificationTarget()
-    return if (simplificationPossible != null) {
-        val simplified = this.simplify(simplificationPossible)
+    val simplificationPossibleAtIndex = this.getSimplificationTarget()
+    return if (simplificationPossibleAtIndex != null) {
+        val simplified = this.simplify(simplificationPossibleAtIndex)
         if (simplified.size == this.size) {
+            val debuggingEntry1 = this.getSimplificationTarget()
+            val debuggingEntry2 = this.simplify(debuggingEntry1!!)
             throw DeveloperError("Simplification error ${this.diagnosticsString()}")
         }
         true to simplified
@@ -110,16 +115,16 @@ fun List<TypeRequirements>.doSimplificationPass(): Pair<DidChange, List<TypeRequ
 }
 
 private fun List<TypeRequirements>.diagnosticsString(): String {
-    return "TODO" // TODO
+    return this.joinToString(" ") { it.precedence.name }
 }
 
-fun List<TypeRequirements>.getSimplificationTarget(): IndexedValue<TypeRequirements>? {
+fun List<TypeRequirements>.getSimplificationTarget(): Int? {
     for (precedence in Precedence.values().reversed()) {
         val target = this
             .withIndex()
             .filter { it.value.precedence == precedence }
-            .firstOrNull { (i, req) -> req.isSimplifiable() && req.isFulfilled(i, this) }
-        if (target != null) return target
+            .firstOrNull { (i, req) -> req.isSimplifiable(i, this) && req.isFulfilled(i, this) }
+        if (target != null) return target.index
     }
     return null
 }
@@ -130,29 +135,33 @@ fun List<TypeRequirements>.areAllFulfilled(): Boolean {
 //    this.map { reqs -> reqs.required.distinct().size <= 1 &&  }.all { it }
 }
 
-fun List<TypeRequirements>.simplify(target: IndexedValue<TypeRequirements>): List<TypeRequirements> {
-    val indexOfPrevious = target.index - 1
-    val implicitInputCanBeConsumedInstead =
-        target.value.requiresWeaklyByOthers?.isSatisfiedBy(this[indexOfPrevious].provides) ?: false
+fun List<TypeRequirements>.simplify(targetIndex: Int): List<TypeRequirements> {
+    val target = this[targetIndex]
+    val indexOfPrevious = targetIndex - 1
+    val implicitInputCanBeConsumedInstead = this.canConsumeItsWeakRequirement(targetIndex)
 
-    if (target.value.requiresByOthers.isEmpty() && !implicitInputCanBeConsumedInstead) {
+    if (target.requiresByOthers.isEmpty() && !implicitInputCanBeConsumedInstead) {
         return this
     }
 
-    val targetsForRemovalForwards = target.value.requiresByOthers.map { it.second }
+    val targetsForRemovalForwards = target.requiresByOthers.map { it.second }
     return this.withIndex()
         .filterNot { (i, _) ->
             val consumeImplicit = i == indexOfPrevious && implicitInputCanBeConsumedInstead
-            consumeImplicit || targetsForRemovalForwards.contains(i - target.index)
+            consumeImplicit || targetsForRemovalForwards.contains(i - targetIndex)
         }
         .map { (i, req) ->
-            if (i == target.index) {
-                TypeRequirements(provides = target.value.provides)
+            if (i == targetIndex) {
+                TypeRequirements(provides = target.provides)
                 // functions providing functions not allowed, for now
             } else {
                 req
             }
         }.recalculateRequiresInformation()
+}
+
+private fun List<TypeRequirements>.canConsumeItsWeakRequirement(index: Int): Boolean {
+    return this[index].requiresWeaklyByOthers?.isSatisfiedBy(this[index - 1].provides) ?: false
 }
 
 private fun List<TypeRequirements>.recalculateRequiresInformation(): List<TypeRequirements> {
