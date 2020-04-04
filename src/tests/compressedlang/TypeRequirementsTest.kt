@@ -1,8 +1,6 @@
 package tests.compressedlang
 
-import compressedlang.TYPE
-import compressedlang.TypeRequirements
-import compressedlang.simplify
+import compressedlang.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -21,7 +19,7 @@ internal class TypeRequirementsTest {
         list.add(TypeRequirements(provides = TYPE.INT).apply {
         })
 
-        val result = list[0].isFulfilled(0, list)
+        val result = list.isFulfilledAt(0)
 
         assertEquals(true, result)
     }
@@ -35,7 +33,7 @@ internal class TypeRequirementsTest {
 
         list.add(TypeRequirements(provides = TYPE.STRING))
 
-        val result = list[0].isFulfilled(0, list)
+        val result = list.isFulfilledAt(0)
 
         assertEquals(false, result)
     }
@@ -53,7 +51,7 @@ internal class TypeRequirementsTest {
 
         list.add(TypeRequirements(provides = TYPE.STRING))
 
-        val result = list[0].isFulfilled(0, list)
+        val result = list.isFulfilledAt(0)
 
         assertEquals(true, result)
     }
@@ -76,7 +74,7 @@ internal class TypeRequirementsTest {
 
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
 
-        val result = list[0].isFulfilled(0, list)
+        val result = list.isFulfilledAt(0)
 
         assertEquals(false, result)
     }
@@ -169,7 +167,7 @@ internal class TypeRequirementsTest {
             isRequiredBy(TYPE.BOOL, NEXT)
         })
 
-        val result = list[2].isSimplifiable(2, list)
+        val result = list.isSimplifiableAt(2)
 
         assertEquals(false, result)
     }
@@ -178,7 +176,7 @@ internal class TypeRequirementsTest {
     fun `list provider type requirement null provider is not simplifiable`() {
         val list = mutableListOf<TypeRequirements>()
         list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
-        val result = list[0].isSimplifiable(0, list)
+        val result = list.isSimplifiableAt(0)
 
         assertEquals(false, result)
     }

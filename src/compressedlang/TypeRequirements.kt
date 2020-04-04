@@ -19,26 +19,6 @@ class TypeRequirements(
         requiresByOthers.add(type to requiredOfIndex)
     }
 
-    fun isFulfilled(atIndex: Int, context: List<TypeRequirements>): Boolean {
-        return requiresByOthers.fold(true) { acc, data ->
-            val requiresOfIndex = atIndex + data.second
-            val satisfied =
-                requiresOfIndex < context.size && data.first.isSatisfiedBy(context[requiresOfIndex].provides)
-            acc && satisfied && context[requiresOfIndex].isFulfilled(requiresOfIndex, context)
-        }
-    }
-
-    // TODO should be extension method on list
-    fun isSimplifiable(atIndex: Int, context: List<TypeRequirements>): Boolean {
-        return when {
-            provides == null -> false
-            requiresWeaklyByOthers == null -> false
-            context.canConsumeItsWeakRequirement(atIndex) -> true
-            requiresByOthers.size == 0 -> false
-            else -> true
-        }
-    }
-
     fun requiresOf(targetIndex: Int, index: Int): TYPE? {
         return requiresByOthers.firstOrNull { it.second + index == targetIndex }?.first
     }
@@ -123,16 +103,35 @@ fun List<TypeRequirements>.getSimplificationTarget(): Int? {
         val target = this
             .withIndex()
             .filter { it.value.precedence == precedence }
-            .firstOrNull { (i, req) -> req.isSimplifiable(i, this) && req.isFulfilled(i, this) }
+            .firstOrNull { (i, _) -> this.isSimplifiableAt(i) && this.isFulfilledAt(i) }
         if (target != null) return target.index
     }
     return null
+}
+
+fun List<TypeRequirements>.isFulfilledAt(index: Int): Boolean {
+    return this[index].requiresByOthers.fold(true) { acc, data ->
+        val requiresOfIndex = index + data.second
+        val satisfied = requiresOfIndex < this.size && data.first.isSatisfiedBy(this[requiresOfIndex].provides)
+        acc && satisfied && this.isFulfilledAt(requiresOfIndex)
+    }
 }
 
 fun List<TypeRequirements>.areAllFulfilled(): Boolean {
     // impossible to read but correct, should be prettier somehow
     return this.map { reqs -> reqs.isRequiredBy.none { !it.first.isSatisfiedBy(reqs.provides) } }.all { it }
 //    this.map { reqs -> reqs.required.distinct().size <= 1 &&  }.all { it }
+}
+
+fun List<TypeRequirements>.isSimplifiableAt(index: Int): Boolean {
+    val target = this[index]
+    return when {
+        target.provides == null -> false
+        target.requiresWeaklyByOthers == null -> false
+        this.canConsumeItsWeakRequirement(index) -> true
+        target.requiresByOthers.size == 0 -> false
+        else -> true
+    }
 }
 
 fun List<TypeRequirements>.simplify(targetIndex: Int): List<TypeRequirements> {
