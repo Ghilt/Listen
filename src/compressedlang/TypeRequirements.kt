@@ -6,8 +6,8 @@ class TypeRequirements(
     val precedence: Precedence = Precedence.HIGHEST,
     val provides: TYPE? = null
 ) {
-    var requiresWeaklyByOthers: TYPE? = null
     var isWeaklyRequired: TYPE? = null
+    var requiresWeaklyByPrevious: TYPE? = null
     val isRequiredBy: MutableList<Pair<TYPE, Int>> = mutableListOf()
     val requiresByOthers: MutableList<Pair<TYPE, Int>> = mutableListOf()
 
@@ -49,7 +49,7 @@ fun MutableList<TypeRequirements>.placeRequirements(
     val previousIndex = startingPoint - 1
     val weakRequirement = inputs[0]
     this[previousIndex].isWeaklyRequired = weakRequirement
-    this[startingPoint].requiresWeaklyByOthers = weakRequirement
+    this[startingPoint].requiresWeaklyByPrevious = weakRequirement
 
     // Skip first implicit input
     for (relativeIndex in 1 until inputs.size) {
@@ -127,7 +127,7 @@ fun List<TypeRequirements>.isSimplifiableAt(index: Int): Boolean {
     val target = this[index]
     return when {
         target.provides == null -> false
-        target.requiresWeaklyByOthers == null -> false
+        target.requiresWeaklyByPrevious == null -> false
         this.canConsumeItsWeakRequirement(index) -> true
         target.requiresByOthers.size == 0 -> false
         else -> true
@@ -156,20 +156,22 @@ fun List<TypeRequirements>.simplify(targetIndex: Int): List<TypeRequirements> {
             } else {
                 req
             }
-        }.recalculateRequiresInformation()
+        }.recalculateIsRequiredByInformation()
 }
 
 private fun List<TypeRequirements>.canConsumeItsWeakRequirement(index: Int): Boolean {
-    return this[index].requiresWeaklyByOthers?.isSatisfiedBy(this[index - 1].provides) ?: false
+    return this[index].requiresWeaklyByPrevious?.isSatisfiedBy(this[index - 1].provides) ?: false
 }
 
-private fun List<TypeRequirements>.recalculateRequiresInformation(): List<TypeRequirements> {
+internal fun List<TypeRequirements>.recalculateIsRequiredByInformation(): List<TypeRequirements> {
     for ((targetIndex, toBeUpdated) in this.withIndex()) {
+        val next = targetIndex + 1
         toBeUpdated.isRequiredBy.clear()
+        toBeUpdated.isWeaklyRequired = if (next < size) this[next].requiresWeaklyByPrevious else null
         for ((index, updateSource) in this.withIndex()) {
             val r = updateSource.requiresOf(targetIndex, index)
             if (r != null) {
-                toBeUpdated.isRequiredBy.add(r to targetIndex - index)
+                toBeUpdated.isRequiredBy.add(r to index - targetIndex)
             }
         }
     }

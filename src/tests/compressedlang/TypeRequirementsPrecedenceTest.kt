@@ -17,7 +17,7 @@ internal class TypeRequirementsPrecedenceTest {
         })
 
         list.add(TypeRequirements(provides = STRING, precedence = Precedence.LOWEST).apply {
-            requiresWeaklyByOthers = INT
+            requiresWeaklyByPrevious = INT
             requiresByOther(INT, 1)
         })
 
@@ -27,7 +27,7 @@ internal class TypeRequirementsPrecedenceTest {
         })
 
         list.add(TypeRequirements(provides = INT).apply {
-            requiresWeaklyByOthers = INT
+            requiresWeaklyByPrevious = INT
             requiresByOther(INT, 1)
         })
 
@@ -50,7 +50,7 @@ internal class TypeRequirementsPrecedenceTest {
         })
 
         list.add(TypeRequirements(provides = INT, precedence = Precedence.MEDIUM).apply {
-            requiresWeaklyByOthers = INT
+            requiresWeaklyByPrevious = INT
             requiresByOther(INT, 1)
         })
 
@@ -60,7 +60,7 @@ internal class TypeRequirementsPrecedenceTest {
         })
 
         list.add(TypeRequirements(provides = INT, precedence = Precedence.MEDIUM).apply {
-            requiresWeaklyByOthers = INT
+            requiresWeaklyByPrevious = INT
             requiresByOther(INT, 1)
         })
 

@@ -16,8 +16,7 @@ internal class TypeRequirementsTest {
             requiresByOther(TYPE.INT, NEXT)
         })
 
-        list.add(TypeRequirements(provides = TYPE.INT).apply {
-        })
+        list.add(TypeRequirements(provides = TYPE.INT))
 
         val result = list.isFulfilledAt(0)
 
@@ -89,7 +88,7 @@ internal class TypeRequirementsTest {
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-            requiresWeaklyByOthers = TYPE.BOOL
+            requiresWeaklyByPrevious = TYPE.BOOL
             requiresByOther(TYPE.BOOL, PREVIOUS)
             requiresByOther(TYPE.STRING, NEXT)
         })
@@ -116,7 +115,7 @@ internal class TypeRequirementsTest {
         })
 
         list.add(TypeRequirements(provides = TYPE.INT).apply {
-           requiresWeaklyByOthers = TYPE.BOOL
+           requiresWeaklyByPrevious = TYPE.BOOL
             requiresByOther(TYPE.STRING, NEXT)
         })
 
@@ -180,5 +179,42 @@ internal class TypeRequirementsTest {
 
         assertEquals(false, result)
     }
+
+    @Test
+    fun `recalculating isRequiredBy correctly sets up dependencies`() {
+        val list = mutableListOf<TypeRequirements>()
+        list.add(TypeRequirements(provides = TYPE.DOUBLE))
+
+        list.add(TypeRequirements(provides = TYPE.INT).apply {
+            requiresWeaklyByPrevious = TYPE.BOOL
+            requiresByOther(TYPE.STRING, NEXT)
+        })
+
+        list.add(TypeRequirements(provides = TYPE.STRING).apply {
+            requiresWeaklyByPrevious = TYPE.DOUBLE
+            requiresByOther(TYPE.STRING, NEXT)
+            requiresByOther(TYPE.STRING, NEXT + 1)
+        })
+
+        list.add(TypeRequirements(provides = TYPE.DOUBLE).apply {
+            requiresByOther(TYPE.INT, NEXT)
+        })
+
+        list.add(TypeRequirements(provides = TYPE.DOUBLE))
+
+        val result = list.recalculateIsRequiredByInformation()
+
+        assertEquals(TYPE.BOOL, result[0].isWeaklyRequired)
+        assertEquals(TYPE.DOUBLE, result[1].isWeaklyRequired)
+        assertEquals(TYPE.STRING, result[2].isRequiredBy[0].first)
+        assertEquals(PREVIOUS, result[2].isRequiredBy[0].second)
+        assertEquals(TYPE.STRING, result[3].isRequiredBy[0].first)
+        assertEquals(PREVIOUS, result[3].isRequiredBy[0].second)
+        assertEquals(TYPE.STRING, result[4].isRequiredBy[0].first)
+        assertEquals(PREVIOUS - 1, result[4].isRequiredBy[0].second)
+        assertEquals(TYPE.INT, result[4].isRequiredBy[1].first)
+        assertEquals(PREVIOUS, result[4].isRequiredBy[1].second)
+    }
+
 
 }
