@@ -1,5 +1,7 @@
 package compressedlang
 
+typealias DidChange = Boolean
+
 class TypeRequirements(
     val precedence: Precedence = Precedence.HIGHEST,
     val provides: TYPE? = null
@@ -40,11 +42,13 @@ class TypeRequirements(
 
     companion object {
         fun createFromElements(elements: List<Function>): List<TypeRequirements> {
-            val elementTypeRequirements = MutableList(elements.size) { TypeRequirements(elements[it].precedence, elements[it].output) }
+            val elementTypeRequirements =
+                MutableList(elements.size) { TypeRequirements(elements[it].precedence, elements[it].output) }
 
             elements.withIndex().forEach { (i, element) ->
                 when (element) {
-                    is Monad<*, *>, is Dyad<*, *, *> -> {
+                    is Monad<*, *>,
+                    is Dyad<*, *, *> -> {
                         elementTypeRequirements.placeRequirements(i, element.inputs)
                     }
                 }
@@ -75,6 +79,42 @@ fun MutableList<TypeRequirements>.placeRequirements(
         }
         this[startingPoint].requires(type, relativeIndex)
     }
+}
+
+fun List<TypeRequirements>.simplifyFully(): List<TypeRequirements> {
+    return if (areAllFulfilled()) {
+        this
+    } else {
+        val (didChange, simplifiedReqs) = doSimplificationPass()
+        if (didChange) {
+            simplifiedReqs.simplifyFully()
+        } else {
+            this
+        }
+    }
+}
+
+// Finds a function with its input types present and accounted for and removes them
+// Todo will require precedence information and can then yield an ambiguousSyntax error
+fun List<TypeRequirements>.doSimplificationPass(): Pair<DidChange, List<TypeRequirements>> {
+    val simplificationPossible: IndexedValue<TypeRequirements>? = this.getSimplificationTarget()
+    return if (simplificationPossible != null) {
+        val simplified = this.simplify(simplificationPossible)
+        if (simplified.size == this.size) {
+            throw RuntimeException("Simplification error ${this.diagnosticsString()}")
+        }
+        true to simplified
+    } else {
+        false to this
+    }
+}
+
+private fun List<TypeRequirements>.diagnosticsString(): String {
+    return "TODO"
+}
+
+fun List<TypeRequirements>.getSimplificationTarget(): IndexedValue<TypeRequirements>? {
+    return this.withIndex().firstOrNull { (i, req) -> req.isSimplifiable() && req.isFulfilled(i, this) }
 }
 
 fun List<TypeRequirements>.areAllFulfilled(): Boolean {

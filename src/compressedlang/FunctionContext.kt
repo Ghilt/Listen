@@ -58,36 +58,8 @@ class FunctionContext(
         }
 
         val elementTypeRequirements = TypeRequirements.createFromElements(elements)
-        return isReqsComplete(elementTypeRequirements)
-    }
-
-    private fun isReqsComplete(reqs: List<TypeRequirements>): Boolean {
-        return if (reqs.areAllFulfilled()) {
-            true
-        } else {
-            val (didChange, simplifiedReqs) = doSimplificationPass(reqs)
-            if (didChange) {
-                isReqsComplete(simplifiedReqs)
-            } else {
-                false
-            }
-        }
-    }
-
-    // Finds a function with its input types present and accounted for and removes them
-    // Todo will require precedence information and can then yield an ambiguousSyntax error
-    private fun doSimplificationPass(reqs: List<TypeRequirements>): Pair<Boolean, List<TypeRequirements>> {
-        val simplificationPossible =
-            reqs.withIndex().firstOrNull { (i, req) -> req.isSimplifiable() && req.isFulfilled(i, reqs) }
-        return if (simplificationPossible != null) {
-            val simplified = reqs.simplify(simplificationPossible)
-            if (simplified.size == reqs.size) {
-                throw RuntimeException("Simplification error ${diagnosticsString()}")
-            }
-            true to simplified
-        } else {
-            false to reqs
-        }
+        val simplifiedRequirements = elementTypeRequirements.simplifyFully()
+        return simplifiedRequirements.areAllFulfilled()
     }
 
     fun build() {
@@ -115,7 +87,7 @@ class FunctionContext(
 
             val internalElements = List(elements.size) { elements[it] to false}
 
-
+//            TODO
 //            internalElements.
         }
 
