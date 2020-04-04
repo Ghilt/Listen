@@ -217,4 +217,29 @@ internal class TypeRequirementsTest {
     }
 
 
+    @Test
+    fun `big requirer can be fulfilled`() {
+        val list = mutableListOf<TypeRequirements>()
+
+        list.add(TypeRequirements(provides = TYPE.INT).apply {
+            requiresByOther(TYPE.STRING, NEXT)
+            requiresByOther(TYPE.INT, NEXT + 1)
+            requiresByOther(TYPE.LIST_TYPE, NEXT + 2)
+            requiresByOther(TYPE.DOUBLE, NEXT + 3)
+        })
+
+        list.add(TypeRequirements(provides = TYPE.STRING))
+        list.add(TypeRequirements(provides = TYPE.INT))
+        list.add(TypeRequirements(provides = TYPE.LIST_TYPE))
+        list.add(TypeRequirements(provides = TYPE.DOUBLE).apply {
+            requiresByOther(TYPE.LIST_TYPE, PREVIOUS)
+            requiresByOther(TYPE.INT, PREVIOUS - 1)
+            requiresByOther(TYPE.STRING, PREVIOUS - 2)
+            requiresByOther(TYPE.INT, PREVIOUS - 3)
+        })
+
+        val result = list.areAllFulfilled()
+
+        assertEquals(true, result)
+    }
 }
