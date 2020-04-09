@@ -1,7 +1,6 @@
 package tests.compressedlang
 
 import compressedlang.*
-import compressedlang.Number
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -30,11 +29,11 @@ internal class FunctionContextTest {
         functionContext.put(filterDyad)
 
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(1))
+        functionContext.put(1.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(2))
+        functionContext.put(2.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
         assertEquals("_D(_DDN)MDN", functionContext.diagnosticsString())
@@ -51,15 +50,15 @@ internal class FunctionContextTest {
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(1))
+        functionContext.put(1.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(2))
+        functionContext.put(2.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(3))
+        functionContext.put(3.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
         assertEquals("_D(_D(_DDN)MDN)MDN", functionContext.diagnosticsString())
@@ -79,19 +78,19 @@ internal class FunctionContextTest {
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(1))
+        functionContext.put(1.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(2))
+        functionContext.put(2.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(3))
+        functionContext.put(3.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(4))
+        functionContext.put(4.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
         assertEquals("_D(_D(_D(_DDN)MDN)MDN)MDN", functionContext.diagnosticsString())
@@ -106,11 +105,11 @@ internal class FunctionContextTest {
         functionContext.put(filterDyad)
 
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(1))
+        functionContext.put(1.toResolvedFunction())
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(2))
+        functionContext.put(2.toResolvedFunction())
 
         val willAcceptContextCreator = functionContext.willAccept(filterDyad)
 
@@ -122,7 +121,7 @@ internal class FunctionContextTest {
         val functionContext = FunctionContext(listOf("12345".toListDu81List()), currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
-        functionContext.put(Number(1))
+        functionContext.put(1.toResolvedFunction())
 
         val list = functionContext.execute()
 

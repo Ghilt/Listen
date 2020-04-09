@@ -13,7 +13,7 @@ sealed class Function(val consumesList: Boolean = false) {
     abstract val precedence: Precedence
 
     fun isExecutable() = inputs.isNotEmpty()
-    fun isResolved() = this is ResolvedFunction || this is Number || this is StringLiteral
+    fun isResolved() = this is ResolvedFunction
 }
 
 data class ResolvedFunction(
@@ -24,29 +24,6 @@ data class ResolvedFunction(
         get() = listOf()
     override val precedence: Precedence
         get() = LOWEST
-}
-
-// TODO remove both number and stringLiteral in favor of ResolvedFunction
-data class Number(
-    val number: kotlin.Number
-) : Function() {
-    override val inputs: List<TYPE>
-        get() = listOf()
-    override val output: TYPE
-        get() = NUMBER
-    override val precedence: Precedence
-        get() = LOW
-}
-
-data class StringLiteral(
-    val literal: String
-) : Function() {
-    override val inputs: List<TYPE>
-        get() = listOf()
-    override val output: TYPE
-        get() = STRING
-    override val precedence: Precedence
-        get() = LOW
 }
 
 data class Nilad(
@@ -94,3 +71,5 @@ data class InnerFunction(
 fun Function.usesNewContext(): Boolean {
     return this is Nilad && contextKey == CURRENT_LIST
 }
+
+fun Number.toResolvedFunction() = ResolvedFunction(this, NUMBER)

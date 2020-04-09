@@ -30,8 +30,8 @@ class Du81Program(
                     context.prepareFor(f)
                 }
             }
-            is ParsedNumber<*> -> context.prepareFor(Number(parsedElement.source))
-            is ParsedStringLiteral -> context.prepareFor(StringLiteral(parsedElement.source))
+            is ParsedNumber<*> -> context.prepareFor(ResolvedFunction(parsedElement.source, TYPE.NUMBER))
+            is ParsedStringLiteral -> context.prepareFor(ResolvedFunction(parsedElement.source, TYPE.STRING))
         }
         return instructionPointer + 1
     }

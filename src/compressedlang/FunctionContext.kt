@@ -69,13 +69,11 @@ class FunctionContext(
     fun diagnosticsString(): String {
         return elements.joinToString("") {
             when (it) {
-                is Number -> "N"
-                is StringLiteral -> "S"
                 is Nilad -> "_"
                 is Monad<*, *> -> "M"
                 is Dyad<*, *, *> -> "D"
                 is InnerFunction -> "(${functions[functions.size - 1 - it.index].diagnosticsString()})"
-                is ResolvedFunction -> "R"
+                is ResolvedFunction -> "N"
             }
         }
     }
@@ -135,8 +133,6 @@ class FunctionContext(
         val consumeList = funcs.getInputsForwardOfFunctionAtIndex(indexOfFunc)
             .map {
                 when (it) {
-                    is Number -> it.number
-                    is StringLiteral -> it.literal
                     is ResolvedFunction -> it.value
                     else -> throw DeveloperError("Unresolved function: $it")
                 }
