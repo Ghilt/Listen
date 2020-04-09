@@ -66,15 +66,11 @@ fun MutableList<TypeRequirements>.placeRequirements(
 }
 
 fun List<TypeRequirements>.simplifyFully(): List<TypeRequirements> {
-    return if (areAllFulfilled()) {
-        this
+    val (didChange, simplifiedReqs) = doSimplificationPass()
+    return if (didChange) {
+        simplifiedReqs.simplifyFully()
     } else {
-        val (didChange, simplifiedReqs) = doSimplificationPass()
-        if (didChange) {
-            simplifiedReqs.simplifyFully()
-        } else {
-            this
-        }
+        this
     }
 }
 
