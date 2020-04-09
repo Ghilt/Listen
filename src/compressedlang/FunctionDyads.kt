@@ -35,10 +35,10 @@ val equalToDyad = Dyad<Double, Double, Boolean>(
     output = TYPE.BOOL
 ) { a, b -> a == b }
 
-val filterDyad = Dyad<List<Any>, (Any) -> Boolean, List<Any>>(
+val filterDyad = Dyad<List<Any>, List<List<Boolean>>, List<Any>>(
     currentListNilad,
     dyadConsume = true,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
     precedence = Precedence.LOWEST
-) { a, b -> a.filter { b(it) } }
+) { a, b -> a.filterIndexed { i, _-> b[i][0] } }

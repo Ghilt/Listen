@@ -1,16 +1,32 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package compressedlang
 
-import compressedlang.ContextKey.INDEX
 import compressedlang.ContextKey.CURRENT_LIST
-import compressedlang.Precedence.*
+import compressedlang.Precedence.LOW
+import compressedlang.Precedence.LOWEST
 import compressedlang.TYPE.*
 
 sealed class Function(val consumesList: Boolean = false) {
     abstract val inputs: List<TYPE>
     abstract val output: TYPE
     abstract val precedence: Precedence
+
+    fun isExecutable() = inputs.isNotEmpty()
+    fun isResolved() = this is ResolvedFunction || this is Number || this is StringLiteral
 }
 
+data class ResolvedFunction(
+    val value: Any,
+    override val output: TYPE
+) : Function() {
+    override val inputs: List<TYPE>
+        get() = listOf()
+    override val precedence: Precedence
+        get() = LOWEST
+}
+
+// TODO remove both number and stringLiteral in favor of ResolvedFunction
 data class Number(
     val number: kotlin.Number
 ) : Function() {
@@ -49,7 +65,9 @@ data class Monad<I, O>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
     val f: (I) -> O
-) : Function()
+) : Function() {
+    fun exec(a: Any) = f(a as I)
+}
 
 data class Dyad<I, I2, O>(
     val default: Nilad,
@@ -57,8 +75,10 @@ data class Dyad<I, I2, O>(
     override val precedence: Precedence = LOWEST,
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    val f: (I, I2) -> O
-) : Function(dyadConsume)
+    private val f: (I, I2) -> O
+) : Function(dyadConsume) {
+    fun exec(a: Any, b: Any) = f(a as I, b as I2)
+}
 
 data class InnerFunction(
     val index: Int
