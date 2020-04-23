@@ -36,7 +36,7 @@ data class Nilad(
         get() = LOW
 }
 
-data class Monad<I, O>(
+data class Monad<I: Any, O: Any>(
     val default: Nilad,
     override val precedence: Precedence = LOWEST,
     override val inputs: List<TYPE>,
@@ -46,7 +46,7 @@ data class Monad<I, O>(
     fun exec(a: Any) = f(a as I)
 }
 
-data class Dyad<I, I2, O>(
+data class Dyad<I: Any, I2: Any, O: Any>(
     val default: Nilad,
     val dyadConsume: Boolean = false,
     override val precedence: Precedence = LOWEST,

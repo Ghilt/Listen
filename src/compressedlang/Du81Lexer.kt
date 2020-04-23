@@ -4,20 +4,15 @@ import toGroupedStringList
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class Du81Lexer(private val filePath: String) {
+class Du81Lexer(private val inputRawOrPath: String, isPath: Boolean = true) {
 
     val source: String
     val tokens: List<ParsedElement>
 
     init {
-        val stream = Files.newInputStream(Paths.get(filePath))
-        var input = ""
-        stream.buffered().reader().use { reader ->
-            input = reader.readText()
-        }
-        source = input
+        source = if (isPath) readInputFromPath(inputRawOrPath) else inputRawOrPath
 
-        val sourceElements: List<ParsedElement> = input
+        val sourceElements: List<ParsedElement> = source
             .toList()
             .toGroupedStringList(true) { x -> x == '"' }
             .toGroupedStringList { x -> x.toIntOrNull() != null }
@@ -26,8 +21,18 @@ class Du81Lexer(private val filePath: String) {
         tokens = sourceElements
     }
 
+    private fun readInputFromPath(filePath: String): String {
+        val stream = Files.newInputStream(Paths.get(filePath))
+        var input = ""
+        stream.buffered().reader().use { reader ->
+            input = reader.readText()
+        }
+
+        return input
+    }
+
     fun printDiagnostics() {
-        println(filePath)
+        if (source != inputRawOrPath) println(inputRawOrPath)
         println(source)
     }
 }

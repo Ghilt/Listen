@@ -98,8 +98,9 @@ class FunctionContext(
             result.add(commands.map { (it as ResolvedFunction).value })
         }
 
-        return (contextCreator as Dyad<*, *, List<*>>).let {
-            val r: List<*> = it.exec(target.list, result)
+        // Temporary
+        return (contextCreator as Dyad<*, *, List<Any>>).let {
+            val r: List<Any> = it.exec(target.list, result)
             r.toListDu81List(contextCreator.output)
         }
     }
@@ -111,12 +112,12 @@ class FunctionContext(
         }
     }
 
-    private fun produceNiladValue(provider: Nilad, list: Du81List<*>, index: Int): Any {
+    private fun produceNiladValue(provider: Nilad, list: Du81List<*>, index: Int, type: TYPE): Any {
         return when (provider.contextKey) {
             ContextKey.CURRENT_LIST -> list
             ContextKey.LENGTH -> list.list.size
-            ContextKey.INDEX -> index
-            ContextKey.VALUE -> list.list[index] ?: throw DeveloperError("Null as a concept is not supported")
+            ContextKey.VALUE_THEN_INDEX -> if (list.type == type) list[index] else index
+            ContextKey.VALUE -> list[index]
         }
     }
 
@@ -141,10 +142,10 @@ class FunctionContext(
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)
 
         val output = when (function) {
-            is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData))
-            is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData), consumeList[0])
+            is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, type))
+            is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, type), consumeList[0])
             else -> throw DeveloperError("Non executable: This function should be called safely")
-        } ?: throw DeveloperError("Null as a concept is not supported")
+        }
 
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) ResolvedFunction(output, function.output) else f }
             .filterIndexed { i, _ ->

@@ -8,7 +8,6 @@ class Du81Program(
     private val context = Context(input)
     private val functions = FunctionRepository()
 
-
     fun runForInput() {
         var instructionPointer = 0
         while (instructionPointer in tokens.indices) {
@@ -18,6 +17,8 @@ class Du81Program(
                 context.execute()
             }
         }
+        context.endOfProgramReached()
+
     }
 
     private fun loadToken(instructionPointer: Int): Int {
@@ -35,6 +36,8 @@ class Du81Program(
         }
         return instructionPointer + 1
     }
+
+    fun getResult() = context.getResult()
 }
 
 // F>iF="hej"F<424.12

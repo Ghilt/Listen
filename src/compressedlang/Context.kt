@@ -23,10 +23,16 @@ class Context(input: Du81List<*>) {
 
     fun isReadyForExecution() = currentFunctionContext.isBuilt
 
-    fun execute() {
-        val list = currentFunctionContext.execute()
-
+    fun endOfProgramReached() {
+        currentFunctionContext.build()
+        execute()
     }
+
+    fun execute() {
+        targets.add(0, currentFunctionContext.execute())
+    }
+
+    fun getResult(): List<Du81List<*>> = targets.toList()
 }
 
 // F>iF="hej"F<424
