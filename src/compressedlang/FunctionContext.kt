@@ -88,7 +88,7 @@ class FunctionContext(
             var commands = elements.drop(2)
             while (commands.size > contextInputSize) {
                 val indexOfFunc = commands.getIndexOfNextExecution()
-                commands = executeAt(commands, indexOfFunc, target, indexOfData, target.type)
+                commands = executeAt(commands, indexOfFunc, target, indexOfData)
             }
 
             if (commands.any { !it.isResolved() }) {
@@ -112,12 +112,12 @@ class FunctionContext(
         }
     }
 
-    private fun produceNiladValue(provider: Nilad, list: Du81List<*>, index: Int, type: TYPE): Any {
+    private fun produceNiladValue(provider: Nilad, data: Du81List<*>, index: Int, type: TYPE): Any {
         return when (provider.contextKey) {
-            ContextKey.CURRENT_LIST -> list
-            ContextKey.LENGTH -> list.list.size
-            ContextKey.VALUE_THEN_INDEX -> if (list.type == type) list[index] else index
-            ContextKey.VALUE -> list[index]
+            ContextKey.CURRENT_LIST -> data
+            ContextKey.LENGTH -> data.list.size
+            ContextKey.VALUE_THEN_INDEX -> if (type.isSatisfiedBy(data.type)) data[index] else index
+            ContextKey.VALUE -> data[index]
         }
     }
 
@@ -125,8 +125,7 @@ class FunctionContext(
         funcs: List<Function>,
         indexOfFunc: Int,
         data: Du81List<*>,
-        indexOfData: Int,
-        type: TYPE
+        indexOfData: Int
     ): List<Function> {
 
         val function = funcs[indexOfFunc]
@@ -142,8 +141,8 @@ class FunctionContext(
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)
 
         val output = when (function) {
-            is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, type))
-            is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, type), consumeList[0])
+            is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]))
+            is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]), consumeList[0])
             else -> throw DeveloperError("Non executable: This function should be called safely")
         }
 
