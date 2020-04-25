@@ -10,7 +10,7 @@ fun String.toListDu81List(): Du81List<Char> {
 }
 
 fun List<Int>.toListDu81List(): Du81List<Int> {
-    return Du81List(this, TYPE.INT)
+    return Du81List(this, TYPE.NUMBER)
 }
 
 fun <T: Any> List<T>.toListDu81List(type: TYPE): Du81List<T> {

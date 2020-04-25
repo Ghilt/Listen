@@ -108,14 +108,14 @@ fun List<TypeRequirements>.getSimplificationTarget(): Int? {
 fun List<TypeRequirements>.isFulfilledAt(index: Int): Boolean {
     return this[index].requiresByOthers.fold(true) { acc, data ->
         val requiresOfIndex = index + data.second
-        val satisfied = requiresOfIndex < this.size && data.first.isSatisfiedBy(this[requiresOfIndex].provides)
+        val satisfied = requiresOfIndex < this.size && this[requiresOfIndex].provides.isSubtypeOf_nullCompensated(data.first)
         acc && satisfied && this.isFulfilledAt(requiresOfIndex)
     }
 }
 
 fun List<TypeRequirements>.areAllFulfilled(): Boolean {
-    // impossible to read but correct, should be prettier somehow
-    return this.map { reqs -> reqs.isRequiredBy.none { !it.first.isSatisfiedBy(reqs.provides) } }.all { it }
+    // impossible to read but was correct before since before refactor, Todo make this comprehensible
+    return this.map { reqs -> reqs.isRequiredBy.none { !it.first.isSubtypeOf_nullCompensated(reqs.provides) } }.all { it }
 //    this.map { reqs -> reqs.required.distinct().size <= 1 &&  }.all { it }
 }
 
@@ -156,7 +156,7 @@ fun List<TypeRequirements>.simplify(targetIndex: Int): List<TypeRequirements> {
 }
 
 private fun List<TypeRequirements>.canConsumeItsWeakRequirement(index: Int): Boolean {
-    return this[index].requiresWeaklyByPrevious?.isSatisfiedBy(this[index - 1].provides) ?: false
+    return this[index - 1].provides?.isSubtypeOf_nullCompensated(this[index].requiresWeaklyByPrevious) ?: false
 }
 
 internal fun List<TypeRequirements>.recalculateIsRequiredByInformation(): List<TypeRequirements> {
@@ -174,3 +174,6 @@ internal fun List<TypeRequirements>.recalculateIsRequiredByInformation(): List<T
 
     return this
 }
+
+private fun TYPE?.isSubtypeOf_nullCompensated(t: TYPE?) = this?.isSubtypeOf(t) ?: false
+

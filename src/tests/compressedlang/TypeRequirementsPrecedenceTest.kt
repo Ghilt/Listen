@@ -13,27 +13,27 @@ internal class TypeRequirementsPrecedenceTest {
     @Test
     fun `requirement of high precedence gets simplified before one of low precedence earlier in list`() {
         val list = mutableListOf<TypeRequirements>()
-        list.add(TypeRequirements(provides = INT).apply {
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER).apply {
+            isWeaklyRequired = NUMBER
         })
 
         list.add(TypeRequirements(provides = STRING, precedence = Precedence.LOWEST).apply {
-            requiresWeaklyByPrevious = INT
-            requiresByOther(INT, 1)
+            requiresWeaklyByPrevious = NUMBER
+            requiresByOther(NUMBER, 1)
         })
 
-        list.add(TypeRequirements(provides = INT).apply {
-            isRequiredBy(INT, -1)
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER).apply {
+            isRequiredBy(NUMBER, -1)
+            isWeaklyRequired = NUMBER
         })
 
-        list.add(TypeRequirements(provides = INT).apply {
-            requiresWeaklyByPrevious = INT
-            requiresByOther(INT, 1)
+        list.add(TypeRequirements(provides = NUMBER).apply {
+            requiresWeaklyByPrevious = NUMBER
+            requiresByOther(NUMBER, 1)
         })
 
-        list.add(TypeRequirements(provides = INT).apply {
-            isRequiredBy(INT, -1)
+        list.add(TypeRequirements(provides = NUMBER).apply {
+            isRequiredBy(NUMBER, -1)
         })
 
 
@@ -46,27 +46,27 @@ internal class TypeRequirementsPrecedenceTest {
     @Test
     fun `requirements of similar precedence gets processed in turn`() {
         val list = mutableListOf<TypeRequirements>()
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.LOW).apply {
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.LOW).apply {
+            isWeaklyRequired = NUMBER
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.MEDIUM).apply {
-            requiresWeaklyByPrevious = INT
-            requiresByOther(INT, 1)
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.MEDIUM).apply {
+            requiresWeaklyByPrevious = NUMBER
+            requiresByOther(NUMBER, 1)
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.LOWEST).apply {
-            isRequiredBy(INT, -1)
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.LOWEST).apply {
+            isRequiredBy(NUMBER, -1)
+            isWeaklyRequired = NUMBER
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.MEDIUM).apply {
-            requiresWeaklyByPrevious = INT
-            requiresByOther(INT, 1)
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.MEDIUM).apply {
+            requiresWeaklyByPrevious = NUMBER
+            requiresByOther(NUMBER, 1)
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.HIGH).apply {
-            isRequiredBy(INT, -1)
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.HIGH).apply {
+            isRequiredBy(NUMBER, -1)
         })
 
 
@@ -83,29 +83,29 @@ internal class TypeRequirementsPrecedenceTest {
         // E.g.  1 + 2.toString()
         // should be simplified to 1 + "2", and hence be an incomplete function
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.LOW).apply {
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.LOW).apply {
+            isWeaklyRequired = NUMBER
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.LOW).apply {
-            requiresWeaklyByPrevious = INT
-            requiresByOther(INT, 1)
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.LOW).apply {
+            requiresWeaklyByPrevious = NUMBER
+            requiresByOther(NUMBER, 1)
         })
 
-        list.add(TypeRequirements(provides = INT, precedence = Precedence.LOW).apply {
-            isRequiredBy(INT, -1)
-            isWeaklyRequired = INT
+        list.add(TypeRequirements(provides = NUMBER, precedence = Precedence.LOW).apply {
+            isRequiredBy(NUMBER, -1)
+            isWeaklyRequired = NUMBER
         })
 
         list.add(TypeRequirements(provides = STRING, precedence = Precedence.HIGH).apply {
-            requiresWeaklyByPrevious = INT
+            requiresWeaklyByPrevious = NUMBER
         })
 
         val result = list.simplifyFully()
 
         assertEquals(3, result.size)
-        assertEquals(INT, result[0].provides)
-        assertEquals(INT, result[1].provides)
+        assertEquals(NUMBER, result[0].provides)
+        assertEquals(NUMBER, result[1].provides)
         assertEquals(STRING, result[2].provides)
     }
 

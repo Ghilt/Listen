@@ -49,7 +49,7 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates two inner functions`() {
-        val functionContext = FunctionContext(listOf("123".toListDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toListDu81List()), currentListNilad)
         functionContext.put(filterDyad)
 
         functionContext.put(currentListNilad)

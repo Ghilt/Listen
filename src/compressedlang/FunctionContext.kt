@@ -110,11 +110,11 @@ class FunctionContext(
         }
     }
 
-    private fun produceNiladValue(provider: Nilad, data: Du81List<*>, index: Int, type: TYPE): Any {
+    private fun produceNiladValue(provider: Nilad, data: Du81List<*>, index: Int, requiredType: TYPE): Any {
         return when (provider.contextKey) {
             ContextKey.CURRENT_LIST -> data
             ContextKey.LENGTH -> data.list.size
-            ContextKey.VALUE_THEN_INDEX -> if (type.isSatisfiedBy(data.type)) data[index] else index
+            ContextKey.VALUE_THEN_INDEX -> if (data.type.isSubtypeOf(requiredType)) data[index] else index
             ContextKey.VALUE -> data[index]
             ContextKey.INDEX -> index
             ContextKey.CONSTANT_0 -> 0
