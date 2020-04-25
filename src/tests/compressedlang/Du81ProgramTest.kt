@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class Du81ProgramTest {
 
     @AfterEach
-    fun makeStaticSingletonTestable(){
+    fun makeStaticSingletonTestable() {
         Du81ProgramEnvironment.for_test_only_ResetEnvironment()
     }
 
@@ -46,5 +46,16 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].list)
+    }
+
+    @Test
+    fun `program that maps to one higher`() {
+        val source = "M+1"
+        val input = listOf(-1, 0, 1, 2, 3)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].list)
     }
 }

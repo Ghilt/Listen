@@ -48,4 +48,12 @@ val filterDyad = Dyad<List<Any>, List<List<Boolean>>, List<Any>>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
     precedence = Precedence.LOWEST
-) { a, b -> a.filterIndexed { i, _-> b[i][0] } }
+) { a, b -> a.filterIndexed { i, _ -> b[i][0] } }
+
+val mapDyad = Dyad<List<Any>, List<List<Any>>, List<Any>>(
+    currentListNilad,
+    dyadConsume = true,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.LOWEST
+) { a, b -> a.mapIndexed { i, _ -> b[i][0] } }

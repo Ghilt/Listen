@@ -14,6 +14,7 @@ class FunctionRepository {
 
         // DYADS - LISTS
         'F' to filterDyad,
+        'M' to mapDyad,
 
         // DYADS - SINGLE VALUE
         '<' to smallerThanDyad,

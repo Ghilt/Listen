@@ -78,7 +78,7 @@ class FunctionContext(
     fun execute(): Du81List<*> {
         val target = produceList(listProvider)
 
-        val result = mutableListOf<List<Any>>()
+        val valuesInContext = mutableListOf<List<Any>>()
         val contextInputSize = contextCreator.inputs.size - 1
 
         for (indexOfData in target.list.indices) {
@@ -92,14 +92,25 @@ class FunctionContext(
                 throw DeveloperError("Unresolved function ${commands.joinToString()}")
             }
 
-            result.add(commands.map { (it as ResolvedFunction).value })
+            valuesInContext.add(commands.map { (it as ResolvedFunction).value })
         }
 
         // TODO Temporary
         @Suppress("UNCHECKED_CAST")
         return (contextCreator as Dyad<*, *, List<Any>>).let {
-            val r: List<Any> = it.exec(target.list, result)
-            r.toListDu81List(contextCreator.output)
+            val result: List<Any> = it.exec(target.list, valuesInContext)
+            val postProcessed = processResultList(result)
+            postProcessed.toListDu81List(contextCreator.output)
+        }
+    }
+
+    private fun processResultList(result: List<Any>): List<Any> {
+        // Since the functions operate on double, they also convert to doubles
+        // This post process step is to return to the integer domain if possible
+        return if (result.isNotEmpty() && result.all { it is Double && it % 1 == 0.0 }) {
+            result.map { (it as Double).toInt() }
+        } else {
+            result
         }
     }
 
@@ -142,8 +153,22 @@ class FunctionContext(
 
         val output = when (function) {
             is Nilad -> produceNiladValue(function, data, indexOfData, function.output)
-            is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]))
-            is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]), consumeList[0])
+            is Monad<*, *> -> function.exec(
+                consumablePrevious ?: produceNiladValue(
+                    function.default,
+                    data,
+                    indexOfData,
+                    function.inputs[0]
+                )
+            )
+            is Dyad<*, *, *> -> function.exec(
+                consumablePrevious ?: produceNiladValue(
+                    function.default,
+                    data,
+                    indexOfData,
+                    function.inputs[0]
+                ), consumeList[0]
+            )
             else -> throw DeveloperError("Non executable: This function should be called safely")
         }
 
