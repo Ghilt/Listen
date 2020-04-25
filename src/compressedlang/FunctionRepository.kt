@@ -10,7 +10,7 @@ class FunctionRepository {
         'i' to indexNilad,
 
         // Monads
-        'i' to lengthMonad,
+        'l' to lengthMonad,
 
         // DYADS - LISTS
         'F' to filterDyad,
@@ -24,4 +24,8 @@ class FunctionRepository {
         '=' to equalToDyad
     )
 
+    fun getDiagnosticsString(function: Function): String {
+        return "${repo.entries.filter { it.value == function }[0].key}"
+    }
 }
+

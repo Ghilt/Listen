@@ -12,7 +12,7 @@ sealed class Function(val consumesList: Boolean = false) {
     abstract val output: TYPE
     abstract val precedence: Precedence
 
-    fun isExecutable() = inputs.isNotEmpty()
+    fun isExecutable() = this !is ResolvedFunction
     fun isResolved() = this is ResolvedFunction
 }
 

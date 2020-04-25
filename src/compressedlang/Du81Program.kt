@@ -3,10 +3,14 @@ package compressedlang
 class Du81Program(
     private val source: String,
     private val tokens: List<ParsedElement>,
-    private val input: List<Int>
+    input: List<Int>,
+    functionRepository: FunctionRepository = FunctionRepository()
 ) {
     private val context = Context(input)
-    private val functions = FunctionRepository()
+
+    init {
+        Du81ProgramEnvironment.initializeRepo(functionRepository)
+    }
 
     fun runForInput() {
         var instructionPointer = 0
@@ -24,7 +28,7 @@ class Du81Program(
     private fun loadToken(instructionPointer: Int): Int {
         when (val parsedElement = tokens[instructionPointer]) {
             is FunctionToken -> {
-                val f = functions.get(parsedElement)
+                val f = Du81ProgramEnvironment.repo.get(parsedElement)
                 if (f == null) {
                     throw SyntaxError("Function not found for token: ${parsedElement.token}")
                 } else {

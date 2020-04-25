@@ -98,7 +98,8 @@ class FunctionContext(
             result.add(commands.map { (it as ResolvedFunction).value })
         }
 
-        // Temporary
+        // TODO Temporary
+        @Suppress("UNCHECKED_CAST")
         return (contextCreator as Dyad<*, *, List<Any>>).let {
             val r: List<Any> = it.exec(target.list, result)
             r.toListDu81List(contextCreator.output)
@@ -143,6 +144,7 @@ class FunctionContext(
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)
 
         val output = when (function) {
+            is Nilad -> produceNiladValue(function, data, indexOfData, function.output)
             is Monad<*, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]))
             is Dyad<*, *, *> -> function.exec(consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]), consumeList[0])
             else -> throw DeveloperError("Non executable: This function should be called safely")
@@ -176,7 +178,9 @@ private fun List<Function>.getIndexOfNextExecution(): Int {
             .firstOrNull { (i, f) -> f.isExecutable() && this.inputsOfFunctionAtIndexAreResolvedValues(i) }
         if (target != null) return target.index
     }
-    throw DeveloperError("Run out of executables: This function should be called safely")
+    throw DeveloperError("Run out of executables: This function should be called safely: ${this.joinToString {
+        Du81ProgramEnvironment.getDiagnosticsString(it)
+    }}")
 }
 
 private fun List<Function>.inputsOfFunctionAtIndexAreResolvedValues(index: Int): Boolean {
@@ -184,6 +188,9 @@ private fun List<Function>.inputsOfFunctionAtIndexAreResolvedValues(index: Int):
 }
 
 private fun List<Function>.getInputsForwardOfFunctionAtIndex(index: Int): List<Function> {
+    // Nilads and Monads do not have any forward inputs
+    if (this[index].inputs.size < 2) return listOf()
+
     val startIndex = index + 1
     val inputsForward = startIndex + this[index].inputs.size - 1
     return this.subList(startIndex, inputsForward)

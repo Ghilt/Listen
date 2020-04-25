@@ -1,7 +1,7 @@
 package compressedlang
 
 enum class TYPE {
-    LIST_TYPE, NUMBER, DOUBLE, INT, STRING, BOOL
+    LIST_TYPE, NUMBER, DOUBLE, INT, STRING, BOOL, ANY
 }
 
 fun TYPE.isSatisfiedBy(type: TYPE?): Boolean {

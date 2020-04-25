@@ -35,10 +35,10 @@ val smallerThanDyad = Dyad<Double, Double, Boolean>(
     output = TYPE.BOOL
 ) { a, b -> a < b }
 
-val equalToDyad = Dyad<Double, Double, Boolean>(
-    default = valueThenIndexNilad,
+val equalToDyad = Dyad<Any, Any, Boolean>(
+    default = valueNilad,
     precedence = Precedence.LOW,
-    inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
     output = TYPE.BOOL
 ) { a, b -> a == b }
 
