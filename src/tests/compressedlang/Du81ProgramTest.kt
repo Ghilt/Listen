@@ -58,4 +58,26 @@ internal class Du81ProgramTest {
 
         assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].list)
     }
+
+    @Test
+    fun `program that has a chain of filters`() {
+        val source = "F>100F>100F>200F>300" // TODO filtering to empty list gives index out of bounds on the next call
+        val input = listOf(100, 200, 300, 400)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(400), program.getResult()[0].list)
+    }
+
+    @Test
+    fun `program that has a chain of maps`() {
+        val source = "M+1M+1M+1M+1M+1M+1"
+        val input = listOf(-1, 0, 1, 2)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].list)
+    }
 }

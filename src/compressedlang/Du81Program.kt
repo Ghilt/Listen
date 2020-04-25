@@ -26,7 +26,7 @@ class Du81Program(
     }
 
     private fun loadToken(instructionPointer: Int): Int {
-        when (val parsedElement = tokens[instructionPointer]) {
+        val success = when (val parsedElement = tokens[instructionPointer]) {
             is FunctionToken -> {
                 val f = Du81ProgramEnvironment.repo.get(parsedElement)
                 if (f == null) {
@@ -37,8 +37,9 @@ class Du81Program(
             }
             is ParsedNumber<*> -> context.prepareFor(ResolvedFunction(parsedElement.source, TYPE.NUMBER))
             is ParsedStringLiteral -> context.prepareFor(ResolvedFunction(parsedElement.source, TYPE.STRING))
+            Nop -> true
         }
-        return instructionPointer + 1
+        return instructionPointer + if (success) 1 else 0
     }
 
     fun getResult() = context.getResult()

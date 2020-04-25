@@ -7,7 +7,9 @@ import compressedlang.Precedence.LOW
 import compressedlang.Precedence.LOWEST
 import compressedlang.TYPE.*
 
-sealed class Function(val consumesList: Boolean = false) {
+sealed class Function(val consumesList: Boolean = false,
+                      open val dynamicOutput: ((Du81List<*>, List<ResolvedFunction>) -> TYPE)? = null,
+) {
     abstract val inputs: List<TYPE>
     abstract val output: TYPE
     abstract val precedence: Precedence
@@ -48,12 +50,14 @@ data class Monad<I: Any, O: Any>(
 
 data class Dyad<I: Any, I2: Any, O: Any>(
     val default: Nilad,
-    val dyadConsume: Boolean = false,
+    val createContext: Boolean = false,
     override val precedence: Precedence = LOWEST,
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val f: (I, I2) -> O
-) : Function(dyadConsume) {
+    private val realOutput: ((Du81List<*>, List<ResolvedFunction>) -> TYPE)? = null,
+    private val f: (I, I2) -> O // TODO instead of real output include it here as additional type info like Pair<Type, O>
+) : Function(createContext) {
+    override val dynamicOutput = realOutput
     fun exec(a: Any, b: Any) = f(a as I, b as I2)
 }
 

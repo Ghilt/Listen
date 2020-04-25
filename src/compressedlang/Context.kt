@@ -13,11 +13,13 @@ class Context(input: Du81List<*>) {
     private val currentTarget
         get() = targets[0]
 
-    fun prepareFor(function: Function) {
-        if (currentFunctionContext.willAccept(function)) {
+    fun prepareFor(function: Function): Boolean {
+        return if (currentFunctionContext.willAccept(function)) {
             currentFunctionContext.put(function)
+            true
         } else {
             currentFunctionContext.build()
+            false
         }
     }
 
@@ -30,6 +32,7 @@ class Context(input: Du81List<*>) {
 
     fun execute() {
         targets.add(0, currentFunctionContext.execute())
+        functionContext.add(0, FunctionContext(targets, currentListNilad))
     }
 
     fun getResult(): List<Du81List<*>> = targets.toList()
