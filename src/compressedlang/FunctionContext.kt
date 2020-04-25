@@ -69,11 +69,8 @@ class FunctionContext(
     fun diagnosticsString(): String {
         return elements.joinToString("") {
             when (it) {
-                is Nilad -> "_"
-                is Monad<*, *> -> "M"
-                is Dyad<*, *, *> -> "D"
                 is InnerFunction -> "(${functions[functions.size - 1 - it.index].diagnosticsString()})"
-                is ResolvedFunction -> "N"
+                else -> Du81ProgramEnvironment.getDiagnosticsString(it)
             }
         }
     }

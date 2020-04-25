@@ -2,9 +2,17 @@ package tests.compressedlang
 
 import compressedlang.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class FunctionContextTest {
+
+    @BeforeAll
+    fun setupProgramEnvironment() {
+        Du81ProgramEnvironment.initializeRepo(FunctionRepository())
+    }
 
     @Test
     fun `functionContext creates inner functions when it needs new inner contexts`() {
@@ -17,7 +25,7 @@ internal class FunctionContextTest {
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
-        assertEquals("_D(_D(_D(_D)))", functionContext.diagnosticsString())
+        assertEquals("_F(_F(_F(_F)))", functionContext.diagnosticsString())
     }
 
     @Test
@@ -36,7 +44,7 @@ internal class FunctionContextTest {
         functionContext.put(2.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
-        assertEquals("_D(_DDN)MDN", functionContext.diagnosticsString())
+        assertEquals("_F(_F>1)l>2", functionContext.diagnosticsString())
     }
 
     @Test
@@ -61,7 +69,7 @@ internal class FunctionContextTest {
         functionContext.put(3.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
-        assertEquals("_D(_D(_DDN)MDN)MDN", functionContext.diagnosticsString())
+        assertEquals("_F(_F(_F>1)l>2)l>3", functionContext.diagnosticsString())
     }
 
     @Test
@@ -93,7 +101,7 @@ internal class FunctionContextTest {
         functionContext.put(4.toResolvedFunction())
 
         //             F_ F_ F_ F>1 L>2 L>3 L>4
-        assertEquals("_D(_D(_D(_DDN)MDN)MDN)MDN", functionContext.diagnosticsString())
+        assertEquals("_F(_F(_F(_F>1)l>2)l>3)l>4", functionContext.diagnosticsString())
     }
 
     @Test

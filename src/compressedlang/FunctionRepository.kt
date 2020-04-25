@@ -25,7 +25,14 @@ class FunctionRepository {
     )
 
     fun getDiagnosticsString(function: Function): String {
-        return "${repo.entries.filter { it.value == function }[0].key}"
+        val diagnosticsChar = repo.entries.firstOrNull {
+            it.value == function
+        }?.key ?: when (function) {
+            is InnerFunction -> "_i_"
+            is ResolvedFunction -> function.value
+            else -> throw DeveloperError("Function unaccounted for")
+        }
+        return "$diagnosticsChar"
     }
 }
 
