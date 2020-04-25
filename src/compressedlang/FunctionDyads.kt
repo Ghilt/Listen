@@ -1,35 +1,42 @@
 package compressedlang
 
 val additionDyad = Dyad<Double, Double, Double>(
-    default = indexNilad,
+    default = valueThenIndexNilad,
     precedence = Precedence.MEDIUM,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.DOUBLE
 ) { a, b -> a + b }
 
+val subtractionDyad = Dyad<Double, Double, Double>(
+    default = constantZeroNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
+    output = TYPE.DOUBLE
+) { a, b -> a - b }
+
 val multiplicationDyad = Dyad<Double, Double, Double>(
-    default = indexNilad,
+    default = valueThenIndexNilad,
     precedence = Precedence.HIGHEST,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.DOUBLE
 ) { a, b -> a * b }
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
-    default = indexNilad,
+    default = valueThenIndexNilad,
     precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL,
 ) { a, b -> a > b }
 
 val smallerThanDyad = Dyad<Double, Double, Boolean>(
-    default = indexNilad,
+    default = valueThenIndexNilad,
     precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL
 ) { a, b -> a < b }
 
 val equalToDyad = Dyad<Double, Double, Boolean>(
-    default = indexNilad,
+    default = valueThenIndexNilad,
     precedence = Precedence.LOW,
     inputs = listOf(TYPE.DOUBLE, TYPE.DOUBLE),
     output = TYPE.BOOL

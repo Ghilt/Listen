@@ -118,6 +118,8 @@ class FunctionContext(
             ContextKey.LENGTH -> data.list.size
             ContextKey.VALUE_THEN_INDEX -> if (type.isSatisfiedBy(data.type)) data[index] else index
             ContextKey.VALUE -> data[index]
+            ContextKey.INDEX -> index
+            ContextKey.CONSTANT_0 -> 0
         }
     }
 

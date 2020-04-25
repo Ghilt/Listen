@@ -19,6 +19,7 @@ class FunctionRepository {
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
         '+' to additionDyad,
+        '-' to subtractionDyad,
         '*' to multiplicationDyad,
         '=' to equalToDyad
     )

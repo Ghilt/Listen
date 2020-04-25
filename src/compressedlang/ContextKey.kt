@@ -1,5 +1,5 @@
 package compressedlang
 
 enum class ContextKey {
-    VALUE_THEN_INDEX, CURRENT_LIST, LENGTH, VALUE
+    CONSTANT_0, VALUE_THEN_INDEX, CURRENT_LIST, LENGTH, VALUE, INDEX
 }
