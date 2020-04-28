@@ -1,18 +1,27 @@
 package compressedlang
 
-
-class Du81List<T : Any>(val list: List<T>, val type: TYPE) {
+data class Du81List(val innerType: TYPE, val list: List<Du81value<*>>) {
     operator fun get(i: Int) = list[i]
+    fun unwrap(): List<Any> = list.map { it.value }
 }
 
-fun String.toListDu81List(): Du81List<Char> {
-    return Du81List(this.toList(), TYPE.STRING)
+
+fun List<Int>.toDu81List(): Du81List {
+    return Du81List(TYPE.NUMBER, this.map { Du81value(TYPE.NUMBER, it) })
 }
 
-fun List<Int>.toListDu81List(): Du81List<Int> {
-    return Du81List(this, TYPE.NUMBER)
+fun <T: Any> List<T>.toDu81List(type: TYPE): Du81List {
+    return Du81List(type, this.map { if (it is Du81value<*>) it else Du81value(type, it) })
 }
 
-fun <T: Any> List<T>.toListDu81List(type: TYPE): Du81List<T> {
-    return Du81List(this, type)
+fun String.toDu81List(): Du81List {
+    return Du81List(TYPE.STRING, this.toList().map { Du81value(TYPE.STRING, it) })
+}
+
+fun List<List<ResolvedFunction>>.toListDu81ListFromResolvedFunctions(): List<List<Du81value<Any>>> {
+    return this.map { innerList -> innerList.map { Du81value(it.output, it.value) }}
+}
+
+fun Du81List.toDu81Value(): Du81value<out Any> {
+    return Du81value(TYPE.LIST_TYPE, this.list)
 }

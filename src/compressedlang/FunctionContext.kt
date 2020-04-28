@@ -1,7 +1,7 @@
 package compressedlang
 
 class FunctionContext(
-    private val targets: List<Du81List<*>>,
+    private val targets: List<Du81List>,
     firstFunction: Function,
     private val functionDepth: Int = 0
 ) {
@@ -75,8 +75,8 @@ class FunctionContext(
         }
     }
 
-    fun execute(): Du81List<*> {
-        val target = produceList(listProvider)
+    fun execute(): Du81List {
+        val target: Du81List = produceList(listProvider)
 
         val valuesProvidedByContext = mutableListOf<List<ResolvedFunction>>()
         val contextInputSize = contextCreator.inputs.size - 1
@@ -94,55 +94,57 @@ class FunctionContext(
 
             valuesProvidedByContext.add(commands.map { (it as ResolvedFunction) })
         }
-
-        val valuesWithoutTypeInfo = valuesProvidedByContext
-            .map { dataIndex -> dataIndex
-                .map { contextOutputIndex -> contextOutputIndex.value
-                }
-            }
+        val finishedCalculations = CalculatedValuesOfContext(valuesProvidedByContext)
 
         // TODO Temporary
         @Suppress("UNCHECKED_CAST")
-        return (contextCreator as Dyad<*, *, List<Any>>).let {
-            val result: List<Any> = it.exec(target.list, valuesWithoutTypeInfo)
+        return (contextCreator as ContextDyad<*, *>).let { dyad ->
+            val result: Du81List = dyad.exec(target, finishedCalculations)
             val postProcessed = processResultList(result)
-            val typeOfNewList = contextCreator.dynamicOutput?.invoke(target, valuesProvidedByContext[0]) ?: TODO()
-            postProcessed.toListDu81List(typeOfNewList)
+            postProcessed
         }
     }
 
-    private fun processResultList(result: List<Any>): List<Any> {
+    private fun processResultList(result: Du81List): Du81List {
         // Since the functions operate on double, they also convert to doubles
         // This post process step is to return to the integer domain if possible
-        return if (result.isNotEmpty() && result.all { it is Double && it % 1 == 0.0 }) {
-            result.map { (it as Double).toInt() }
+        return if (result.list.isNotEmpty() && result.list.all { it.value is Double && it.value % 1 == 0.0 }) {
+            Du81List(TYPE.NUMBER, result.list.map { Du81value(it.type, (it.value as Double).toInt()) })
         } else {
             result
         }
     }
 
-    private fun produceList(provider: Nilad): Du81List<*> {
+    private fun produceList(provider: Nilad): Du81List {
         return when (provider.contextKey) {
             ContextKey.CURRENT_LIST -> targets[0]
             else -> throw DeveloperError("This is not a list producer")
         }
     }
 
-    private fun produceNiladValue(provider: Nilad, data: Du81List<*>, index: Int, requiredType: TYPE): Any {
+    private fun produceNiladValue(
+        provider: Nilad,
+        data: Du81List,
+        index: Int,
+        requiredType: TYPE
+    ): Du81value<Any> {
         return when (provider.contextKey) {
-            ContextKey.CURRENT_LIST -> data
-            ContextKey.LENGTH -> data.list.size
-            ContextKey.VALUE_THEN_INDEX -> if (data.type.isSubtypeOf(requiredType)) data[index] else index
-            ContextKey.VALUE -> data[index]
-            ContextKey.INDEX -> index
-            ContextKey.CONSTANT_0 -> 0
+            ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data)
+            ContextKey.LENGTH -> Du81value(TYPE.NUMBER, data.list.size)
+            ContextKey.VALUE_THEN_INDEX -> Du81value(
+                TYPE.NUMBER,
+                if (data.innerType.isSubtypeOf(requiredType)) data[index].value else index
+            )
+            ContextKey.VALUE -> Du81value(data.innerType, data[index])
+            ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
+            ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
         }
     }
 
     private fun executeAt(
         funcs: List<Function>,
         indexOfFunc: Int,
-        data: Du81List<*>,
+        data: Du81List,
         indexOfData: Int
     ): List<Function> {
 
@@ -156,15 +158,16 @@ class FunctionContext(
                 }
             }
 
+        // TODO not working, add test and fix
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)
 
         val output = when (function) {
             is Nilad -> produceNiladValue(function, data, indexOfData, function.output)
             is Monad<*, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0])
+                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]).value
             )
             is Dyad<*, *, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]),
+                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]).value,
                 consumeList[0]
             )
             else -> throw DeveloperError("Non executable: This function should be called safely")

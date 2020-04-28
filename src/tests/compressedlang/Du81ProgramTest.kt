@@ -22,7 +22,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(1, 2, 8), program.getResult()[0].list)
+        assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
     }
 
     @Test
@@ -33,7 +33,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(1, 2, 0, 8), program.getResult()[0].list)
+        assertEquals(listOf(1, 2, 0, 8), program.getResult()[0].unwrap())
     }
 
 
@@ -45,7 +45,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].list)
+        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].unwrap())
     }
 
     @Test
@@ -56,7 +56,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].list)
+        assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].unwrap())
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(400), program.getResult()[0].list)
+        assertEquals(listOf(400), program.getResult()[0].unwrap())
     }
 
     @Test
@@ -78,6 +78,6 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].list)
+        assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].unwrap())
     }
 }

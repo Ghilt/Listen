@@ -1,11 +1,11 @@
 package compressedlang
 
-class Context(input: Du81List<*>) {
+class Context(input: Du81List) {
 
-    constructor(stringInput: String) : this(stringInput.toListDu81List())
-    constructor(intListInput: List<Int>) : this(intListInput.toListDu81List())
+    constructor(stringInput: String) : this(stringInput.toDu81List())
+    constructor(intListInput: List<Int>) : this(intListInput.toDu81List())
 
-    private val targets: MutableList<Du81List<*>> = mutableListOf(input)
+    private val targets: MutableList<Du81List> = mutableListOf(input)
     private val functionContext = mutableListOf(FunctionContext(targets, currentListNilad))
     private val currentFunctionContext
         get() = functionContext[0]
@@ -35,7 +35,7 @@ class Context(input: Du81List<*>) {
         functionContext.add(0, FunctionContext(targets, currentListNilad))
     }
 
-    fun getResult(): List<Du81List<*>> = targets.toList()
+    fun getResult(): List<Du81List> = targets.toList()
 }
 
 // F>iF="hej"F<424

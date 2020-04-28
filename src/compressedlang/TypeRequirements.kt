@@ -34,6 +34,7 @@ class TypeRequirements(
                     is Dyad<*, *, *> -> {
                         elementTypeRequirements.placeRequirements(i, element.inputs)
                     }
+                    is ContextDyad<*, *>, -> elementTypeRequirements.placeRequirements(i, element.inputs)
                 }
             }
             return elementTypeRequirements
