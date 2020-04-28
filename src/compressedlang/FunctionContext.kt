@@ -159,7 +159,7 @@ class FunctionContext(
             }
 
         // TODO not working, add test and fix
-        val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)
+        val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
 
         val output = when (function) {
             is Nilad -> produceNiladValue(function, data, indexOfData, function.output)
@@ -181,12 +181,12 @@ class FunctionContext(
             }
     }
 
-    private fun getPreviousIfConsumableByFunctionAtIndex(funcs: List<Function>, indexOfFunc: Int, ): Function? {
+    private fun getPreviousIfConsumableByFunctionAtIndex(funcs: List<Function>, indexOfFunc: Int, ): ResolvedFunction? {
         if (indexOfFunc > 0) {
             val function = funcs[indexOfFunc]
             val previousFunc = funcs[indexOfFunc - 1]
             if (previousFunc.isResolved() && previousFunc.output == function.inputs[0]) {
-                return previousFunc
+                return previousFunc as ResolvedFunction
             }
         }
         return null

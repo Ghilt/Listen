@@ -80,4 +80,26 @@ internal class Du81ProgramTest {
 
         assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].unwrap())
     }
+
+    @Test
+    fun `program that consumes weak inputs`() {
+        val source = "M1+1+1"
+        val input = listOf(-123, 213123, 12312)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(3, 3, 3), program.getResult()[0].unwrap())
+    }
+
+    @Test
+    fun `program that mixes consuming and not consuming previous input`() {
+        val source = "M+1+1"
+        val input = listOf(-123, 213123, 12312)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(-121, 213125, 12314), program.getResult()[0].unwrap())
+    }
 }
