@@ -36,10 +36,20 @@ internal class Du81ProgramTest {
         assertEquals(listOf(1, 2, 0, 8), program.getResult()[0].unwrap())
     }
 
-
     @Test
     fun `program that filters numbers in list which appear on their own index`() {
         val source = "F=i"
+        val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].unwrap())
+    }
+
+    @Test
+    fun `program that filters numbers in list which appear on their own index works the same with explicit input`() {
+        val source = "Fv=i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
         val lexed = Du81Lexer(source, false)
         val program = Du81Program(source, lexed.tokens, input)
@@ -101,5 +111,16 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals(listOf(-121, 213125, 12314), program.getResult()[0].unwrap())
+    }
+
+    @Test
+    fun `program that mixes filters and maps`() {
+        val source = "M+iF>0"
+        val input = listOf(0, 10, 100)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(11, 102), program.getResult()[0].unwrap())
     }
 }

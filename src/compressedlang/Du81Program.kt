@@ -9,6 +9,7 @@ class Du81Program(
     private val context = Context(input)
 
     init {
+        // TODO do this outside the program class itself to make it easier to test stuff
         Du81ProgramEnvironment.initializeRepo(functionRepository)
     }
 

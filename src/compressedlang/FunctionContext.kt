@@ -135,7 +135,7 @@ class FunctionContext(
                 TYPE.NUMBER,
                 if (data.innerType.isSubtypeOf(requiredType)) data[index].value else index
             )
-            ContextKey.VALUE -> Du81value(data.innerType, data[index])
+            ContextKey.VALUE -> Du81value(data.innerType, data[index].value)
             ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
             ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
         }
@@ -158,11 +158,10 @@ class FunctionContext(
                 }
             }
 
-        // TODO not working, add test and fix
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
 
         val output = when (function) {
-            is Nilad -> produceNiladValue(function, data, indexOfData, function.output)
+            is Nilad -> produceNiladValue(function, data, indexOfData, function.output).value
             is Monad<*, *> -> function.exec(
                 consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]).value
             )
