@@ -184,7 +184,7 @@ class FunctionContext(
         if (indexOfFunc > 0) {
             val function = funcs[indexOfFunc]
             val previousFunc = funcs[indexOfFunc - 1]
-            if (previousFunc.isResolved() && previousFunc.output == function.inputs[0]) {
+            if (previousFunc.isResolved() && previousFunc.output.isSubtypeOf(function.inputs[0])) {
                 return previousFunc as ResolvedFunction
             }
         }
