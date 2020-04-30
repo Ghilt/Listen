@@ -45,3 +45,5 @@ private fun String.toParsedElement(): ParsedElement {
         else -> FunctionToken(this[0])
     }
 }
+
+fun String.lex(path: Boolean = false) = Du81Lexer(this, path).tokens

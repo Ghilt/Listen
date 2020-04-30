@@ -3,15 +3,24 @@ package tests.compressedlang
 import compressedlang.Du81Lexer
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
+import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import tests.assertAllEquals
+import tests.runSeveralProgramsOnTheSameInput
 
 internal class Du81ProgramTest {
 
+    @BeforeEach
+    fun initiateEnvironment(){
+        Du81ProgramEnvironment.initialize()
+    }
+
     @AfterEach
     fun makeStaticSingletonTestable() {
-        Du81ProgramEnvironment.for_test_only_ResetEnvironment()
+        Du81ProgramEnvironment.for_test_only_resetEnvironment()
     }
 
     @Test
@@ -49,13 +58,25 @@ internal class Du81ProgramTest {
 
     @Test
     fun `filters numbers in list which appear on their own index works the same with explicit input`() {
-        val source = "Fv=i"
+        val source1 = "Fv=i"
+        val source2 = "F=i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
-        program.runForInput()
+        val program1 = Du81Program(source1, source1.lex(), input).apply { runForInput() }
+        val program2 = Du81Program(source2, source2.lex(), input).apply { runForInput() }
 
-        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].unwrap())
+        assertEquals(listOf(0, 2, 5, 7), program1.getResult()[0].unwrap())
+        assertEquals(program1.getResult(), program2.getResult())
+    }
+
+    @Test
+    fun `filters numbers in list which appear on their own index works the same with explicit inputs`() {
+        val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
+        val results = runSeveralProgramsOnTheSameInput(input,
+            "Fv=i",
+            "F=i",
+            "Fi=v")
+
+        assertAllEquals(listOf(0, 2, 5, 7), results)
     }
 
     @Test

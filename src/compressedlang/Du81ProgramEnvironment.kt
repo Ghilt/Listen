@@ -8,7 +8,7 @@ object Du81ProgramEnvironment {
 
     private var repository: FunctionRepository? = null
 
-    fun initializeRepo(repo: FunctionRepository) {
+    fun initialize(repo: FunctionRepository = FunctionRepository()) {
         if (repository != null) {
             throw DeveloperError("What are you even doing? Double initialization functionRepository")
         } else {
@@ -22,7 +22,7 @@ object Du81ProgramEnvironment {
     fun getDiagnosticsString(func: Function) = repository?.getDiagnosticsString(func)
         ?: throw DeveloperError("What are you even doing? You forgot to initialize functionRepository")
 
-    internal fun for_test_only_ResetEnvironment() {
+    internal fun for_test_only_resetEnvironment() {
         if (isJUnitTest()) {
             repository = null
         } else {

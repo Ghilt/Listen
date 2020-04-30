@@ -3,6 +3,7 @@ package tests.compressedlang
 import compressedlang.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -11,7 +12,7 @@ internal class FunctionContextTest {
 
     @BeforeAll
     fun setupProgramEnvironment() {
-        Du81ProgramEnvironment.initializeRepo(FunctionRepository())
+        Du81ProgramEnvironment.initialize()
     }
 
     @Test

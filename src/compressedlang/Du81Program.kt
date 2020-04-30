@@ -3,15 +3,9 @@ package compressedlang
 class Du81Program(
     private val source: String,
     private val tokens: List<ParsedElement>,
-    input: List<Int>,
-    functionRepository: FunctionRepository = FunctionRepository()
+    input: List<Int>
 ) {
     private val context = Context(input)
-
-    init {
-        // TODO do this outside the program class itself to make it easier to test stuff
-        Du81ProgramEnvironment.initializeRepo(functionRepository)
-    }
 
     fun runForInput() {
         var instructionPointer = 0
