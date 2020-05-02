@@ -4,8 +4,7 @@ package compressedlang.fncs
 
 import compressedlang.*
 import compressedlang.ContextKey.CURRENT_LIST
-import compressedlang.Precedence.LOW
-import compressedlang.Precedence.LOWEST
+import compressedlang.Precedence.*
 import compressedlang.TYPE.LIST_TYPE
 import compressedlang.TYPE.NUMBER
 
@@ -43,7 +42,7 @@ data class Nilad(
     override val inputs: List<TYPE>
         get() = listOf()
     override val precedence: Precedence
-        get() = LOW
+        get() = HIGHEST
 }
 
 data class Monad<I : Any, O : Any>(

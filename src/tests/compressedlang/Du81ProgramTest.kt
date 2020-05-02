@@ -85,7 +85,12 @@ internal class Du81ProgramTest {
         val results = runSeveralProgramsOnTheSameInput(input,
             "Fv=i",
             "F=i",
-            "Fi=v")
+            "Fi=v",
+            "F2+i=v+2",
+            "Fi+3=3+v",
+            "F4+v=i+4",
+            "Fi+5=v+5",
+            "Fi+8+8-8=v+1+1+1+1+1+1+1+1")
 
         assertAllEquals(listOf(0, 2, 5, 7), results)
     }
