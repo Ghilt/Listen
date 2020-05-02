@@ -107,7 +107,7 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `has a chain of filters`() {
+    fun `chain filters`() {
         val source = "F>100F>100F>200F>300"
         val input = listOf(100, 200, 300, 400)
         val lexed = Du81Lexer(source, false)
@@ -118,7 +118,7 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `has a chain of maps`() {
+    fun `chain maps`() {
         val source = "M+1M+1M+1M+1M+1M+1"
         val input = listOf(-1, 0, 1, 2)
         val lexed = Du81Lexer(source, false)
@@ -192,5 +192,16 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals(listOf<Int>(), program.getResult()[0].unwrap())
+    }
+
+    @Test
+    fun `filter all a characters`() {
+        val source = "F=\"a\""
+        val input = "aabbac".toList()
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals("aaa", program.getResult()[0].unwrap().joinToString(""))
     }
 }

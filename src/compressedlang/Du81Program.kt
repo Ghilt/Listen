@@ -5,8 +5,15 @@ import compressedlang.fncs.ResolvedFunction
 class Du81Program(
     private val source: String,
     private val tokens: List<ParsedElement>,
-    input: List<Int>
+    input: List<Any>
 ) {
+
+    constructor(
+        source: String,
+        tokens: List<ParsedElement>,
+        input: String
+    ) : this (source, tokens, input.toList())
+
     private val context = Context(input)
 
     fun runForInput() {

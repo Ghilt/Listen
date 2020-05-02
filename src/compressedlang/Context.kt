@@ -6,7 +6,7 @@ import compressedlang.fncs.currentListNilad
 class Context(input: Du81List) {
 
     constructor(stringInput: String) : this(stringInput.toDu81List())
-    constructor(intListInput: List<Int>) : this(intListInput.toDu81List())
+    constructor(intListInput: List<Any>) : this(intListInput.toDu81ListAutoType())
 
     private val targets: MutableList<Du81List> = mutableListOf(input)
     private val functionContext = mutableListOf(FunctionContext(targets, currentListNilad))

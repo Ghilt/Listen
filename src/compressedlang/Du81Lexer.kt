@@ -4,6 +4,8 @@ import toGroupedStringList
 import java.nio.file.Files
 import java.nio.file.Paths
 
+// TODO make this a function and not a class
+
 class Du81Lexer(private val inputRawOrPath: String, isPath: Boolean = true) {
 
     val source: String
@@ -41,7 +43,7 @@ private fun String.toParsedElement(): ParsedElement {
     return when {
         this[0].isDigit() && this.contains('.') -> ParsedNumber(this.toDouble())
         this[0].isDigit() -> ParsedNumber(this.toInt())
-        this[0] == '"' -> ParsedStringLiteral(this)
+        this[0] == '"' -> ParsedStringLiteral(this.substring(1, this.length - 1))
         else -> FunctionToken(this[0])
     }
 }

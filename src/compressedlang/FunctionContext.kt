@@ -164,7 +164,7 @@ class FunctionContext(
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
 
         val output: ResolvedFunction = when (function) {
-            is Nilad -> ResolvedFunction(produceNiladValue(function, data, indexOfData, function.output))
+            is Nilad -> ResolvedFunction(produceNiladValue(function, data, indexOfData, function.output)) // todo func here
             is Monad<*, *> -> function.exec(
                 consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0])
             )

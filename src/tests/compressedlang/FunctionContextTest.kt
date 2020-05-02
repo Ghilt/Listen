@@ -137,7 +137,7 @@ internal class FunctionContextTest {
 
     @Test
     fun `execute filter on index yields filtered list`() {
-        val functionContext = FunctionContext(listOf("12345".toDu81List()),
+        val functionContext = FunctionContext(listOf("abcde".toDu81List()),
             currentListNilad
         )
         functionContext.put(filterDyad)
@@ -146,6 +146,6 @@ internal class FunctionContextTest {
 
         val list = functionContext.execute()
 
-        assertEquals("3, 4, 5", list.unwrap().joinToString())
+        assertEquals("c, d, e", list.unwrap().joinToString())
     }
 }
