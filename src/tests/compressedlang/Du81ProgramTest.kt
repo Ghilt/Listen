@@ -24,8 +24,19 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `filters away numbers smaller than 1`() {
+    fun `filters numbers larger than 0`() {
         val source = "F>0"
+        val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
+        val lexed = Du81Lexer(source, false)
+        val program = Du81Program(source, lexed.tokens, input)
+        program.runForInput()
+
+        assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
+    }
+
+    @Test
+    fun `filters numbers larger than 0 with nilad fetching value`() {
+        val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
         val lexed = Du81Lexer(source, false)
         val program = Du81Program(source, lexed.tokens, input)

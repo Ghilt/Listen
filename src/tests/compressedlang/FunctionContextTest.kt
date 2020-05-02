@@ -1,9 +1,9 @@
 package tests.compressedlang
 
 import compressedlang.*
+import compressedlang.fncs.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -17,7 +17,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions when it needs new inner contexts`() {
-        val functionContext = FunctionContext(listOf("123".toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf("123".toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
@@ -31,7 +33,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner function`() {
-        val functionContext = FunctionContext(listOf("123".toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf("123".toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
 
         functionContext.put(currentListNilad)
@@ -50,7 +54,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates two inner functions`() {
-        val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
 
         functionContext.put(currentListNilad)
@@ -75,7 +81,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions`() {
-        val functionContext = FunctionContext(listOf("123".toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf("123".toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
 
         functionContext.put(currentListNilad)
@@ -107,7 +115,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions and sequential functions`() {
-        val functionContext = FunctionContext(listOf("123".toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf("123".toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
 
         functionContext.put(currentListNilad)
@@ -127,7 +137,9 @@ internal class FunctionContextTest {
 
     @Test
     fun `execute filter on index yields filtered list`() {
-        val functionContext = FunctionContext(listOf("12345".toDu81List()), currentListNilad)
+        val functionContext = FunctionContext(listOf("12345".toDu81List()),
+            currentListNilad
+        )
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())

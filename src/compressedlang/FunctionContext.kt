@@ -1,5 +1,8 @@
 package compressedlang
 
+import compressedlang.fncs.*
+import compressedlang.fncs.Function
+
 class FunctionContext(
     private val targets: List<Du81List>,
     firstFunction: Function,
@@ -160,19 +163,19 @@ class FunctionContext(
 
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
 
-        val output = when (function) {
-            is Nilad -> produceNiladValue(function, data, indexOfData, function.output).value
+        val output: ResolvedFunction = when (function) {
+            is Nilad -> ResolvedFunction(produceNiladValue(function, data, indexOfData, function.output))
             is Monad<*, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]).value
+                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0])
             )
             is Dyad<*, *, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]).value,
+                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]),
                 consumeList[0]
             )
             else -> throw DeveloperError("Non executable: This function should be called safely")
         }
 
-        return funcs.mapIndexed { i, f -> if (i == indexOfFunc) ResolvedFunction(output, function.output) else f }
+        return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
                 val consumePrevious = i == indexOfFunc - 1 && consumablePrevious != null
                 val consumeForward = i in consumeList.indices.map { it + indexOfFunc + 1 }

@@ -1,5 +1,8 @@
 package compressedlang
 
+import compressedlang.fncs.Function
+import compressedlang.fncs.currentListNilad
+
 class Context(input: Du81List) {
 
     constructor(stringInput: String) : this(stringInput.toDu81List())

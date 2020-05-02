@@ -1,7 +1,8 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package compressedlang
+package compressedlang.fncs
 
+import compressedlang.*
 import compressedlang.ContextKey.CURRENT_LIST
 import compressedlang.Precedence.LOW
 import compressedlang.Precedence.LOWEST
@@ -20,9 +21,14 @@ sealed class Function(
 }
 
 data class ResolvedFunction(
-    val value: Any,
-    override val output: TYPE
+    val value: Du81value<Any>,
 ) : Function() {
+
+    constructor(value: Any, type: TYPE) : this(Du81value(type, value))
+
+    val actualValue = value.value
+
+    override val output = value.type
     override val inputs: List<TYPE>
         get() = listOf()
     override val precedence: Precedence
@@ -31,7 +37,8 @@ data class ResolvedFunction(
 
 data class Nilad(
     val contextKey: ContextKey,
-    override val output: TYPE
+    override val output: TYPE,
+    private val outputType: (TYPE) -> TYPE = { it },
 ) : Function() {
     override val inputs: List<TYPE>
         get() = listOf()
@@ -44,9 +51,10 @@ data class Monad<I : Any, O : Any>(
     override val precedence: Precedence = LOWEST,
     override val inputs: List<TYPE>,
     override val output: TYPE,
+    private val outputType: (TYPE) -> TYPE = { it },
     val f: (I) -> O
 ) : Function() {
-    fun exec(a: Any) = f(a as I)
+    fun exec(a: Du81value<Any>) = ResolvedFunction(f(a.value as I), outputType(a.type))
 }
 
 data class Dyad<I : Any, I2 : Any, O : Any>(
@@ -55,9 +63,10 @@ data class Dyad<I : Any, I2 : Any, O : Any>(
     override val precedence: Precedence = LOWEST,
     override val inputs: List<TYPE>,
     override val output: TYPE,
+    private val outputType: (TYPE, TYPE) -> TYPE = { v1, _ -> v1 },
     private val f: (I, I2) -> O
 ) : Function(createContext) {
-    fun exec(a: Any, b: Any) = f(a as I, b as I2)
+    fun exec(a: Du81value<Any>, b: Du81value<Any>) = ResolvedFunction(f(a.value as I,  b.value as I2), outputType(a.type, b.type))
 }
 
 data class ContextDyad<I : Any, I2 : Any>(

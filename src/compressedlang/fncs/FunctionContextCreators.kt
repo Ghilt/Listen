@@ -1,4 +1,7 @@
-package compressedlang
+package compressedlang.fncs
+
+import compressedlang.Precedence
+import compressedlang.TYPE
 
 val filterDyad = ContextDyad(
     currentListNilad,

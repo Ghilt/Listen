@@ -1,5 +1,7 @@
 package compressedlang
 
+import compressedlang.fncs.ResolvedFunction
+
 class Du81Program(
     private val source: String,
     private val tokens: List<ParsedElement>,

@@ -1,5 +1,7 @@
 package compressedlang
 
+import compressedlang.fncs.ResolvedFunction
+
 data class Du81List(val innerType: TYPE, val list: List<Du81value<*>>) {
     operator fun get(i: Int) = list[i]
     fun unwrap(): List<Any> = list.map { it.value }
@@ -19,7 +21,7 @@ fun String.toDu81List(): Du81List {
 }
 
 fun List<List<ResolvedFunction>>.toListDu81ListFromResolvedFunctions(): List<List<Du81value<Any>>> {
-    return this.map { innerList -> innerList.map { Du81value(it.output, it.value) }}
+    return this.map { innerList -> innerList.map { it.value }}
 }
 
 fun Du81List.toDu81Value(): Du81value<out Any> {

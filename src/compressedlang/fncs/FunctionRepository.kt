@@ -1,4 +1,7 @@
-package compressedlang
+package compressedlang.fncs
+
+import compressedlang.DeveloperError
+import compressedlang.FunctionToken
 
 class FunctionRepository {
 
@@ -31,7 +34,7 @@ class FunctionRepository {
             it.value == function
         }?.key ?: when (function) {
             is InnerFunction -> "_i_"
-            is ResolvedFunction -> function.value
+            is ResolvedFunction -> function.actualValue
             else -> throw DeveloperError("Function unaccounted for")
         }
         return "$diagnosticsChar"

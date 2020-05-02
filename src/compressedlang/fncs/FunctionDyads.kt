@@ -1,4 +1,6 @@
-package compressedlang
+package compressedlang.fncs
+
+import compressedlang.*
 
 val additionDyad = Dyad<Double, Double, Double>(
     default = valueThenIndexNilad,
