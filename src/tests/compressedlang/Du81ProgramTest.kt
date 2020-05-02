@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tests.assertAllEquals
+import tests.getResultAsString
 import tests.runSeveralProgramsOnTheSameInput
 
 internal class Du81ProgramTest {
 
     @BeforeEach
-    fun initiateEnvironment(){
+    fun initiateEnvironment() {
         Du81ProgramEnvironment.initialize()
     }
 
@@ -25,7 +26,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `filters numbers larger than 0`() {
-        val source = "F>0"
+        val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
         val lexed = Du81Lexer(source, false)
         val program = Du81Program(source, lexed.tokens, input)
@@ -82,7 +83,8 @@ internal class Du81ProgramTest {
     @Test
     fun `filters numbers in list which appear on their own index works the same with explicit inputs`() {
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
-        val results = runSeveralProgramsOnTheSameInput(input,
+        val results = runSeveralProgramsOnTheSameInput(
+            input,
             "Fv=i",
             "F=i",
             "Fi=v",
@@ -90,7 +92,8 @@ internal class Du81ProgramTest {
             "Fi+3=3+v",
             "F4+v=i+4",
             "Fi+5=v+5",
-            "Fi+8+8-8=v+1+1+1+1+1+1+1+1")
+            "Fi+8+8-8=v+1+1+1+1+1+1+1+1"
+        )
 
         assertAllEquals(listOf(0, 2, 5, 7), results)
     }
@@ -186,7 +189,7 @@ internal class Du81ProgramTest {
     @Test
     fun `maps empty result list`() {
         val source = "F>1M=0"
-        val input = listOf(0,0,0,0)
+        val input = listOf(0, 0, 0, 0)
         val lexed = Du81Lexer(source, false)
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
@@ -202,6 +205,16 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed.tokens, input)
         program.runForInput()
 
-        assertEquals("aaa", program.getResult()[0].unwrap().joinToString(""))
+        assertEquals("aaa", program.getResultAsString())
+    }
+
+    @Test
+    fun `map to nilad value`() {
+        val source = "MvF=3"
+        val input = listOf(1, 2, 3, 2, 1)
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("3", program.getResultAsString())
     }
 }

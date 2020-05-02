@@ -86,14 +86,14 @@ class FunctionContext(
 
         for (indexOfData in target.list.indices) {
             var commands = elements.drop(2)
-            while (commands.size > contextInputSize) {
-                val indexOfFunc = commands.getIndexOfNextExecution()
-                commands = executeAt(commands, indexOfFunc, target, indexOfData)
+            var indexOfFunc: Int? = -1
+            while (indexOfFunc != null) {
+                indexOfFunc = commands.getIndexOfNextExecution()
+                if (indexOfFunc != null) commands = executeAt(commands, indexOfFunc, target, indexOfData)
             }
 
-            if (commands.any { !it.isResolved() }) {
-                throw DeveloperError("Unresolved function ${commands.joinToString()}")
-            }
+            if (commands.any { !it.isResolved() }) throw DeveloperError("Unresolved function ${commands.joinToString()}")
+            if (commands.size != contextInputSize) throw SyntaxError("Disallowed resolution of tokens: ${commands.joinToString()}")
 
             valuesProvidedByContext.add(commands.map { (it as ResolvedFunction) })
         }
@@ -195,7 +195,7 @@ class FunctionContext(
     }
 }
 
-private fun List<Function>.getIndexOfNextExecution(): Int {
+private fun List<Function>.getIndexOfNextExecution(): Int? {
     for (precedence in Precedence.values().reversed()) {
         val target = this
             .withIndex()
@@ -203,9 +203,7 @@ private fun List<Function>.getIndexOfNextExecution(): Int {
             .firstOrNull { (i, f) -> f.isExecutable() && this.inputsOfFunctionAtIndexAreResolvedValues(i) }
         if (target != null) return target.index
     }
-    throw DeveloperError("Run out of executables: This function should be called safely: ${this.joinToString {
-        Du81ProgramEnvironment.getDiagnosticsString(it)
-    }}")
+    return null
 }
 
 private fun List<Function>.inputsOfFunctionAtIndexAreResolvedValues(index: Int): Boolean {
