@@ -4,40 +4,28 @@ import toGroupedStringList
 import java.nio.file.Files
 import java.nio.file.Paths
 
-// TODO make this a function and not a class
 
-class Du81Lexer(private val inputRawOrPath: String, isPath: Boolean = true) {
+fun du81Lex(inputRawOrPath: String, isPath: Boolean = true): Pair<String, List<ParsedElement>> {
 
-    val source: String
-    val tokens: List<ParsedElement>
+    val source = if (isPath) readInputFromPath(inputRawOrPath) else inputRawOrPath
 
-    init {
-        source = if (isPath) readInputFromPath(inputRawOrPath) else inputRawOrPath
-
-        val sourceElements: List<ParsedElement> = source
-            .toList()
-            .toGroupedStringList(true) { x -> x == '"' }
-            .toGroupedStringList { x -> x.toIntOrNull() != null }
-            .map { it.toParsedElement() }
-
-        tokens = sourceElements
-    }
-
-    private fun readInputFromPath(filePath: String): String {
-        val stream = Files.newInputStream(Paths.get(filePath))
-        var input = ""
-        stream.buffered().reader().use { reader ->
-            input = reader.readText()
-        }
-
-        return input
-    }
-
-    fun printDiagnostics() {
-        if (source != inputRawOrPath) println(inputRawOrPath)
-        println(source)
-    }
+    return source to source
+        .toList()
+        .toGroupedStringList(true) { x -> x == '"' }
+        .toGroupedStringList { x -> x.toIntOrNull() != null }
+        .map { it.toParsedElement() }
 }
+
+private fun readInputFromPath(filePath: String): String {
+    val stream = Files.newInputStream(Paths.get(filePath))
+    var input = ""
+    stream.buffered().reader().use { reader ->
+        input = reader.readText()
+    }
+
+    return input
+}
+
 
 private fun String.toParsedElement(): ParsedElement {
     return when {
@@ -48,4 +36,4 @@ private fun String.toParsedElement(): ParsedElement {
     }
 }
 
-fun String.lex(path: Boolean = false) = Du81Lexer(this, path).tokens
+fun String.lex(path: Boolean = false) = du81Lex(this, path).second

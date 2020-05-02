@@ -1,6 +1,5 @@
 package tests.compressedlang
 
-import compressedlang.Du81Lexer
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
 import compressedlang.lex
@@ -28,8 +27,8 @@ internal class Du81ProgramTest {
     fun `filters numbers larger than 0`() {
         val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
@@ -39,8 +38,8 @@ internal class Du81ProgramTest {
     fun `filters numbers larger than 0 with nilad fetching value`() {
         val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
@@ -50,8 +49,8 @@ internal class Du81ProgramTest {
     fun `filters away negative numbers`() {
         val source = "F>-1"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(1, 2, 0, 8), program.getResult()[0].unwrap())
@@ -61,8 +60,8 @@ internal class Du81ProgramTest {
     fun `filters numbers in list which appear on their own index`() {
         val source = "F=i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].unwrap())
@@ -102,8 +101,8 @@ internal class Du81ProgramTest {
     fun `maps to one higher`() {
         val source = "M+1"
         val input = listOf(-1, 0, 1, 2, 3)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].unwrap())
@@ -113,8 +112,8 @@ internal class Du81ProgramTest {
     fun `chain filters`() {
         val source = "F>100F>100F>200F>300"
         val input = listOf(100, 200, 300, 400)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(400), program.getResult()[0].unwrap())
@@ -124,8 +123,8 @@ internal class Du81ProgramTest {
     fun `chain maps`() {
         val source = "M+1M+1M+1M+1M+1M+1"
         val input = listOf(-1, 0, 1, 2)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].unwrap())
@@ -135,8 +134,8 @@ internal class Du81ProgramTest {
     fun `consumes weak inputs`() {
         val source = "M1+1+1"
         val input = listOf(-123, 213123, 12312)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(3, 3, 3), program.getResult()[0].unwrap())
@@ -146,8 +145,8 @@ internal class Du81ProgramTest {
     fun `mixes consuming and not consuming previous input`() {
         val source = "M+1+1"
         val input = listOf(-123, 213123, 12312)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(-121, 213125, 12314), program.getResult()[0].unwrap())
@@ -157,8 +156,8 @@ internal class Du81ProgramTest {
     fun `mixes filters and maps`() {
         val source = "M+iF>0"
         val input = listOf(0, 10, 100)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(11, 102), program.getResult()[0].unwrap())
@@ -168,8 +167,8 @@ internal class Du81ProgramTest {
     fun `filters explicit index equals to 1`() {
         val source = "F1=i"
         val input = listOf(100, 202, 300, 400)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf(202), program.getResult()[0].unwrap())
@@ -179,8 +178,8 @@ internal class Du81ProgramTest {
     fun `filters empty list`() {
         val source = "F>1"
         val input = listOf<Int>()
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf<Int>(), program.getResult()[0].unwrap())
@@ -190,8 +189,8 @@ internal class Du81ProgramTest {
     fun `maps empty result list`() {
         val source = "F>1M=0"
         val input = listOf(0, 0, 0, 0)
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals(listOf<Int>(), program.getResult()[0].unwrap())
@@ -201,8 +200,8 @@ internal class Du81ProgramTest {
     fun `filter all a characters`() {
         val source = "F=\"a\""
         val input = "aabbac".toList()
-        val lexed = Du81Lexer(source, false)
-        val program = Du81Program(source, lexed.tokens, input)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
         program.runForInput()
 
         assertEquals("aaa", program.getResultAsString())
