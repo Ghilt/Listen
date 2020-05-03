@@ -102,7 +102,7 @@ class FunctionContext(
         // TODO Temporary
         @Suppress("UNCHECKED_CAST")
         return (contextCreator as ContextDyad<*, *>).let { dyad ->
-            val result: Du81List = dyad.exec(target, finishedCalculations)
+            val result: Du81List = dyad.executeFromContext(target, finishedCalculations)
             val postProcessed = processResultList(result)
             postProcessed
         }
@@ -129,7 +129,7 @@ class FunctionContext(
         provider: Nilad,
         data: Du81List,
         index: Int,
-        requiredType: TYPE
+        requiredType: TYPE?
     ): Du81value<Any> {
         return when (provider.contextKey) {
             ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data)
@@ -162,18 +162,15 @@ class FunctionContext(
             }
 
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
+        val requiredTypeOfNilad = if (function.inputs.isNotEmpty()) function.inputs[0] else null
+        val firstInput = consumablePrevious ?: produceNiladValue(
+            function.defaultImplicitInput,
+            data,
+            indexOfData,
+            requiredTypeOfNilad
+        )
 
-        val output: ResolvedFunction = when (function) {
-            is Nilad -> ResolvedFunction(produceNiladValue(function, data, indexOfData, function.output)) // todo func here
-            is Monad<*, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0])
-            )
-            is Dyad<*, *, *> -> function.exec(
-                consumablePrevious ?: produceNiladValue(function.default, data, indexOfData, function.inputs[0]),
-                consumeList[0]
-            )
-            else -> throw DeveloperError("Non executable: This function should be called safely")
-        }
+        val output: ResolvedFunction = function.exec(firstInput, consumeList)
 
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
