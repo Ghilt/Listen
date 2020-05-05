@@ -19,7 +19,11 @@ sealed class Function(
     fun isExecutable() = this !is ResolvedFunction
     fun isResolved() = this is ResolvedFunction
 
-    abstract fun exec(a: Du81value<Any>, b: List<Du81value<Any>>): ResolvedFunction
+    abstract fun exec(
+        a: Du81value<Any>,
+        b: List<Du81value<Any>>,
+        environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ): ResolvedFunction
 }
 
 data class ResolvedFunction(
@@ -38,7 +42,11 @@ data class ResolvedFunction(
     override val precedence: Precedence
         get() = LOWEST
 
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>) = this
+    override fun exec(
+        a: Du81value<Any>,
+        b: List<Du81value<Any>>,
+        environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ) = this
 }
 
 data class Nilad(
@@ -54,8 +62,11 @@ data class Nilad(
     override val precedence: Precedence
         get() = HIGHEST
 
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>): ResolvedFunction {
-        return ResolvedFunction(a)
+    override fun exec(a: Du81value<Any>,
+                      b: List<Du81value<Any>>,
+                      environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ): ResolvedFunction {
+        return ResolvedFunction(environmentHook(contextKey, listOf()))
     }
 }
 
@@ -65,12 +76,24 @@ data class Monad<I : Any, O : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
     private val outputType: (TYPE) -> TYPE = { it },
+    val contextKey: ContextKey? = null,
     val f: (I) -> O
 ) : Function() {
 
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>): ResolvedFunction {
-        val value = f(a.value as I)
-        val type = outputType(a.type)
+    override fun exec(
+        a: Du81value<Any>,
+        b: List<Du81value<Any>>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ): ResolvedFunction {
+
+        val input = if (contextKey != null) {
+            environmentHook(contextKey, listOf(a))
+        } else {
+            a
+        }
+
+        val value = f(input.value as I)
+        val type = outputType(input.type)
         return ResolvedFunction(value, type)
     }
 }
@@ -84,7 +107,10 @@ data class Dyad<I : Any, I2 : Any, O : Any>(
     private val outputType: (TYPE, TYPE) -> TYPE = { v1, _ -> v1 },
     private val f: (I, I2) -> O
 ) : Function(createContext) {
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>): ResolvedFunction {
+    override fun exec(a: Du81value<Any>,
+                      b: List<Du81value<Any>>,
+                      environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ): ResolvedFunction {
         val value = f(a.value as I, b[0].value as I2)
         val type = outputType(a.type, b[0].type)
         return ResolvedFunction(value, type)
@@ -100,8 +126,10 @@ data class ContextDyad<I : Any, I2 : Any>(
     private val outputType: (TYPE, TYPE) -> TYPE,
     private val f: (List<I>, List<I2>) -> List<Any>
 ) : Function(createContext) {
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>) =
-        throw DeveloperError("Executing context function not supported")
+    override fun exec(a: Du81value<Any>,
+                      b: List<Du81value<Any>>,
+                      environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+    ) = throw DeveloperError("Executing context function not supported")
 
     fun executeFromContext(a: Du81List, b: CalculatedValuesOfContext): Du81List {
         val newType = outputType(a.innerType, b.calculateSingleType())
@@ -121,8 +149,9 @@ data class InnerFunction(
     override val precedence: Precedence
         get() = LOW
 
-    override fun exec(a: Du81value<Any>, b: List<Du81value<Any>>) =
-        throw DeveloperError("Executing inner function not supported")
+    override fun exec(a: Du81value<Any>,
+                      b: List<Du81value<Any>>,
+                      environmentHook:(contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>    ) = throw DeveloperError("Executing inner function not supported")
 }
 
 fun Function.usesNewContext(): Boolean {

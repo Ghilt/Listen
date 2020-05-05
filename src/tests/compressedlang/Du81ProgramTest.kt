@@ -2,6 +2,7 @@ package tests.compressedlang
 
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
+import compressedlang.Du81value
 import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -215,5 +216,16 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("3", program.getResultAsString())
+    }
+
+    @Test
+    fun `list by index monad fetches correct list`() {
+        val source = "M100M200M300Mi$"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
+            program.getResult()[0].unwrap().flatMap { it as ArrayList<*> }.joinToString { "${(it as Du81value<*>).value}" })
     }
 }

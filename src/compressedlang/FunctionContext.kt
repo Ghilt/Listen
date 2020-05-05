@@ -125,22 +125,24 @@ class FunctionContext(
         }
     }
 
-    private fun produceNiladValue(
-        provider: Nilad,
+    private fun getContextValueProducer(
         data: Du81List,
         index: Int,
         requiredType: TYPE?
-    ): Du81value<Any> {
-        return when (provider.contextKey) {
-            ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data)
-            ContextKey.LENGTH -> Du81value(TYPE.NUMBER, data.list.size)
-            ContextKey.VALUE_THEN_INDEX -> Du81value(
-                TYPE.NUMBER,
-                if (data.innerType.isSubtypeOf(requiredType)) data[index].value else index
-            )
-            ContextKey.VALUE -> Du81value(data.innerType, data[index].value)
-            ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
-            ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
+    ): (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any> {
+        return { contextKey: ContextKey, contextValues: List<Du81value<Any>> ->
+            when (contextKey) {
+                ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data)
+                ContextKey.LIST_BY_INDEX -> Du81value(TYPE.LIST_TYPE, targets[contextValues[0].value as Int])
+                ContextKey.LENGTH -> Du81value(TYPE.NUMBER, data.list.size)
+                ContextKey.VALUE_THEN_INDEX -> Du81value(
+                    TYPE.NUMBER,
+                    if (data.innerType.isSubtypeOf(requiredType)) data[index].value else index
+                )
+                ContextKey.VALUE -> Du81value(data.innerType, data[index].value)
+                ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
+                ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
+            }
         }
     }
 
@@ -163,14 +165,10 @@ class FunctionContext(
 
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
         val requiredTypeOfNilad = if (function.inputs.isNotEmpty()) function.inputs[0] else null
-        val firstInput = consumablePrevious ?: produceNiladValue(
-            function.defaultImplicitInput,
-            data,
-            indexOfData,
-            requiredTypeOfNilad
-        )
+        val environmentHook = getContextValueProducer(data, indexOfData, requiredTypeOfNilad)
+        val firstInput = consumablePrevious ?: environmentHook(function.defaultImplicitInput.contextKey, consumeList)
 
-        val output: ResolvedFunction = function.exec(firstInput, consumeList)
+        val output: ResolvedFunction = function.exec(firstInput, consumeList, environmentHook)
 
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->

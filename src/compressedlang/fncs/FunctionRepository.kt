@@ -15,6 +15,7 @@ class FunctionRepository {
 
         // Monads
         'l' to lengthMonad,
+        '$' to listByIndexMonad,
 
         // DYADS - LISTS
         'F' to filterDyad,
