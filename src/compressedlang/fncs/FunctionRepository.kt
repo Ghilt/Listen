@@ -21,13 +21,15 @@ class FunctionRepository {
         'F' to filterDyad,
         'M' to mapDyad,
 
-        // DYADS - SINGLE VALUE
+        // DYADS
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
         '+' to additionDyad,
         '-' to subtractionDyad,
         '*' to multiplicationDyad,
-        '=' to equalToDyad
+        '=' to equalToDyad,
+
+        'e' to elementByIndexDyad
     )
 
     fun getDiagnosticsString(function: Function): String {

@@ -228,4 +228,14 @@ internal class Du81ProgramTest {
         assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
             program.getResult()[0].unwrap().flatMap { it as ArrayList<*> }.joinToString { "${(it as Du81value<*>).value}" })
     }
+
+    @Test
+    fun `get element of list by index dyad`() {
+        val source = "M100M200M300Mi\$e0"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("300200100", program.getResultAsString())
+    }
 }

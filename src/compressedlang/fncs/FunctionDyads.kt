@@ -43,3 +43,10 @@ val equalToDyad = Dyad<Any, Any, Boolean>(
     inputs = listOf(TYPE.ANY, TYPE.ANY),
     output = TYPE.BOOL,
 ) { a, b -> a == b }
+
+val elementByIndexDyad = Dyad<List<Any>, Int, Any>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
+    output = TYPE.BOOL,
+) { a, b -> a[b] }
