@@ -167,8 +167,9 @@ class FunctionContext(
         val requiredTypeOfNilad = if (function.inputs.isNotEmpty()) function.inputs[0] else null
         val environmentHook = getContextValueProducer(data, indexOfData, requiredTypeOfNilad)
         val firstInput = consumablePrevious ?: environmentHook(function.defaultImplicitInput.contextKey, consumeList)
+        val inputsToFunction = listOf(firstInput) + consumeList
 
-        val output: ResolvedFunction = function.exec(firstInput, consumeList, environmentHook)
+        val output: ResolvedFunction = function.exec(inputsToFunction, environmentHook)
 
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
