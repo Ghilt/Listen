@@ -36,15 +36,22 @@ class FunctionContext(
                 functions[0].put(function)
             }
             else -> {
+                ifInNeedOfContextCreatorThenAddDefaultOne(function)
                 elements.add(function)
             }
+        }
+    }
+
+    private fun ifInNeedOfContextCreatorThenAddDefaultOne(function: Function) {
+        if (elements.size == 1 && function !is ContextDyad<*,*>) {
+            elements.add(Du81ProgramEnvironment.repo.defaultContextCreator)
         }
     }
 
     fun willAccept(function: Function): Boolean {
         return when {
             isInnerFunction && isComplete() -> false
-            !function.consumesList -> true
+            !function.createsContext -> true
             elements.last().usesNewContext() -> true
             elements.last() is InnerFunction -> true // inner functions produces lists, for now
             isInnerFunction -> throw SyntaxError("Faulty syntax")
@@ -79,6 +86,7 @@ class FunctionContext(
     }
 
     fun execute(): Du81List {
+
         val target: Du81List = produceList(listProvider)
 
         val valuesProvidedByContext = mutableListOf<List<ResolvedFunction>>()
@@ -142,6 +150,10 @@ class FunctionContext(
                 ContextKey.VALUE -> Du81value(data.innerType, data[index].value)
                 ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
                 ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
+                ContextKey.VALUE_THEN_CURRENT_LIST -> Du81value(
+                    TYPE.LIST_TYPE,
+                    if (data.innerType.isSubtypeOf(TYPE.LIST_TYPE)) data[index].value else data.list
+                )
             }
         }
     }

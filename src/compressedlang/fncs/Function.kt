@@ -9,7 +9,7 @@ import compressedlang.TYPE.LIST_TYPE
 import compressedlang.TYPE.NUMBER
 
 sealed class Function(
-    val consumesList: Boolean = false,
+    val createsContext: Boolean = false, // TODO likely remove
 ) {
     abstract val defaultImplicitInput: Nilad
     abstract val inputs: List<TYPE>

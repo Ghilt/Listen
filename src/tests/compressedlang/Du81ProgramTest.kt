@@ -238,4 +238,14 @@ internal class Du81ProgramTest {
 
         assertEquals("300200100", program.getResultAsString())
     }
+
+    @Test
+    fun `create list by taking single item from list`() {
+        val source = "e1"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("b", program.getResultAsString())
+    }
 }

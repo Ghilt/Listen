@@ -5,6 +5,8 @@ import compressedlang.FunctionToken
 
 class FunctionRepository {
 
+    val defaultContextCreator: Function = createListOfValueDyad
+
     fun get(ft: FunctionToken) = repo[ft.token]
 
     private val repo: Map<Char, Function> = mapOf(

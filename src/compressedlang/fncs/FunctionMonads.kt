@@ -19,4 +19,4 @@ val listByIndexMonad = Monad(
     output = TYPE.LIST_TYPE,
     contextKey = ContextKey.LIST_BY_INDEX,
     precedence = Precedence.HIGH // TODO need to fix precedences -> Int
-) { listIndex: Du81List -> listIndex.list  }
+) { list: Du81List -> list.list  }

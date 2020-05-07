@@ -3,6 +3,15 @@ package compressedlang.fncs
 import compressedlang.Precedence
 import compressedlang.TYPE
 
+val createListOfValueDyad = ContextDyad(
+    createContext = true,
+    precedence = Precedence.LOWEST,
+    defaultImplicitInput = currentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+    outputType = { t1, _ -> t1 }
+) { _: List<Any>, b: List<Any> -> listOf(b.first())}
+
 val filterDyad = ContextDyad(
     createContext = true,
     precedence = Precedence.LOWEST,
