@@ -140,8 +140,8 @@ class FunctionContext(
     ): (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any> {
         return { contextKey: ContextKey, contextValues: List<Du81value<Any>> ->
             when (contextKey) {
-                ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data)
-                ContextKey.LIST_BY_INDEX -> Du81value(TYPE.LIST_TYPE, targets[contextValues[0].value as Int])
+                ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data.list)
+                ContextKey.LIST_BY_INDEX -> Du81value(TYPE.LIST_TYPE, targets[contextValues[0].value as Int].list)
                 ContextKey.LENGTH -> Du81value(TYPE.NUMBER, data.list.size)
                 ContextKey.VALUE_THEN_INDEX -> Du81value(
                     TYPE.NUMBER,
