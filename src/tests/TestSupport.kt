@@ -5,11 +5,11 @@ import compressedlang.lex
 
 fun runSeveralProgramsOnTheSameInput(input: List<Int>, vararg programs: String): List<List<Any>> {
     return programs.map {
-        Du81Program(it, it.lex(), input).apply { runForInput() }.getResult()[0].unwrap()
+        Du81Program(it, it.lex(), input).apply { runForInput() }.getResult()[0]
     }
 }
 
-fun Du81Program.getResultAsString() = this.getResult()[0].unwrap().joinToString("")
+fun Du81Program.getResultAsString() = this.getResult()[0].joinToString("")
 
 fun assertAllEquals(target: List<Int>, results: List<List<Any>>) {
     val nonEqualElements = results.withIndex().filter {

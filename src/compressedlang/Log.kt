@@ -11,18 +11,19 @@ fun log(
     funcs: List<Function>,
     indexOfFunc: Int,
     output: ResolvedFunction,
-    consumablePrevious: Du81value<Any>?,
-    consumeList: List<Du81value<Any>>
+    consumablePrevious: Any?,
+    firstInput: Any?,
+    consumeList: List<Any>
 ){
     val func = funcs[indexOfFunc]
 
     println("Func: ${Du.getDiagnosticsString(func)} " +
             "at i: $indexOfFunc " +
             "in [${funcs.joinToString(" ") { Du.getDiagnosticsString(it) }}] " +
-            "outputs ${output.value.type}: ${output.value.value} as [" +
-            (if (consumablePrevious == null) "impl " else "${consumablePrevious.value} ") +
+            "outputs ${output.value.typeOfValue()}: ${output.value} as [" +
+            (if (consumablePrevious == null) "<$firstInput>" else "$consumablePrevious ") +
             Du.getDiagnosticsString(func) +
-            (if (consumeList.isEmpty()) "]" else " ${consumeList.joinToString("") { it.value.toString() }}]")
+            (if (consumeList.isEmpty()) "]" else " ${consumeList.joinToString("") { it.toString() }}]")
 
     )
 }

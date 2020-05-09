@@ -20,30 +20,26 @@ sealed class Function(
     fun isResolved() = this is ResolvedFunction
 
     abstract fun exec(
-        wrappedValues: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction
 }
 
 data class ResolvedFunction(
-    val value: Du81value<Any>,
+    val value: Any,
 ) : Function() {
-
-    constructor(value: Any, type: TYPE) : this(Du81value(type, value))
-
-    val actualValue = value.value
 
     override val defaultImplicitInput: Nilad
         get() = throw DeveloperError("ResolvedFunction: Not supported $value")
     override val inputs: List<TYPE>
         get() = listOf()
-    override val output = value.type
+    override val output = value.typeOfValue()
     override val precedence: Precedence
         get() = LOWEST
 
     override fun exec(
-        values: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = this
 }
 
@@ -61,8 +57,8 @@ data class Nilad(
         get() = HIGHEST
 
     override fun exec(
-        values: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
         return ResolvedFunction(environmentHook(contextKey, listOf()))
     }
@@ -73,31 +69,22 @@ data class Monad<I : Any, O : Any>(
     override val defaultImplicitInput: Nilad,
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val outputType: (TYPE) -> TYPE = { output },
     val contextKey: ContextKey? = null,
     val f: (I) -> O
 ) : Function() {
 
     override fun exec(
-        wrappedValues: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
         val input = if (contextKey != null) {
-            environmentHook(contextKey, wrappedValues)
+            environmentHook(contextKey, values)
         } else {
-            wrappedValues[0]
+            values[0]
         }
 
-        // TODO I strongly feel this house of cards is falling apart
-        val inputValue = if (input.type == LIST_TYPE) {
-            (input.value as List<Du81value<Any>>).unwrap()
-        } else {
-            input.value
-        }
-
-        val value = f(inputValue as I)
-        val type = outputType(input.type)
-        return ResolvedFunction(value, type)
+        val value = f(input as I)
+        return ResolvedFunction(value)
     }
 }
 
@@ -111,14 +98,12 @@ data class Dyad<I : Any, I2 : Any, O : Any>(
     private val f: (I, I2) -> O
 ) : Function(createContext) {
     override fun exec(
-        wrappedValues: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
         // TODO support environmentHook
-        val values = wrappedValues.unwrap()
         val value = f(values[0] as I, values[1] as I2)
-        val type = outputType(wrappedValues[0].type, wrappedValues[1].type)
-        return ResolvedFunction(value, type)
+        return ResolvedFunction(value)
     }
 }
 
@@ -128,17 +113,15 @@ data class ContextDyad<I : Any, I2 : Any>(
     override val defaultImplicitInput: Nilad,
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val outputType: (TYPE, TYPE) -> TYPE,
     private val f: (List<I>, List<I2>) -> List<Any>
 ) : Function(createContext) {
     override fun exec(
-        wrappedValues: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing context function not supported")
 
-    fun executeFromContext(a: Du81List, b: CalculatedValuesOfContext): Du81List {
-        val newType = outputType(a.innerType, b.calculateSingleType())
-        return f(a.list as List<I>, b.conformToDyad() as List<I2>).toDu81List(newType)
+    fun executeFromContext(a: List<Any>, b: CalculatedValuesOfContext): List<Any> {
+        return f(a as List<I>, b.conformToDyad() as List<I2>)
     }
 }
 
@@ -155,8 +138,8 @@ data class InnerFunction(
         get() = LOW
 
     override fun exec(
-        wrappedValues: List<Du81value<Any>>,
-        environmentHook: (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any>
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing inner function not supported")
 }
 
@@ -164,22 +147,4 @@ fun Function.usesNewContext(): Boolean {
     return this is Nilad && contextKey == CURRENT_LIST
 }
 
-fun Number.toResolvedFunction() = ResolvedFunction(this, NUMBER)
-
-/**
- * Leave the messy Du81 world when entering the neat function world
- */
-private fun List<Du81value<Any>>.unwrap(): List<Any> {
-    return this.map {
-        if (it.type == LIST_TYPE) {
-            val v = it.value as List<*>
-            if (v.isNotEmpty() && v[0] is Du81value<*>) {
-                (v as List<Du81value<Any>>).unwrap()
-            } else {
-                v
-            }
-        } else {
-            it.value
-        }
-    }
-}
+fun Number.toResolvedFunction() = ResolvedFunction(this)

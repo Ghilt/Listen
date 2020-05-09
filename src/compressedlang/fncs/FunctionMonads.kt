@@ -1,7 +1,6 @@
 package compressedlang.fncs
 
 import compressedlang.ContextKey
-import compressedlang.Du81List
 import compressedlang.Precedence
 import compressedlang.TYPE
 

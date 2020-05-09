@@ -1,9 +1,7 @@
 package compressedlang
 
-import compressedlang.fncs.ContextDyad
-import compressedlang.fncs.Dyad
+import compressedlang.fncs.*
 import compressedlang.fncs.Function
-import compressedlang.fncs.Monad
 
 typealias DidChange = Boolean
 

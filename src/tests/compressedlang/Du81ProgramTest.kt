@@ -2,7 +2,6 @@ package tests.compressedlang
 
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
-import compressedlang.Du81value
 import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -32,7 +31,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
+        assertEquals(listOf(1, 2, 8), program.getResult()[0])
     }
 
     @Test
@@ -43,7 +42,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(1, 2, 8), program.getResult()[0].unwrap())
+        assertEquals(listOf(1, 2, 8), program.getResult()[0])
     }
 
     @Test
@@ -54,7 +53,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(1, 2, 0, 8), program.getResult()[0].unwrap())
+        assertEquals(listOf(1, 2, 0, 8), program.getResult()[0])
     }
 
     @Test
@@ -65,7 +64,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0].unwrap())
+        assertEquals(listOf(0, 2, 5, 7), program.getResult()[0])
     }
 
     @Test
@@ -76,7 +75,7 @@ internal class Du81ProgramTest {
         val program1 = Du81Program(source1, source1.lex(), input).apply { runForInput() }
         val program2 = Du81Program(source2, source2.lex(), input).apply { runForInput() }
 
-        assertEquals(listOf(0, 2, 5, 7), program1.getResult()[0].unwrap())
+        assertEquals(listOf(0, 2, 5, 7), program1.getResult()[0])
         assertEquals(program1.getResult(), program2.getResult())
     }
 
@@ -106,7 +105,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0].unwrap())
+        assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0])
     }
 
     @Test
@@ -117,7 +116,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(400), program.getResult()[0].unwrap())
+        assertEquals(listOf(400), program.getResult()[0])
     }
 
     @Test
@@ -128,7 +127,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(5, 6, 7, 8), program.getResult()[0].unwrap())
+        assertEquals(listOf(5, 6, 7, 8), program.getResult()[0])
     }
 
     @Test
@@ -139,7 +138,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(3, 3, 3), program.getResult()[0].unwrap())
+        assertEquals(listOf(3, 3, 3), program.getResult()[0])
     }
 
     @Test
@@ -150,7 +149,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(-121, 213125, 12314), program.getResult()[0].unwrap())
+        assertEquals(listOf(-121, 213125, 12314), program.getResult()[0])
     }
 
     @Test
@@ -161,7 +160,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(11, 102), program.getResult()[0].unwrap())
+        assertEquals(listOf(11, 102), program.getResult()[0])
     }
 
     @Test
@@ -172,7 +171,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf(202), program.getResult()[0].unwrap())
+        assertEquals(listOf(202), program.getResult()[0])
     }
 
     @Test
@@ -183,7 +182,7 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf<Int>(), program.getResult()[0].unwrap())
+        assertEquals(listOf<Int>(), program.getResult()[0])
     }
 
     @Test
@@ -194,13 +193,13 @@ internal class Du81ProgramTest {
         val program = Du81Program(source, lexed, input)
         program.runForInput()
 
-        assertEquals(listOf<Int>(), program.getResult()[0].unwrap())
+        assertEquals(listOf<Int>(), program.getResult()[0])
     }
 
     @Test
     fun `filter all a characters`() {
         val source = "F=\"a\""
-        val input = "aabbac".toList()
+        val input = "aabbac".split("")
         val lexed = source.lex()
         val program = Du81Program(source, lexed, input)
         program.runForInput()
@@ -226,7 +225,7 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
-            program.getResult()[0].unwrap().flatMap { it as ArrayList<*> }.joinToString())
+            program.getResult()[0].flatMap { it as ArrayList<*> }.joinToString())
     }
 
     @Test

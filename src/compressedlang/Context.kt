@@ -3,12 +3,9 @@ package compressedlang
 import compressedlang.fncs.Function
 import compressedlang.fncs.currentListNilad
 
-class Context(input: Du81List) {
+class Context(input: List<Any>) {
 
-    constructor(stringInput: String) : this(stringInput.toDu81List())
-    constructor(intListInput: List<Any>) : this(intListInput.toDu81ListAutoType())
-
-    private val targets: MutableList<Du81List> = mutableListOf(input)
+    private val targets: MutableList<List<Any>> = mutableListOf(input)
     private val functionContext = mutableListOf(FunctionContext(targets, currentListNilad))
     private val currentFunctionContext
         get() = functionContext[0]
@@ -38,7 +35,7 @@ class Context(input: Du81List) {
         functionContext.add(0, FunctionContext(targets, currentListNilad))
     }
 
-    fun getResult(): List<Du81List> = targets.toList()
+    fun getResult(): List<List<Any>> = targets.toList()
 }
 
 // F>iF="hej"F<424

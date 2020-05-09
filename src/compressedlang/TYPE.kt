@@ -1,5 +1,7 @@
 package compressedlang
 
+import java.lang.IllegalArgumentException
+
 enum class TYPE {
     LIST_TYPE, NUMBER, STRING, BOOL, ANY;
 
@@ -16,3 +18,22 @@ private val typeRelations: Map<TYPE, Set<TYPE>> = mapOf(
     TYPE.BOOL to setOf(TYPE.ANY),
     TYPE.ANY to setOf()
 )
+
+fun <E  : Any> List<E>.typeOfList(): TYPE {
+
+    if (this.isEmpty()) {
+        return TYPE.ANY
+    }
+    return this[0].typeOfValue()
+}
+
+fun Any.typeOfValue(): TYPE {
+    return when (this) {
+        is Boolean -> TYPE.BOOL
+        is Number -> TYPE.NUMBER
+        is String -> TYPE.STRING
+        is Char -> TYPE.STRING // Maybe support Chars?
+        is List<*> -> TYPE.LIST_TYPE
+        else -> throw IllegalArgumentException("Type not supported: $this")
+    }
+}

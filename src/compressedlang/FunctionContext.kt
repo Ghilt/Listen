@@ -4,7 +4,7 @@ import compressedlang.fncs.*
 import compressedlang.fncs.Function
 
 class FunctionContext(
-    private val targets: List<Du81List>,
+    private val targets: List<List<Any>>,
     firstFunction: Function,
     private val functionDepth: Int = 0
 ) {
@@ -85,14 +85,14 @@ class FunctionContext(
         }
     }
 
-    fun execute(): Du81List {
+    fun execute(): List<Any> {
 
-        val target: Du81List = produceList(listProvider)
+        val target: List<Any> = produceList(listProvider)
 
         val valuesProvidedByContext = mutableListOf<List<ResolvedFunction>>()
         val contextInputSize = contextCreator.inputs.size - 1
 
-        for (indexOfData in target.list.indices) {
+        for (indexOfData in target.indices) {
             var commands = elements.drop(2)
             var indexOfFunc: Int? = -1
             while (indexOfFunc != null) {
@@ -110,23 +110,23 @@ class FunctionContext(
         // TODO Temporary
         @Suppress("UNCHECKED_CAST")
         return (contextCreator as ContextDyad<*, *>).let { dyad ->
-            val result: Du81List = dyad.executeFromContext(target, finishedCalculations)
+            val result: List<Any> = dyad.executeFromContext(target, finishedCalculations)
             val postProcessed = processResultList(result)
             postProcessed
         }
     }
 
-    private fun processResultList(result: Du81List): Du81List {
+    private fun processResultList(result: List<Any>): List<Any> {
         // Since the functions operate on double, they also convert to doubles
         // This post process step is to return to the integer domain if possible
-        return if (result.list.isNotEmpty() && result.list.all { it.value is Double && it.value % 1 == 0.0 }) {
-            Du81List(TYPE.NUMBER, result.list.map { Du81value(it.type, (it.value as Double).toInt()) })
+        return if (result.isNotEmpty() && result.all { it is Double && it % 1 == 0.0 }) {
+            result.map { (it as Double).toInt() }
         } else {
             result
         }
     }
 
-    private fun produceList(provider: Nilad): Du81List {
+    private fun produceList(provider: Nilad): List<Any> {
         return when (provider.contextKey) {
             ContextKey.CURRENT_LIST -> targets[0]
             else -> throw DeveloperError("This is not a list producer")
@@ -134,26 +134,20 @@ class FunctionContext(
     }
 
     private fun getContextValueProducer(
-        data: Du81List,
+        data: List<Any>,
         index: Int,
         requiredType: TYPE?
-    ): (contextKey: ContextKey, contextValues: List<Du81value<Any>>) -> Du81value<Any> {
-        return { contextKey: ContextKey, contextValues: List<Du81value<Any>> ->
+    ): (contextKey: ContextKey, contextValues: List<Any>) -> Any {
+        return { contextKey: ContextKey, contextValues: List<Any> ->
             when (contextKey) {
-                ContextKey.CURRENT_LIST -> Du81value(TYPE.LIST_TYPE, data.list)
-                ContextKey.LIST_BY_INDEX -> Du81value(TYPE.LIST_TYPE, targets[contextValues[0].value as Int].list)
-                ContextKey.LENGTH -> Du81value(TYPE.NUMBER, data.list.size)
-                ContextKey.VALUE_THEN_INDEX -> Du81value(
-                    TYPE.NUMBER,
-                    if (data.innerType.isSubtypeOf(requiredType)) data[index].value else index
-                )
-                ContextKey.VALUE -> Du81value(data.innerType, data[index].value)
-                ContextKey.INDEX -> Du81value(TYPE.NUMBER, index)
-                ContextKey.CONSTANT_0 -> Du81value(TYPE.NUMBER, 0)
-                ContextKey.VALUE_THEN_CURRENT_LIST -> Du81value(
-                    TYPE.LIST_TYPE,
-                    if (data.innerType.isSubtypeOf(TYPE.LIST_TYPE)) data[index].value else data.list
-                )
+                ContextKey.CURRENT_LIST -> data
+                ContextKey.LIST_BY_INDEX -> targets[contextValues[0] as Int]
+                ContextKey.LENGTH -> data.size
+                ContextKey.VALUE_THEN_INDEX -> if (data.typeOfList().isSubtypeOf(requiredType)) data[index] else index
+                ContextKey.VALUE -> data[index]
+                ContextKey.INDEX -> index
+                ContextKey.CONSTANT_0 -> 0
+                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
             }
         }
     }
@@ -161,7 +155,7 @@ class FunctionContext(
     private fun executeAt(
         funcs: List<Function>,
         indexOfFunc: Int,
-        data: Du81List,
+        data: List<Any>,
         indexOfData: Int
     ): List<Function> {
 
@@ -171,7 +165,8 @@ class FunctionContext(
             return reduceByCalculatedFunction(
                 funcs,
                 indexOfFunc,
-                ResolvedFunction(functions[function.index].execute().list, TYPE.LIST_TYPE),
+                ResolvedFunction(functions[function.index].execute()),
+                null,
                 null,
                 listOf()
             )
@@ -193,17 +188,18 @@ class FunctionContext(
 
         val output: ResolvedFunction = function.exec(inputsToFunction, environmentHook)
 
-        return reduceByCalculatedFunction(funcs, indexOfFunc, output, consumablePrevious, consumeList)
+        return reduceByCalculatedFunction(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList)
     }
 
     private fun reduceByCalculatedFunction(
         funcs: List<Function>,
         indexOfFunc: Int,
         output: ResolvedFunction,
-        consumablePrevious: Du81value<Any>?,
-        consumeList: List<Du81value<Any>>
+        consumablePrevious: Any?,
+        firstInput: Any?,
+        consumeList: List<Any>
     ): List<Function> {
-        log(funcs, indexOfFunc, output, consumablePrevious, consumeList)
+        log(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList)
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
                 val consumePrevious = i == indexOfFunc - 1 && consumablePrevious != null
@@ -212,7 +208,7 @@ class FunctionContext(
             }
     }
 
-    private fun getPreviousIfConsumableByFunctionAtIndex(funcs: List<Function>, indexOfFunc: Int, ): ResolvedFunction? {
+    private fun getPreviousIfConsumableByFunctionAtIndex(funcs: List<Function>, indexOfFunc: Int): ResolvedFunction? {
         if (indexOfFunc > 0) {
             val function = funcs[indexOfFunc]
             val previousFunc = funcs[indexOfFunc - 1]

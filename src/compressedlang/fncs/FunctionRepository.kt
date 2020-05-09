@@ -40,7 +40,7 @@ class FunctionRepository {
             it.value == function
         }?.key ?: when (function) {
             is InnerFunction -> "_i_"
-            is ResolvedFunction -> function.actualValue
+            is ResolvedFunction -> function.value
             else -> throw DeveloperError("Function unaccounted for")
         }
         return "$diagnosticsChar"
