@@ -22,6 +22,7 @@ class FunctionRepository {
         // DYADS - LISTS
         'F' to filterDyad,
         'M' to mapDyad,
+        'P' to flatMapDyad,
 
         // DYADS
         '<' to smallerThanDyad,

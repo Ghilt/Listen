@@ -226,7 +226,7 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
-            program.getResult()[0].unwrap().flatMap { it as ArrayList<*> }.joinToString { "${(it as Du81value<*>).value}" })
+            program.getResult()[0].unwrap().flatMap { it as ArrayList<*> }.joinToString())
     }
 
     @Test
@@ -247,5 +247,15 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("b", program.getResultAsString())
+    }
+
+    @Test
+    fun `complex filters with pointless inner function output should be the same as input`() {
+        val source = "F_F=\"a\"e0=\"a\""
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("abc", program.getResultAsString())
     }
 }

@@ -6,6 +6,7 @@ import compressedlang.fncs.FunctionRepository
 // In ~90% of cases when you program something less trivial it feels like you end up with a desire for something
 // singletonny for the case of simplicity. Makes me think of Android 'Context',if it was how it started, and they just
 // decided to send it in every method
+typealias Du = Du81ProgramEnvironment
 
 object Du81ProgramEnvironment {
 

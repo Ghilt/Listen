@@ -29,3 +29,12 @@ val mapDyad = ContextDyad(
     output = TYPE.LIST_TYPE,
     outputType = { _, t2 -> t2 }
 ) { a: List<Any>, b: List<Any> -> a.mapIndexed { i, _ -> b[i] } }
+
+val flatMapDyad = ContextDyad(
+    createContext = true,
+    precedence = Precedence.LOWEST,
+    defaultImplicitInput = currentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+    outputType = { _, t2 -> t2 }
+) { a: List<Any>, b: List<List<Any>> -> a.withIndex().flatMap { (i, _) -> b[i] } }

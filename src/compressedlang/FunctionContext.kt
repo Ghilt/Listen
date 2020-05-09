@@ -43,7 +43,7 @@ class FunctionContext(
     }
 
     private fun ifInNeedOfContextCreatorThenAddDefaultOne(function: Function) {
-        if (elements.size == 1 && function !is ContextDyad<*,*>) {
+        if (elements.size == 1 && function !is ContextDyad<*, *>) {
             elements.add(Du81ProgramEnvironment.repo.defaultContextCreator)
         }
     }
@@ -167,6 +167,16 @@ class FunctionContext(
 
         val function = funcs[indexOfFunc]
 
+        if (function is InnerFunction) {
+            return reduceByCalculatedFunction(
+                funcs,
+                indexOfFunc,
+                ResolvedFunction(functions[function.index].execute().list, TYPE.LIST_TYPE),
+                null,
+                listOf()
+            )
+        }
+
         val consumeList = funcs.getInputsForwardOfFunctionAtIndex(indexOfFunc)
             .map {
                 when (it) {
@@ -183,6 +193,17 @@ class FunctionContext(
 
         val output: ResolvedFunction = function.exec(inputsToFunction, environmentHook)
 
+        return reduceByCalculatedFunction(funcs, indexOfFunc, output, consumablePrevious, consumeList)
+    }
+
+    private fun reduceByCalculatedFunction(
+        funcs: List<Function>,
+        indexOfFunc: Int,
+        output: ResolvedFunction,
+        consumablePrevious: Du81value<Any>?,
+        consumeList: List<Du81value<Any>>
+    ): List<Function> {
+        log(funcs, indexOfFunc, output, consumablePrevious, consumeList)
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
                 val consumePrevious = i == indexOfFunc - 1 && consumablePrevious != null

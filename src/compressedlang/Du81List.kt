@@ -8,7 +8,6 @@ data class Du81List(val innerType: TYPE, val list: List<Du81value<*>>) {
     fun unwrap(): List<Any> = list.map { it.value }
 }
 
-
 fun List<Int>.toDu81List(): Du81List {
     return Du81List(TYPE.NUMBER, this.map { Du81value(TYPE.NUMBER, it) })
 }

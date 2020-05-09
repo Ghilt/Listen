@@ -48,5 +48,5 @@ val elementByIndexDyad = Dyad<List<Any>, Int, Any>(
     defaultImplicitInput = valueThenCurrentListNilad,
     precedence = Precedence.LOW,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
-    output = TYPE.BOOL,
+    output = TYPE.ANY,
 ) { a, b -> a[b] }
