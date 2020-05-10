@@ -2,6 +2,7 @@ package tests
 
 import deferFlatMap
 import deferMap
+import joinNeighbors
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toGroupedStringList
@@ -104,8 +105,30 @@ internal class TransformationKollektionListTest {
 
     @Test
     fun `toGroupedStringList groups items into strings`() {
-        val result = listOf(1, 0, 2, 3, 9, 8, 9, 9, 5, 4, 9, 0, 9).toGroupedStringList(true) { item -> item == 0 || item == 9 }
+        val result =
+            listOf(1, 0, 2, 3, 9, 8, 9, 9, 5, 4, 9, 0, 9).toGroupedStringList(true) { item -> item == 0 || item == 9 }
 
         assertEquals("1, 0239, 8, 99, 5, 4, 90, 9", result.joinToString())
+    }
+
+    @Test
+    fun `join neighbors works on empty list`() {
+        val result = listOf<Int>().joinNeighbors({ _, _, _ -> true }) { a, b, c -> a + b + c}
+        assertEquals("", result.joinToString())
+
+    }
+
+    @Test
+    fun `join neighbors do not join doubly when adjacent predicates are true`() {
+        val result = listOf(1,2,1,2,1,2,1).joinNeighbors({ _, b, _ -> b == 2 }) { a, b, c -> a + b + c}
+        assertEquals("4, 2, 4", result.joinToString())
+
+    }
+
+    @Test
+    fun `join neighbors joins single neighborhood `() {
+        val result = listOf(1,2,3,4,5).joinNeighbors({ _, b, _ -> b == 3 }) { a, b, c -> a + b + c }
+        assertEquals("1, 9, 5", result.joinToString())
+
     }
 }

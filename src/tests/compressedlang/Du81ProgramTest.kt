@@ -24,6 +24,17 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `filters doubles larger than 0,001`() {
+        val source = "Fv>0.001"
+        val input = listOf(-1.5, -1.4, 1.3, -2.1, 2.1, -3.2, -5.3, 0.1, 0.0, 8.2)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
+        program.runForInput()
+
+        assertEquals(listOf(1.3, 2.1, 0.1, 8.2), program.getResult()[0])
+    }
+
+    @Test
     fun `filters numbers larger than 0`() {
         val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)

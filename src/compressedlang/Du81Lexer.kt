@@ -1,5 +1,6 @@
 package compressedlang
 
+import joinNeighbors
 import toGroupedStringList
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -9,10 +10,13 @@ fun du81Lex(inputRawOrPath: String, isPath: Boolean = true): Pair<String, List<P
 
     val source = if (isPath) readInputFromPath(inputRawOrPath) else inputRawOrPath
 
+    fun String.isInt() = this.toIntOrNull() != null
+
     return source to source
         .toList()
         .toGroupedStringList(true) { x -> x == '"' }
-        .toGroupedStringList { x -> x.toIntOrNull() != null }
+        .toGroupedStringList { x -> x.isInt() }
+        .joinNeighbors({ a, b, c -> a.isInt() && b == "." && c.isInt() }) { a, b, c -> "$a$b$c" } // TODO this step could be removed(/or kept alongside with) if '.' was made an Int-append dyad, could maybe be cool to append ints for some reason?
         .map { it.toParsedElement() }
 }
 
