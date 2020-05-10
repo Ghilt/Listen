@@ -6,7 +6,7 @@ import compressedlang.TYPE
 val createListOfValueDyad = ContextDyad(
     createContext = true,
     precedence = Precedence.LOWEST,
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,
 ) { _: List<Any>, b: List<Any> -> listOf(b.first())}
@@ -14,7 +14,7 @@ val createListOfValueDyad = ContextDyad(
 val filterDyad = ContextDyad(
     createContext = true,
     precedence = Precedence.LOWEST,
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
 ) { a: List<Any>, b: List<Boolean> -> a.filterIndexed { i, _ -> b[i] } }
@@ -22,7 +22,7 @@ val filterDyad = ContextDyad(
 val mapDyad = ContextDyad(
     createContext = true,
     precedence = Precedence.LOWEST,
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,
 ) { a: List<Any>, b: List<Any> -> a.mapIndexed { i, _ -> b[i] } }
@@ -30,7 +30,15 @@ val mapDyad = ContextDyad(
 val flatMapDyad = ContextDyad(
     createContext = true,
     precedence = Precedence.LOWEST,
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE, TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
 ) { a: List<Any>, b: List<List<Any>> -> a.withIndex().flatMap { (i, _) -> b[i] } }
+
+val pipeDyad = ContextDyad(
+    createContext = true,
+    precedence = Precedence.LOWEST,
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+) { a: List<Any>, _: List<List<Any>> -> a }

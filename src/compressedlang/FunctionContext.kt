@@ -73,6 +73,11 @@ class FunctionContext(
     }
 
     fun build() {
+        functions.forEach { it.build() }
+        if (elements.size == 1) {
+            // Special case inner function which only provides a list
+            put(pipeDyad)
+        }
         isBuilt = true
     }
 
@@ -147,7 +152,9 @@ class FunctionContext(
                 ContextKey.VALUE -> data[index]
                 ContextKey.INDEX -> index
                 ContextKey.CONSTANT_0 -> 0
-                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
+                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList()
+                        .isSubtypeOf(TYPE.LIST_TYPE)
+                ) data[index] else data
             }
         }
     }
@@ -162,14 +169,8 @@ class FunctionContext(
         val function = funcs[indexOfFunc]
 
         if (function is InnerFunction) {
-            return reduceByCalculatedFunction(
-                funcs,
-                indexOfFunc,
-                ResolvedFunction(functions[function.index].execute()),
-                null,
-                null,
-                listOf()
-            )
+            val innerFuncResult = ResolvedFunction(functions[function.index].execute())
+            return reduceByCalculatedFunction(funcs, indexOfFunc, innerFuncResult, null, null, listOf())
         }
 
         val consumeList = funcs.getInputsForwardOfFunctionAtIndex(indexOfFunc)

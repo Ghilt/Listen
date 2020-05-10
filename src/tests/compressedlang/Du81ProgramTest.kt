@@ -219,7 +219,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `list by index monad fetches correct list`() {
-        val source = "M100M200M300Mi$"
+        val source = "M100M200M300Mi\$"
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), input)
         program.runForInput()
@@ -256,5 +256,24 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("abc", program.getResultAsString())
+    }
+
+    @Test
+    fun `flatmap list into a list of copies of itself`() {
+        val source = "P_"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+        assertEquals("abcabcabc", program.getResultAsString())
+    }
+
+    @Test
+    fun `flatmap different past results together`() {
+        val source = "M11M22M33Mi\$Pv"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("333333222222111111", program.getResultAsString())
     }
 }

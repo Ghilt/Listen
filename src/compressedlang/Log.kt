@@ -21,7 +21,7 @@ fun log(
             "at i: $indexOfFunc " +
             "in [${funcs.joinToString(" ") { Du.getDiagnosticsString(it) }}] " +
             "outputs ${output.value.typeOfValue()}: ${output.value} as [" +
-            (if (consumablePrevious == null) "<$firstInput>" else "$consumablePrevious ") +
+            (if (consumablePrevious == null) "<$firstInput> " else "$consumablePrevious ") +
             Du.getDiagnosticsString(func) +
             (if (consumeList.isEmpty()) "]" else " ${consumeList.joinToString("") { it.toString() }}]")
 
