@@ -43,7 +43,7 @@ class FunctionContext(
     }
 
     private fun ifInNeedOfContextCreatorThenAddDefaultOne(function: Function) {
-        if (elements.size == 1 && function !is ContextDyad<*, *>) {
+        if (elements.size == 1 && function !is ContextFunction) {
             elements.add(Du81ProgramEnvironment.repo.defaultContextCreator)
         }
     }
@@ -76,7 +76,7 @@ class FunctionContext(
         functions.forEach { it.build() }
         if (elements.size == 1) {
             // Special case inner function which only provides a list
-            put(pipeDyad)
+            put(pipeMonad)
         }
         isBuilt = true
     }
@@ -113,8 +113,7 @@ class FunctionContext(
         val finishedCalculations = CalculatedValuesOfContext(valuesProvidedByContext)
 
         // TODO Temporary
-        @Suppress("UNCHECKED_CAST")
-        return (contextCreator as ContextDyad<*, *>).let { dyad ->
+        return (contextCreator as ContextFunction).let { dyad ->
             val result: List<Any> = dyad.executeFromContext(target, finishedCalculations)
             val postProcessed = processResultList(result)
             postProcessed

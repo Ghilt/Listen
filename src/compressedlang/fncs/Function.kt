@@ -6,7 +6,6 @@ import compressedlang.*
 import compressedlang.ContextKey.CURRENT_LIST
 import compressedlang.Precedence.*
 import compressedlang.TYPE.LIST_TYPE
-import compressedlang.TYPE.NUMBER
 
 sealed class Function(
     val createsContext: Boolean = false, // TODO likely remove
@@ -16,7 +15,7 @@ sealed class Function(
     abstract val output: TYPE
     abstract val precedence: Precedence
 
-    fun isExecutable() = this !is ResolvedFunction
+    fun isExecutable() = this !is ResolvedFunction && this !is ContextFunction
     fun isResolved() = this is ResolvedFunction
 
     abstract fun exec(
@@ -107,21 +106,41 @@ data class Dyad<I : Any, I2 : Any, O : Any>(
     }
 }
 
-data class ContextDyad<I : Any, I2 : Any>(
-    val createContext: Boolean = false,
+abstract class ContextFunction(
+    createContext: Boolean = true,
     override val precedence: Precedence = LOWEST,
-    override val defaultImplicitInput: Nilad,
+    override val defaultImplicitInput: Nilad = valueThenCurrentListNilad
+) : Function(createContext) {
+    abstract fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
+}
+
+data class ContextMonad<I : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val f: (List<I>, List<I2>) -> List<Any>
-) : Function(createContext) {
+    private val f: (List<I>) -> List<Any>
+) : ContextFunction() {
     override fun exec(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing context function not supported")
 
-    fun executeFromContext(a: List<Any>, b: CalculatedValuesOfContext): List<Any> {
-        return f(a as List<I>, b.conformToDyad() as List<I2>)
+    override fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+        return f(a as List<I>)
+    }
+}
+
+data class ContextDyad<I : Any, I2 : Any>(
+    override val inputs: List<TYPE>,
+    override val output: TYPE,
+    private val f: (List<I>, List<I2>) -> List<Any>
+) : ContextFunction() {
+    override fun exec(
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
+    ) = throw DeveloperError("Executing context function not supported")
+
+    override fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+        return f(a as List<I>, inputFromContext.conformToDyad() as List<I2>)
     }
 }
 

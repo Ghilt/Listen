@@ -19,12 +19,7 @@ class FunctionRepository {
         'l' to lengthMonad,
         '$' to listByIndexMonad,
 
-        // DYADS - LISTS
-        'F' to filterDyad,
-        'M' to mapDyad,
-        'P' to flatMapDyad,
-
-        // DYADS
+        // Dyads
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
         '+' to additionDyad,
@@ -32,7 +27,15 @@ class FunctionRepository {
         '*' to multiplicationDyad,
         '=' to equalToDyad,
 
-        'e' to elementByIndexDyad
+        'e' to elementByIndexDyad,
+
+        // Context creators
+        '|' to pipeMonad,
+
+        'F' to filterDyad,
+        'M' to mapDyad,
+        'P' to flatMapDyad,
+        '@' to createListOfValueDyad,
     )
 
     fun getDiagnosticsString(function: Function): String {
