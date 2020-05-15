@@ -123,12 +123,24 @@ class FunctionContext(
     private fun processResultList(result: List<Any>): List<Any> {
         // Since the functions operate on double, they also convert to doubles
         // This post process step is to return to the integer domain if possible
-        return if (result.isNotEmpty() && result.all { it is Double && it % 1 == 0.0 }) {
+        return if (result.isNotEmpty() && result.all { it.isDoubleButCouldBeRepresentedByInt() }) {
             result.map { (it as Double).toInt() }
         } else {
             result
         }
     }
+
+    private fun processFunctionResult(result: ResolvedFunction): ResolvedFunction {
+        // Since the functions operate on double, they also convert to doubles
+        // This post process step is to return to the integer domain if possible
+        return if (result.output == TYPE.NUMBER && result.value.isDoubleButCouldBeRepresentedByInt() ) {
+            ResolvedFunction((result.value as Double).toInt())
+        } else {
+            result
+        }
+    }
+
+    private fun Any.isDoubleButCouldBeRepresentedByInt() = this is Double && this % 1 == 0.0
 
     private fun produceList(provider: Nilad): List<Any> {
         return when (provider.contextKey) {
@@ -145,15 +157,18 @@ class FunctionContext(
         return { contextKey: ContextKey, contextValues: List<Any> ->
             when (contextKey) {
                 ContextKey.CURRENT_LIST -> data
-                ContextKey.LIST_BY_INDEX -> targets[contextValues[0] as Int]
+                ContextKey.LIST_BY_INDEX -> {
+                    val indexOfRequestedList = contextValues[0] as Int
+                    if (indexOfRequestedList >= targets.size) throw Du81AttemptingToFetchNonExistingListError(targets.size, indexOfRequestedList)
+                    targets[indexOfRequestedList]
+                }
                 ContextKey.LENGTH -> data.size
                 ContextKey.VALUE_THEN_INDEX -> if (data.typeOfList().isSubtypeOf(requiredType)) data[index] else index
                 ContextKey.VALUE -> data[index]
                 ContextKey.INDEX -> index
                 ContextKey.CONSTANT_0 -> 0
-                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList()
-                        .isSubtypeOf(TYPE.LIST_TYPE)
-                ) data[index] else data
+                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
+                ContextKey.NOP -> ContextKey.NOP // This is treated specially down the line
             }
         }
     }
@@ -188,7 +203,9 @@ class FunctionContext(
 
         val output: ResolvedFunction = function.exec(inputsToFunction, environmentHook)
 
-        return reduceByCalculatedFunction(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList)
+        val postProcessed = processFunctionResult(output)
+
+        return reduceByCalculatedFunction(funcs, indexOfFunc, postProcessed, consumablePrevious, firstInput, consumeList)
     }
 
     private fun reduceByCalculatedFunction(
@@ -200,6 +217,11 @@ class FunctionContext(
         consumeList: List<Any>
     ): List<Function> {
         log(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList)
+
+        if (output.isNoOperation) {
+            return funcs.filterIndexed { i, _ -> i != indexOfFunc }
+        }
+
         return funcs.mapIndexed { i, f -> if (i == indexOfFunc) output else f }
             .filterIndexed { i, _ ->
                 val consumePrevious = i == indexOfFunc - 1 && consumablePrevious != null
@@ -211,6 +233,11 @@ class FunctionContext(
     private fun getPreviousIfConsumableByFunctionAtIndex(funcs: List<Function>, indexOfFunc: Int): ResolvedFunction? {
         if (indexOfFunc > 0) {
             val function = funcs[indexOfFunc]
+
+            if (function is Nilad) {
+                return  null
+            }
+
             val previousFunc = funcs[indexOfFunc - 1]
             if (previousFunc.isResolved() && previousFunc.output.isSubtypeOf(function.inputs[0])) {
                 return previousFunc as ResolvedFunction

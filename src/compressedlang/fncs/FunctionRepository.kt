@@ -14,6 +14,7 @@ class FunctionRepository {
         '_' to currentListNilad,
         'i' to indexNilad,
         'v' to valueNilad,
+        ',' to no_opNilad,
 
         // Monads
         'l' to lengthMonad,

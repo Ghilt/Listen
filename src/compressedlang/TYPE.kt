@@ -34,6 +34,7 @@ fun Any.typeOfValue(): TYPE {
         is String -> TYPE.STRING
         is Char -> TYPE.STRING // Maybe support Chars?
         is List<*> -> TYPE.LIST_TYPE
+        is ContextKey -> TYPE.ANY // Handling special cases
         else -> throw IllegalArgumentException("Type not supported: $this")
     }
 }

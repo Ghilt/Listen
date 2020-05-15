@@ -2,12 +2,14 @@ package tests.compressedlang
 
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
+import compressedlang.SyntaxError
 import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tests.assertAllEquals
+import tests.expectException
 import tests.getResultAsString
 import tests.runSeveralProgramsOnTheSameInput
 
@@ -101,7 +103,10 @@ internal class Du81ProgramTest {
             "F2+i=v+2",
             "Fi+3=3+v",
             "F4+v=i+4",
-            "Fi+5=v+5",
+            "Fi,+5,=v+5",
+            "Fi+3=3+,v",
+            "F4+v,,=,i+4",
+            "Fi,+5=v,+,,5",
             "Fi+8+8-8=v+1+1+1+1+1+1+1+1"
         )
 
@@ -236,7 +241,8 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
-            program.getResult()[0].flatMap { it as ArrayList<*> }.joinToString())
+            program.getResult()[0].flatMap { it as ArrayList<*> }.joinToString()
+        )
     }
 
     @Test
@@ -286,5 +292,48 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("333333222222111111", program.getResultAsString())
+    }
+
+    @Test
+    fun `create list from value works correctly`() {
+        val source = "@112121229"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("112121229", program.getResultAsString())
+    }
+
+    @Test
+    fun `| pipe works correctly`() {
+        val source = "|||||M0\$e2"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("ccc", program.getResultAsString())
+    }
+
+    @Test
+    fun `throw syntax error if function have too many resolved values`() {
+        val source = "F1,1,1,1"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+
+
+        val exception = expectException { program.runForInput() }
+
+        assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
+    }
+
+    @Test
+    fun `nop resolves to nothingness`() {
+        val source = "F,,,,,,=,,,,,1,,,,,,+,,,,,1,,,,,,,,"
+        val input = listOf(1, 2, 3, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("22", program.getResultAsString())
     }
 }

@@ -40,6 +40,9 @@ data class ResolvedFunction(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = this
+
+    val isNoOperation: Boolean = value == ContextKey.NOP
+
 }
 
 data class Nilad(

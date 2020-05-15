@@ -22,3 +22,12 @@ fun assertAllEquals(target: List<Int>, results: List<List<Any>>) {
         throw AssertionError("All items not equal to $target\n$errorMessage")
     }
 }
+
+fun expectException(function: () -> Unit): Any? {
+    try {
+        function()
+    } catch (e: Throwable) {
+        return e
+    }
+    return null
+}
