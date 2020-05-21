@@ -24,6 +24,26 @@ sealed class Function(
     ): ResolvedFunction
 }
 
+data class ControlFlow(
+    val value: Any,
+) : Function(false) {
+
+    override val defaultImplicitInput: Nilad
+        get() = throw DeveloperError("ControlFlow: Not supported $value")
+    override val inputs: List<TYPE>
+        get() = throw DeveloperError("ControlFlow: Not supported $value")
+    override val output
+        get() = throw DeveloperError("ControlFlow: Not supported $value")
+    override val precedence: Precedence
+        get() = throw DeveloperError("ControlFlow: Not supported $value")
+
+    override fun exec(
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
+    ): ResolvedFunction = throw DeveloperError("ControlFlow: Not supported $value")
+
+}
+
 data class ResolvedFunction(
     val value: Any,
 ) : Function() {
@@ -163,10 +183,6 @@ data class InnerFunction(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing inner function not supported")
-}
-
-fun Function.usesNewContext(): Boolean {
-    return this is Nilad && contextKey == CURRENT_LIST
 }
 
 fun Number.toResolvedFunction() = ResolvedFunction(this)

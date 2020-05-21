@@ -28,8 +28,10 @@ class TypeRequirements(
 
     companion object {
         fun createFromElements(elements: List<Function>): List<TypeRequirements> {
-            val elementTypeRequirements =
-                MutableList(elements.size) { TypeRequirements(elements[it].precedence, elements[it].output) }
+
+            // TODO not thought through how context less part of a function context will behave
+
+            val elementTypeRequirements = MutableList(elements.size) { TypeRequirements(elements[it].precedence, elements[it].output) }
 
             elements.withIndex().forEach { (i, element) ->
                 when (element) {

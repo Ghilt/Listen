@@ -5,84 +5,100 @@ import compressedlang.fncs.Function
 
 class FunctionContext(
     private val targets: List<List<Any>>,
-    firstFunction: Function,
     private val functionDepth: Int = 0
 ) {
 
+    private val canAcceptContextCreator: Boolean
+        get() = contextCreator == null
     private val isInnerFunction: Boolean
         get() = functionDepth != 0
 
-    private val elements: MutableList<Function> = mutableListOf(firstFunction)
+    private val contextLessElements: MutableList<Function> = mutableListOf()
+    private var contextCreator: ContextFunction? = null
+    private val elements: MutableList<Function> = mutableListOf()
     private val functions: MutableList<FunctionContext> = mutableListOf()
     internal var isBuilt = false
 
-    private val listProvider
-        get() = elements[0] as Nilad
-
-    private val contextCreator
-        get() = elements[1]
-
     fun put(function: Function) {
         if (!willAccept(function)) {
-            throw DeveloperError("Adding unacceptable function to function context")
+            throw DeveloperError("Adding unacceptable function to function context: $function")
         }
 
         when {// TODO correctly make inner functions
-            functions.isEmpty() && function.usesNewContext() -> {
+            functions.isEmpty() && function is ControlFlow -> {
                 elements.add(InnerFunction(functions.size))
-                functions.add(0, FunctionContext(targets, function, functionDepth + 1))
+                functions.add(0, FunctionContext(targets, functionDepth + 1))
             }
             functions.isNotEmpty() && functions[0].willAccept(function) -> {
                 functions[0].put(function)
             }
+            contextCreator == null && function is ContextFunction -> contextCreator = function
+            contextCreator == null -> contextLessElements.add(function)
             else -> {
-                ifInNeedOfContextCreatorThenAddDefaultOne(function)
+//                ifInNeedOfContextCreatorThenAddDefaultOne(function)
                 elements.add(function)
             }
         }
     }
 
     private fun ifInNeedOfContextCreatorThenAddDefaultOne(function: Function) {
-        if (elements.size == 1 && function !is ContextFunction) {
-            elements.add(Du81ProgramEnvironment.repo.defaultContextCreator)
+        if (contextCreator == null && function !is ContextFunction) {
+            contextCreator = Du81ProgramEnvironment.repo.defaultContextCreator
         }
     }
 
     fun willAccept(function: Function): Boolean {
         return when {
+//            !function.createsContext && canAcceptContextCreator -> true
+//            function.createsContext && canAcceptContextCreator -> true
+//            function.createsContext && !canAcceptContextCreator -> false
             isInnerFunction && isComplete() -> false
-            !function.createsContext -> true
-            elements.last().usesNewContext() -> true
-            elements.last() is InnerFunction -> true // inner functions produces lists, for now
-            isInnerFunction -> throw SyntaxError("Faulty syntax")
-            else -> false
+            function.createsContext && !willAcceptContextCreator() -> false
+//            isInnerFunction && !isComplete() -> true
+            else -> true
         }
     }
 
+    private fun willAcceptContextCreator(): Boolean = canAcceptContextCreator || (elements.isNotEmpty() && elements.last() is InnerFunction) && functions[0].willAcceptContextCreator()
+
     private fun isComplete(): Boolean {
 
-        if (elements.size <= 1) {
-            // First element always a list provider which can't complete a context on its own, for now
-            // probably extract the list provider to its own variable rather than keeping in list
+        if (canAcceptContextCreator) {
             return false
         }
 
-        val elementTypeRequirements = TypeRequirements.createFromElements(elements)
+        val elementTypeRequirements = TypeRequirements.createFromElements(getViewOfFunctionsContext())
         val simplifiedRequirements = elementTypeRequirements.simplifyFully()
         return simplifiedRequirements.areAllFulfilled()
     }
 
     fun build() {
         functions.forEach { it.build() }
-        if (elements.size == 1) {
+        if (canAcceptContextCreator) {
             // Special case inner function which only provides a list
+            // TODO Inner functions not returning a list
             put(pipeMonad)
         }
         isBuilt = true
     }
 
+    private fun getViewOfFunctionsContext(): List<Function> {
+        // This is glue pandering to legacy TypeRequirement implementation which i can't bother to change atm
+        val creator = contextCreator
+        if (creator == null && elements.isNotEmpty()) throw DeveloperError("Something is wrong with this function, context creator is null but has elements depending on context: $elements")
+        val maybeContextCreator = mutableListOf<Function>().apply { if (creator != null) add(creator) }
+        return listOf(currentListNilad) + maybeContextCreator + elements
+    }
+
+    private fun getViewOfWholeContext(): List<Function> {
+        val creator = contextCreator
+        if (creator == null && elements.isNotEmpty()) throw DeveloperError("Something is wrong with this function, context creator is null but has elements depending on context: $elements")
+        val maybeContextCreator = mutableListOf<Function>().apply { if (creator != null) add(creator) }
+        return contextLessElements + maybeContextCreator + elements
+    }
+
     fun diagnosticsString(): String {
-        return elements.joinToString("") {
+        return getViewOfWholeContext().joinToString("") {
             when (it) {
                 is InnerFunction -> "(${functions[functions.size - 1 - it.index].diagnosticsString()})"
                 else -> Du81ProgramEnvironment.getDiagnosticsString(it)
@@ -91,18 +107,36 @@ class FunctionContext(
     }
 
     fun execute(): List<Any> {
+        var contextLessCommands = contextLessElements.toList()
+        var indexOfContextLessFunc: Int? = -1
+        while (indexOfContextLessFunc != null) {
+            indexOfContextLessFunc = contextLessCommands.getIndexOfNextExecution()
+            if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, targets[0], -1)
+        }
 
-        val target: List<Any> = produceList(listProvider)
+        if (contextLessCommands.size != 1) throw DeveloperError("Todo, maybe support more fully-fledged context less execution in the future")
+
+        val resolvedContextLess = contextLessCommands[0] as ResolvedFunction
+
+        val listToOperateOn: List<Any> = if (resolvedContextLess.output != TYPE.LIST_TYPE) {
+            // the contextLess command returns a single value, wrap it in a list to let the creator operate on that
+            listOf(resolvedContextLess.value)
+        } else {
+            resolvedContextLess.value as List<Any>
+        }
+
+
+        if (contextCreator == null) throw DeveloperError("Todo, maybe support more fully-fledged context less execution in the future")
+
+        val contextInputSize = (contextCreator?.inputs?.size ?: 0) - 1
 
         val valuesProvidedByContext = mutableListOf<List<ResolvedFunction>>()
-        val contextInputSize = contextCreator.inputs.size - 1
-
-        for (indexOfData in target.indices) {
-            var commands = elements.drop(2)
+        for (indexOfData in listToOperateOn.indices) {
+            var commands = elements.toList()
             var indexOfFunc: Int? = -1
             while (indexOfFunc != null) {
                 indexOfFunc = commands.getIndexOfNextExecution()
-                if (indexOfFunc != null) commands = executeAt(commands, indexOfFunc, target, indexOfData)
+                if (indexOfFunc != null) commands = executeAt(commands, indexOfFunc, listToOperateOn, indexOfData)
             }
 
             if (commands.any { !it.isResolved() }) throw DeveloperError("Unresolved function ${commands.joinToString()}")
@@ -114,7 +148,7 @@ class FunctionContext(
 
         // TODO Temporary
         return (contextCreator as ContextFunction).let { dyad ->
-            val result: List<Any> = dyad.executeFromContext(target, finishedCalculations)
+            val result: List<Any> = dyad.executeFromContext(listToOperateOn, finishedCalculations)
             val postProcessed = processResultList(result)
             postProcessed
         }
@@ -142,15 +176,8 @@ class FunctionContext(
 
     private fun Any.isDoubleButCouldBeRepresentedByInt() = this is Double && this % 1 == 0.0
 
-    private fun produceList(provider: Nilad): List<Any> {
-        return when (provider.contextKey) {
-            ContextKey.CURRENT_LIST -> targets[0]
-            else -> throw DeveloperError("This is not a list producer")
-        }
-    }
-
     private fun getContextValueProducer(
-        data: List<Any>,
+        data: List<Any>, // Todo remove this argument?, it is too confusing, fetch by targets[0]
         index: Int,
         requiredType: TYPE?
     ): (contextKey: ContextKey, contextValues: List<Any>) -> Any {

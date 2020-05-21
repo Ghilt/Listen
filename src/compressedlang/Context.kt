@@ -6,7 +6,7 @@ import compressedlang.fncs.currentListNilad
 class Context(input: List<Any>) {
 
     private val targets: MutableList<List<Any>> = mutableListOf(input)
-    private val functionContext = mutableListOf(FunctionContext(targets, currentListNilad))
+    private val functionContext = mutableListOf(FunctionContext(targets).apply { put(currentListNilad) })
     private val currentFunctionContext
         get() = functionContext[0]
 
@@ -31,8 +31,10 @@ class Context(input: List<Any>) {
     }
 
     fun execute() {
+        log("Du81, outer function ready for execution: ${currentFunctionContext.diagnosticsString()}")
+
         targets.add(0, currentFunctionContext.execute())
-        functionContext.add(0, FunctionContext(targets, currentListNilad))
+        functionContext.add(0, FunctionContext(targets).apply { put(currentListNilad) })
     }
 
     fun getResult(): List<List<Any>> = targets.toList()

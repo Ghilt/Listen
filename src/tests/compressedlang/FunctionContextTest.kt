@@ -17,14 +17,15 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions when it needs new inner contexts`() {
-        val functionContext = FunctionContext(listOf("123".toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
@@ -33,14 +34,12 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner function`() {
-        val functionContext = FunctionContext(listOf("123".toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
-
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
 
@@ -54,14 +53,14 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates two inner functions`() {
-        val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
@@ -81,17 +80,18 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions`() {
-        val functionContext = FunctionContext(listOf("123".toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
@@ -115,11 +115,10 @@ internal class FunctionContextTest {
 
     @Test
     fun `functionContext creates inner functions and sequential functions`() {
-        val functionContext = FunctionContext(listOf("123".toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
+        functionContext.put(innerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
@@ -137,15 +136,14 @@ internal class FunctionContextTest {
 
     @Test
     fun `execute filter on index yields filtered list`() {
-        val functionContext = FunctionContext(listOf("abcde".toList()),
-            currentListNilad
-        )
+        val functionContext = FunctionContext(listOf("abcde".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
 
         val list = functionContext.execute()
 
+        assertEquals("_F>1", functionContext.diagnosticsString())
         assertEquals("c, d, e", list.joinToString())
     }
 }

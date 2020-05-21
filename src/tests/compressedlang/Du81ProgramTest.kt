@@ -125,6 +125,17 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `maps to one lower`() {
+        val source = "Mv-1" // Does not use implicit values with (-) sign as it is a dyad in all cases. Zero is its implicit input
+        val input = listOf(-1, 0, 1, 2, 3)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
+        program.runForInput()
+
+        assertEquals(listOf(-2, -1, 0, 1, 2), program.getResult()[0])
+    }
+
+    @Test
     fun `chain filters`() {
         val source = "F>100F>100F>200F>300"
         val input = listOf(100, 200, 300, 400)
@@ -267,7 +278,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `complex filters with pointless inner function output should be the same as input`() {
-        val source = "F_F=\"a\"e0=\"a\""
+        val source = "F#_F=\"a\"e0=\"a\""
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), input)
         program.runForInput()
@@ -336,4 +347,18 @@ internal class Du81ProgramTest {
 
         assertEquals("22", program.getResultAsString())
     }
+
+
+//    @Test
+//    fun `make some context less calculations to retrieve list`() {
+//        val source = "Mv+##1+1-2|\$Fi>2,e0"
+//        val input = listOf(1, 2, 3, 0)
+//        val program = Du81Program(source, source.lex(), input)
+
+//        program.runForInput()
+
+//        assertEquals("22", program.getResultAsString())
+//    }
+
+    // TODO inner function tests needed
 }

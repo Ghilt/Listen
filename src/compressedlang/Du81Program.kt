@@ -17,7 +17,7 @@ class Du81Program(
     private val context = Context(input)
 
     fun runForInput() {
-        log("Du81 run for: $source")
+        log("\nDu81 run for: $source")
         log("Du81 run tokens: ${tokens.joinToString(" ")}")
         var instructionPointer = 0
         while (instructionPointer in tokens.indices) {
