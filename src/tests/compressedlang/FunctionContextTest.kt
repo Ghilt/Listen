@@ -147,7 +147,7 @@ internal class FunctionContextTest {
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
 
-        val list = functionContext.execute()
+        val list = functionContext.execute(-1)
 
         assertEquals("_F>1", functionContext.diagnosticsString())
         assertEquals(TYPE.LIST_TYPE, list.type)

@@ -436,15 +436,26 @@ internal class Du81ProgramTest {
 
         assertEquals("10", program.getResultAsString())
     }
-// TODO up next
-//    @Test
-//    fun `access outer context from inner function contextless part`() {
-//        val source = "M(v+5)"
-//        val input = listOf(1, 2)
-//        val program = Du81Program(source, source.lex(), input)
-//
-//        program.runForInput()
-//
-//        assertEquals("10001000", program.getResultAsString())
-//    }
+
+    @Test
+    fun `access outer context from inner function contextless part`() {
+        val source = "M(v+5)"
+        val input = listOf(1, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("67", program.getResultAsString())
+    }
+
+    @Test
+    fun `append lists with flatmap with inner function providing implicit input`() {
+        val source = "M+1Mv-1P(v-1)\$"
+        val input = listOf(1, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1223", program.getResultAsString())
+    }
 }

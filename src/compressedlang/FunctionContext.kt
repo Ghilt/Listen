@@ -85,13 +85,14 @@ class FunctionContext(
         }
     }
 
-    fun execute(): ResolvedFunction {
+    fun execute(outerFunctionIndexOfData: Int): ResolvedFunction {
         // TODO refactor-extract fun on this little duplicated loop thing
         var contextLessCommands = contextLessElements.toList()
         var indexOfContextLessFunc: Int? = -1
         while (indexOfContextLessFunc != null) {
             indexOfContextLessFunc = contextLessCommands.getIndexOfNextExecution()
-            if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, -1)
+            if (outerFunctionIndexOfData == -1) throw SyntaxError("An outer function with context less elements currently not supported")
+            if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, outerFunctionIndexOfData)
         }
 
         val resolvedContextLess = contextLessCommands[0] as ResolvedFunction
@@ -190,7 +191,7 @@ class FunctionContext(
         if (function is InnerFunction) {
             // TODO Remove this if supporting functions creating functions
             log("Du81, inner function ready for execution: ${functions[function.index].diagnosticsString()}")
-            val innerFuncResult = functions[function.index].execute()
+            val innerFuncResult = functions[function.index].execute(indexOfData)
             return reduceByCalculatedFunction(funcs, indexOfFunc, innerFuncResult, null, null, listOf())
         }
 
