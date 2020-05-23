@@ -278,7 +278,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `complex filters with pointless inner function output should be the same as input`() {
-        val source = "F#_F=\"a\"e0=\"a\""
+        val source = "F(_F=\"a\")e0=\"a\""
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), input)
         program.runForInput()
@@ -348,17 +348,59 @@ internal class Du81ProgramTest {
         assertEquals("22", program.getResultAsString())
     }
 
+    @Test
+    fun `syntax error thrown if ending inner function without having started one`() {
+        val source = "Fv=i)"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
 
-//    @Test
-//    fun `make some context less calculations to retrieve list`() {
-//        val source = "Mv+##1+1-2|\$Fi>2,e0"
-//        val input = listOf(1, 2, 3, 0)
-//        val program = Du81Program(source, source.lex(), input)
+        val exception = expectException { program.runForInput() }
 
-//        program.runForInput()
+        assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
+    }
 
-//        assertEquals("22", program.getResultAsString())
-//    }
 
-    // TODO inner function tests needed
+    @Test
+    fun `sum monad sums list`() {
+        val source = "Mp"
+        val input = listOf(1, 2, 3, -2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("4444", program.getResultAsString())
+    }
+
+    @Test
+    fun `perform some calculation in inner function`() {
+        val source = "M(_M+i)ei"
+        val input = listOf(1, 2, 3, 0)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1353", program.getResultAsString())
+    }
+
+    @Test
+    fun `inner function is calculated first and taken as argument to monad`() {
+        val source = "Mv+(_Mv)p"
+        val input = listOf(1, 2, 3, 0)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("7896", program.getResultAsString())
+    }
+
+    @Test
+    fun `perform some calculation in consecutive inner functions`() {
+        val source = "M(_M+i)p+(_M+v)p+(_M+2)pFi=0"
+        val input = listOf(1, 2, 3, 0)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("38", program.getResultAsString())
+    }
 }

@@ -6,6 +6,7 @@ import compressedlang.*
 import compressedlang.ContextKey.CURRENT_LIST
 import compressedlang.Precedence.*
 import compressedlang.TYPE.LIST_TYPE
+import java.lang.Exception
 
 sealed class Function(
     val createsContext: Boolean = false, // TODO likely remove
@@ -17,6 +18,17 @@ sealed class Function(
 
     fun isExecutable() = this !is ResolvedFunction && this !is ContextFunction
     fun isResolved() = this is ResolvedFunction
+
+    fun execute(
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
+    ): ResolvedFunction {
+        try {
+            return exec(values,environmentHook)
+        } catch (e: java.lang.ClassCastException) {
+            throw createSyntaxError(e, this, values)
+        }
+    }
 
     abstract fun exec(
         values: List<Any>,
@@ -134,7 +146,14 @@ abstract class ContextFunction(
     override val precedence: Precedence = LOWEST,
     override val defaultImplicitInput: Nilad = valueThenCurrentListNilad
 ) : Function(createContext) {
-    abstract fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
+    fun executeFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+        try {
+            return execFromContext(values, inputFromContext)
+        } catch (e: java.lang.ClassCastException) {
+            throw createSyntaxError(e, this, values)
+        }
+    }
+    abstract fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
 }
 
 data class ContextMonad<I : Any>(
@@ -147,8 +166,8 @@ data class ContextMonad<I : Any>(
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing context function not supported")
 
-    override fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
-        return f(a as List<I>)
+    override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+        return f(values as List<I>)
     }
 }
 
@@ -162,8 +181,8 @@ data class ContextDyad<I : Any, I2 : Any>(
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ) = throw DeveloperError("Executing context function not supported")
 
-    override fun executeFromContext(a: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
-        return f(a as List<I>, inputFromContext.conformToDyad() as List<I2>)
+    override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+        return f(values as List<I>, inputFromContext.conformToDyad() as List<I2>)
     }
 }
 
@@ -177,7 +196,7 @@ data class InnerFunction(
     override val output: TYPE
         get() = LIST_TYPE
     override val precedence: Precedence
-        get() = LOW
+        get() = HIGHESTER
 
     override fun exec(
         values: List<Any>,
@@ -186,3 +205,9 @@ data class InnerFunction(
 }
 
 fun Number.toResolvedFunction() = ResolvedFunction(this)
+
+fun createSyntaxError(exception: Exception,f: Function, values: List<Any>) : SyntaxError {
+
+    return SyntaxError("Error with [ ${Du81ProgramEnvironment.getDiagnosticsString(f)} ] function, input arguments not matching its requirements. " +
+            "\nRequired: ${f.inputs} but got: ${values}\n\n$exception")
+}

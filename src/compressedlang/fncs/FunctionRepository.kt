@@ -11,7 +11,8 @@ class FunctionRepository {
 
     private val repo: Map<Char, Function> = mapOf(
         // Control flow
-        '#' to innerFunctionControlFlow, // TODO might have single value producing inner function?
+        '(' to startInnerFunctionControlFlow, // TODO might have single value producing inner function?
+        ')' to endInnerFunctionControlFlow,
 
         // Nilads
         '_' to currentListNilad,
@@ -22,6 +23,7 @@ class FunctionRepository {
         // Monads
         'l' to lengthMonad,
         '$' to listByIndexMonad,
+        'p' to sumMonad,
 
         // Dyads
         '<' to smallerThanDyad,

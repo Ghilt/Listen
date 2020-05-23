@@ -18,4 +18,11 @@ val listByIndexMonad = Monad(
     output = TYPE.LIST_TYPE,
     contextKey = ContextKey.LIST_BY_INDEX,
     precedence = Precedence.HIGH // TODO need to fix precedences -> Int
-) { list: List<*>  -> list }
+) { list: List<*> -> list }
+
+val sumMonad = Monad(
+    defaultImplicitInput = currentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { list: List<Double> -> list.reduce { e0, e1 -> e0 + e1 } }

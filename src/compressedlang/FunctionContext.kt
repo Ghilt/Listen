@@ -24,37 +24,30 @@ class FunctionContext(
             throw DeveloperError("Adding unacceptable function to function context: $function")
         }
 
-        when {// TODO correctly make inner functions
-            functions.isEmpty() && function is ControlFlow -> {
+        when {
+            functions.isNotEmpty() && functions[0].willAccept(function) -> {
+                functions[0].put(function)
+            }
+            function.isStartInnerFunction() -> {
                 elements.add(InnerFunction(functions.size))
                 functions.add(0, FunctionContext(targets, functionDepth + 1))
             }
-            functions.isNotEmpty() && functions[0].willAccept(function) -> {
-                functions[0].put(function)
+            function.isEndInnerFunction() -> {
+                if (!isInnerFunction) throw SyntaxError("Cannot find an inner function to end")
+                build()
             }
             contextCreator == null && function is ContextFunction -> contextCreator = function
             contextCreator == null -> contextLessElements.add(function)
             else -> {
-//                ifInNeedOfContextCreatorThenAddDefaultOne(function)
                 elements.add(function)
             }
         }
     }
 
-    private fun ifInNeedOfContextCreatorThenAddDefaultOne(function: Function) {
-        if (contextCreator == null && function !is ContextFunction) {
-            contextCreator = Du81ProgramEnvironment.repo.defaultContextCreator
-        }
-    }
-
     fun willAccept(function: Function): Boolean {
         return when {
-//            !function.createsContext && canAcceptContextCreator -> true
-//            function.createsContext && canAcceptContextCreator -> true
-//            function.createsContext && !canAcceptContextCreator -> false
             isInnerFunction && isComplete() -> false
             function.createsContext && !willAcceptContextCreator() -> false
-//            isInnerFunction && !isComplete() -> true
             else -> true
         }
     }
@@ -64,12 +57,11 @@ class FunctionContext(
     private fun isComplete(): Boolean {
 
         if (canAcceptContextCreator) {
+            // TODO allow inner functions not using context
             return false
         }
 
-        val elementTypeRequirements = TypeRequirements.createFromElements(getViewOfFunctionsContext())
-        val simplifiedRequirements = elementTypeRequirements.simplifyFully()
-        return simplifiedRequirements.areAllFulfilled()
+        return isBuilt
     }
 
     fun build() {
@@ -228,7 +220,7 @@ class FunctionContext(
         val firstInput = consumablePrevious ?: environmentHook(function.defaultImplicitInput.contextKey, consumeList)
         val inputsToFunction = listOf(firstInput) + consumeList
 
-        val output: ResolvedFunction = function.exec(inputsToFunction, environmentHook)
+        val output: ResolvedFunction = function.execute(inputsToFunction, environmentHook)
 
         val postProcessed = processFunctionResult(output)
 

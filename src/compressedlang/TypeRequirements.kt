@@ -5,6 +5,7 @@ import compressedlang.fncs.Function
 
 typealias DidChange = Boolean
 
+@Deprecated("The way to auto close functions was introducing massive complexity and simply was not worth it")
 class TypeRequirements(
     val precedence: Precedence = Precedence.HIGHEST,
     val provides: TYPE? = null

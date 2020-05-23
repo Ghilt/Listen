@@ -5,5 +5,6 @@ enum class Precedence {
     LOW,
     MEDIUM,
     HIGH,
-    HIGHEST
+    HIGHEST,
+    HIGHESTER // TODO replace enum with Int
 }

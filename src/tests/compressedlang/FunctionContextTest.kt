@@ -19,13 +19,13 @@ internal class FunctionContextTest {
     fun `functionContext creates inner functions when it needs new inner contexts`() {
         val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
@@ -37,11 +37,12 @@ internal class FunctionContextTest {
         val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
@@ -56,19 +57,21 @@ internal class FunctionContextTest {
         val functionContext = FunctionContext(listOf(listOf(1, 2, 3).toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
         functionContext.put(2.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
@@ -83,27 +86,30 @@ internal class FunctionContextTest {
         val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
         functionContext.put(largerThanDyad)
         functionContext.put(1.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
         functionContext.put(2.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
         functionContext.put(3.toResolvedFunction())
+        functionContext.put(endInnerFunctionControlFlow)
 
         functionContext.put(lengthMonad)
         functionContext.put(largerThanDyad)
@@ -118,7 +124,7 @@ internal class FunctionContextTest {
         val functionContext = FunctionContext(listOf("123".toList())).apply { put(currentListNilad) }
         functionContext.put(filterDyad)
 
-        functionContext.put(innerFunctionControlFlow)
+        functionContext.put(startInnerFunctionControlFlow)
         functionContext.put(currentListNilad)
         functionContext.put(filterDyad)
 
