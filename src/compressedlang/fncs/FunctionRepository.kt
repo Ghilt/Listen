@@ -5,13 +5,11 @@ import compressedlang.FunctionToken
 
 class FunctionRepository {
 
-    val defaultContextCreator: ContextFunction = createListOfValueDyad
-
     fun get(ft: FunctionToken) = repo[ft.token]
 
     private val repo: Map<Char, Function> = mapOf(
         // Control flow
-        '(' to startInnerFunctionControlFlow, // TODO might have single value producing inner function?
+        '(' to startInnerFunctionControlFlow,
         ')' to endInnerFunctionControlFlow,
 
         // Nilads

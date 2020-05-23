@@ -403,4 +403,48 @@ internal class Du81ProgramTest {
 
         assertEquals("38", program.getResultAsString())
     }
+
+    @Test
+    fun `inner function returns single value`() {
+        val source = "Mi+(_p)"
+        val input = listOf(1, -52, 3, 0)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-48-47-46-45", program.getResultAsString())
+    }
+
+    @Test
+    fun `override precedence rules by making inner functions`() {
+        val source = "M(5+5)*(5+5)*(5+5)"
+        val input = listOf(1, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("10001000", program.getResultAsString())
+    }
+
+    @Test
+    fun `new outer function immediately after inner function`() {
+        val source = "M(5+5)F0=i"
+        val input = listOf(1, 2, 3, 4)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("10", program.getResultAsString())
+    }
+// TODO up next
+//    @Test
+//    fun `access outer context from inner function contextless part`() {
+//        val source = "M(v+5)"
+//        val input = listOf(1, 2)
+//        val program = Du81Program(source, source.lex(), input)
+//
+//        program.runForInput()
+//
+//        assertEquals("10001000", program.getResultAsString())
+//    }
 }

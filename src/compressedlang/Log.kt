@@ -13,11 +13,12 @@ fun log(
     output: ResolvedFunction,
     consumablePrevious: Any?,
     firstInput: Any?,
-    consumeList: List<Any>
+    consumeList: List<Any>,
+    functionDepth: Int
 ){
     val func = funcs[indexOfFunc]
 
-    println("Func: ${Du.getDiagnosticsString(func)} " +
+    println("Func($functionDepth): ${Du.getDiagnosticsString(func)} " +
             "at i: $indexOfFunc " +
             "in [${funcs.joinToString(" ") { Du.getDiagnosticsString(it) }}] " +
             "outputs ${output.value.typeOfValue()}: ${output.value} as [" +

@@ -150,6 +150,7 @@ internal class FunctionContextTest {
         val list = functionContext.execute()
 
         assertEquals("_F>1", functionContext.diagnosticsString())
-        assertEquals("c, d, e", list.joinToString())
+        assertEquals(TYPE.LIST_TYPE, list.type)
+        assertEquals("c, d, e", (list.value as List<*>).joinToString())
     }
 }

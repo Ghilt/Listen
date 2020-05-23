@@ -46,31 +46,18 @@ class FunctionContext(
 
     fun willAccept(function: Function): Boolean {
         return when {
-            isInnerFunction && isComplete() -> false
+            isInnerFunction && isBuilt -> false
             function.createsContext && !willAcceptContextCreator() -> false
             else -> true
         }
     }
 
-    private fun willAcceptContextCreator(): Boolean = canAcceptContextCreator || (elements.isNotEmpty() && elements.last() is InnerFunction) && functions[0].willAcceptContextCreator()
-
-    private fun isComplete(): Boolean {
-
-        if (canAcceptContextCreator) {
-            // TODO allow inner functions not using context
-            return false
-        }
-
-        return isBuilt
-    }
+    private fun willAcceptContextCreator(): Boolean = canAcceptContextCreator ||
+            (elements.isNotEmpty() && elements.last() is InnerFunction) &&
+            functions[0].willAcceptContextCreator() && !functions[0].isBuilt
 
     fun build() {
-        functions.forEach { it.build() }
-        if (canAcceptContextCreator) {
-            // Special case inner function which only provides a list
-            // TODO Inner functions not returning a list
-            put(pipeMonad)
-        }
+        functions.forEach { it.build() } // TODO remove
         isBuilt = true
     }
 
@@ -98,7 +85,8 @@ class FunctionContext(
         }
     }
 
-    fun execute(): List<Any> {
+    fun execute(): ResolvedFunction {
+        // TODO refactor-extract fun on this little duplicated loop thing
         var contextLessCommands = contextLessElements.toList()
         var indexOfContextLessFunc: Int? = -1
         while (indexOfContextLessFunc != null) {
@@ -106,19 +94,19 @@ class FunctionContext(
             if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, targets[0], -1)
         }
 
-        if (contextLessCommands.size != 1) throw DeveloperError("Todo, maybe support more fully-fledged context less execution in the future")
-
         val resolvedContextLess = contextLessCommands[0] as ResolvedFunction
+
+        if (contextCreator == null) {
+            return resolvedContextLess
+        }
 
         val listToOperateOn: List<Any> = if (resolvedContextLess.output != TYPE.LIST_TYPE) {
             // the contextLess command returns a single value, wrap it in a list to let the creator operate on that
             listOf(resolvedContextLess.value)
         } else {
+            @Suppress("UNCHECKED_CAST")
             resolvedContextLess.value as List<Any>
         }
-
-
-        if (contextCreator == null) throw DeveloperError("Todo, maybe support more fully-fledged context less execution in the future")
 
         val contextInputSize = (contextCreator?.inputs?.size ?: 0) - 1
 
@@ -142,7 +130,7 @@ class FunctionContext(
         return (contextCreator as ContextFunction).let { dyad ->
             val result: List<Any> = dyad.executeFromContext(listToOperateOn, finishedCalculations)
             val postProcessed = processResultList(result)
-            postProcessed
+            ResolvedFunction(postProcessed)
         }
     }
 
@@ -202,7 +190,9 @@ class FunctionContext(
         val function = funcs[indexOfFunc]
 
         if (function is InnerFunction) {
-            val innerFuncResult = ResolvedFunction(functions[function.index].execute())
+            // TODO Remove this if supporting functions creating functions
+            log("Du81, inner function ready for execution: ${functions[function.index].diagnosticsString()}")
+            val innerFuncResult = functions[function.index].execute()
             return reduceByCalculatedFunction(funcs, indexOfFunc, innerFuncResult, null, null, listOf())
         }
 
@@ -235,7 +225,7 @@ class FunctionContext(
         firstInput: Any?,
         consumeList: List<Any>
     ): List<Function> {
-        log(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList)
+        log(funcs, indexOfFunc, output, consumablePrevious, firstInput, consumeList, functionDepth)
 
         if (output.isNoOperation) {
             return funcs.filterIndexed { i, _ -> i != indexOfFunc }
@@ -254,7 +244,7 @@ class FunctionContext(
             val function = funcs[indexOfFunc]
 
             if (function is Nilad) {
-                return  null
+                return null
             }
 
             val previousFunc = funcs[indexOfFunc - 1]
@@ -289,22 +279,3 @@ private fun List<Function>.getInputsForwardOfFunctionAtIndex(index: Int): List<F
     val inputsForward = startIndex + this[index].inputs.size - 1
     return this.subList(startIndex, inputsForward)
 }
-
-
-// F>i
-// Mi
-// F>i*2*3*4
-// F>_F=3L=L
-// (F>(_F=(_F>0)L)*7L)
-
-
-// F>iF="hej"F<424.12
-// 22022  0  22 0
-// Fi>iF="hej"F<424.12
-// MiFi
-// 2020
-// F>i*2*3*4F="hej"F<424.12
-// 22020202022   0 22 0
-// FF>i*2*3*4F="hej"F<424.12
-
-// TLi12

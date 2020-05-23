@@ -60,6 +60,8 @@ data class ResolvedFunction(
     val value: Any,
 ) : Function() {
 
+    val type = value.typeOfValue()
+
     override val defaultImplicitInput: Nilad
         get() = throw DeveloperError("ResolvedFunction: Not supported $value")
     override val inputs: List<TYPE>
