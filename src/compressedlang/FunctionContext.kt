@@ -91,7 +91,7 @@ class FunctionContext(
         var indexOfContextLessFunc: Int? = -1
         while (indexOfContextLessFunc != null) {
             indexOfContextLessFunc = contextLessCommands.getIndexOfNextExecution()
-            if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, targets[0], -1)
+            if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, -1)
         }
 
         val resolvedContextLess = contextLessCommands[0] as ResolvedFunction
@@ -116,7 +116,7 @@ class FunctionContext(
             var indexOfFunc: Int? = -1
             while (indexOfFunc != null) {
                 indexOfFunc = commands.getIndexOfNextExecution()
-                if (indexOfFunc != null) commands = executeAt(commands, indexOfFunc, listToOperateOn, indexOfData)
+                if (indexOfFunc != null) commands = executeAt(commands, indexOfFunc, indexOfData)
             }
 
             if (commands.any { !it.isResolved() }) throw DeveloperError("Unresolved function ${commands.joinToString()}")
@@ -157,24 +157,23 @@ class FunctionContext(
     private fun Any.isDoubleButCouldBeRepresentedByInt() = this is Double && this % 1 == 0.0
 
     private fun getContextValueProducer(
-        data: List<Any>, // Todo remove this argument?, it is too confusing, fetch by targets[0]
         index: Int,
         requiredType: TYPE?
     ): (contextKey: ContextKey, contextValues: List<Any>) -> Any {
         return { contextKey: ContextKey, contextValues: List<Any> ->
             when (contextKey) {
-                ContextKey.CURRENT_LIST -> data
+                ContextKey.CURRENT_LIST -> targets[0]
                 ContextKey.LIST_BY_INDEX -> {
                     val indexOfRequestedList = contextValues[0] as Int
                     if (indexOfRequestedList >= targets.size) throw Du81AttemptingToFetchNonExistingListError(targets.size, indexOfRequestedList)
                     targets[indexOfRequestedList]
                 }
-                ContextKey.LENGTH -> data.size
-                ContextKey.VALUE_THEN_INDEX -> if (data.typeOfList().isSubtypeOf(requiredType)) data[index] else index
-                ContextKey.VALUE -> data[index]
+                ContextKey.LENGTH -> targets[0].size
+                ContextKey.VALUE_THEN_INDEX -> if (targets[0].typeOfList().isSubtypeOf(requiredType)) targets[0][index] else index
+                ContextKey.VALUE -> targets[0][index]
                 ContextKey.INDEX -> index
                 ContextKey.CONSTANT_0 -> 0
-                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
+                ContextKey.VALUE_THEN_CURRENT_LIST -> if (targets[0].typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) targets[0][index] else targets[0]
                 ContextKey.NOP -> ContextKey.NOP // This is treated specially down the line
             }
         }
@@ -183,7 +182,6 @@ class FunctionContext(
     private fun executeAt(
         funcs: List<Function>,
         indexOfFunc: Int,
-        data: List<Any>,
         indexOfData: Int
     ): List<Function> {
 
@@ -206,7 +204,7 @@ class FunctionContext(
 
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
         val requiredTypeOfNilad = if (function.inputs.isNotEmpty()) function.inputs[0] else null
-        val environmentHook = getContextValueProducer(data, indexOfData, requiredTypeOfNilad)
+        val environmentHook = getContextValueProducer(indexOfData, requiredTypeOfNilad)
         val firstInput = consumablePrevious ?: environmentHook(function.defaultImplicitInput.contextKey, consumeList)
         val inputsToFunction = listOf(firstInput) + consumeList
 
