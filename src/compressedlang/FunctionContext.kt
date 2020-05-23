@@ -29,7 +29,11 @@ class FunctionContext(
                 functions[0].put(function)
             }
             function.isStartInnerFunction() -> {
-                elements.add(InnerFunction(functions.size))
+                if (contextCreator == null) {
+                    contextLessElements.add(InnerFunction(functions.size))
+                } else {
+                    elements.add(InnerFunction(functions.size))
+                }
                 functions.add(0, FunctionContext(targets, functionDepth + 1))
             }
             function.isEndInnerFunction() -> {
@@ -91,7 +95,6 @@ class FunctionContext(
         var indexOfContextLessFunc: Int? = -1
         while (indexOfContextLessFunc != null) {
             indexOfContextLessFunc = contextLessCommands.getIndexOfNextExecution()
-            if (outerFunctionIndexOfData == -1) throw SyntaxError("An outer function with context less elements currently not supported")
             if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, outerFunctionIndexOfData)
         }
 
