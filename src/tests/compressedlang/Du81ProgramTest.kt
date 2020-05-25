@@ -499,4 +499,26 @@ internal class Du81ProgramTest {
 
         assertEquals("0.32, 4, 2.8", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `whole number division dyad`() {
+        val source = "M¤2"
+        val input = listOf(-3, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-1, 5, 3", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `whole number division dyad a non int in input should still only return integers`() {
+        val source = "M¤2.3"
+        val input = listOf(-1, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("0, 4, 3", program.getCommaSeparatedResult())
+    }
 }
