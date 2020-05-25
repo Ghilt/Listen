@@ -36,7 +36,7 @@ sealed class Function(
     ): ResolvedFunction
 }
 
-data class ControlFlow(
+class ControlFlow(
     val value: Any,
 ) : Function(false) {
 
@@ -56,7 +56,7 @@ data class ControlFlow(
 
 }
 
-data class ResolvedFunction(
+class ResolvedFunction(
     val value: Any,
 ) : Function() {
 
@@ -79,7 +79,7 @@ data class ResolvedFunction(
 
 }
 
-data class Nilad(
+class Nilad(
     val contextKey: ContextKey,
     override val output: TYPE,
     private val outputType: (TYPE) -> TYPE = { output },
@@ -100,7 +100,7 @@ data class Nilad(
     }
 }
 
-data class Monad<I : Any, O : Any>(
+class Monad<I : Any, O : Any>(
     override val precedence: Precedence = LOWEST,
     override val defaultImplicitInput: Nilad,
     override val inputs: List<TYPE>,
@@ -124,8 +124,8 @@ data class Monad<I : Any, O : Any>(
     }
 }
 
-data class Dyad<I : Any, I2 : Any, O : Any>(
-    val createContext: Boolean = false,
+open class Dyad<I : Any, I2 : Any, O : Any>(
+    private val createContext: Boolean = false,
     override val precedence: Precedence = LOWEST,
     override val defaultImplicitInput: Nilad,
     override val inputs: List<TYPE>,
@@ -158,7 +158,7 @@ abstract class ContextFunction(
     abstract fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
 }
 
-data class ContextMonad<I : Any>(
+class ContextMonad<I : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
     private val f: (List<I>) -> List<Any>
@@ -173,7 +173,7 @@ data class ContextMonad<I : Any>(
     }
 }
 
-data class ContextDyad<I : Any, I2 : Any>(
+class ContextDyad<I : Any, I2 : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
     private val f: (List<I>, List<I2>) -> List<Any>
@@ -188,7 +188,7 @@ data class ContextDyad<I : Any, I2 : Any>(
     }
 }
 
-data class InnerFunction(
+class InnerFunction(
     val index: Int // TODO remove, inner functions should not need to keep track of their own index in a program
 ) : Function() {
     override val defaultImplicitInput: Nilad
