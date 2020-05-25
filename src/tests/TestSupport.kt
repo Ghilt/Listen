@@ -10,6 +10,7 @@ fun runSeveralProgramsOnTheSameInput(input: List<Int>, vararg programs: String):
 }
 
 fun Du81Program.getResultAsString() = this.getResult()[0].joinToString("")
+fun Du81Program.getCommaSeparatedResult() = this.getResult()[0].joinToString()
 
 fun assertAllEquals(target: List<Int>, results: List<List<Any>>) {
     val nonEqualElements = results.withIndex().filter {

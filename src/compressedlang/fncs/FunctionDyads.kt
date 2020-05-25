@@ -23,6 +23,13 @@ val multiplicationDyad = Dyad<Double, Double, Double>(
     output = TYPE.NUMBER,
 ) { a, b -> a * b }
 
+val divisionDyad = Dyad<Double, Double, Double>(
+    defaultImplicitInput = valueThenIndexNilad,
+    precedence = Precedence.HIGHEST,
+    inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
+    output = TYPE.NUMBER,
+) { a, b -> a / b }
+
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
     precedence = Precedence.LOW,

@@ -8,10 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import tests.assertAllEquals
-import tests.expectException
-import tests.getResultAsString
-import tests.runSeveralProgramsOnTheSameInput
+import tests.*
 
 internal class Du81ProgramTest {
 
@@ -479,5 +476,27 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("hej där", program.getResultAsString())
+    }
+
+    @Test
+    fun `division dyad`() {
+        val source = "M/2"
+        val input = listOf(10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("5, 3.5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `division dyad with a non int`() {
+        val source = "M/2.5"
+        val input = listOf(0.8, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("0.32, 4, 2.8", program.getCommaSeparatedResult())
     }
 }

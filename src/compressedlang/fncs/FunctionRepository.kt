@@ -29,6 +29,7 @@ class FunctionRepository {
         '+' to additionDyad,
         '-' to subtractionDyad,
         '*' to multiplicationDyad,
+        '/' to divisionDyad,
         '=' to equalToDyad,
 
         'e' to elementByIndexDyad,
