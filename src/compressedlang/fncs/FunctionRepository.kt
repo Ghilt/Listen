@@ -7,7 +7,7 @@ class FunctionRepository {
 
     fun get(ft: FunctionToken) = repo[ft.token]
 
-    private val repo: Map<Char, Function> = mapOf(
+    private val repo: Map<Char, Function> = mapOf( // TODO I want to crash here if the same key is added twice
         // Control flow
         '(' to startInnerFunctionControlFlow,
         ')' to endInnerFunctionControlFlow,
@@ -26,11 +26,15 @@ class FunctionRepository {
         // Dyads
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
+
+        // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
         '-' to subtractionDyad,
         '*' to multiplicationDyad,
         '/' to divisionDyad,
         '¤' to wholeDivisionDyad,
+        '%' to moduloDyad, /* Programming standard, negative numbers possible in output */
+        '£' to moduloMathematicalDyad, /* second input decides sign of output */
         '=' to equalToDyad,
 
         'e' to elementByIndexDyad,

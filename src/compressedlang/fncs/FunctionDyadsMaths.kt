@@ -34,3 +34,15 @@ val divisionDyad = MathsDyad(
 val wholeDivisionDyad = MathsDyad(
     precedence = Precedence.HIGHEST,
 ) { a, b -> (a / b).toInt().toDouble() }
+
+val moduloDyad = MathsDyad(
+    precedence = Precedence.HIGHEST,
+) { a, b -> a % b }
+
+val moduloMathematicalDyad = MathsDyad(
+    precedence = Precedence.HIGHEST,
+) { a, b ->
+    val programmingModulo = a % b
+    val needsToAddTheMod = (b < 0 && programmingModulo > 0) || (b > 0 && programmingModulo < 0)
+    if (needsToAddTheMod) b + programmingModulo else programmingModulo
+}

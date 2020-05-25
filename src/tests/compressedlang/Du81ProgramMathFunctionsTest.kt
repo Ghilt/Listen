@@ -130,4 +130,71 @@ internal class Du81ProgramMathFunctionsTest {
 
         assertEquals("0, 4, 3", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `modulo dyad`() {
+        val source = "M%3"
+        val input = listOf(-2, -1, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-2, -1, 1, 1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `modulo dyad with non integers`() {
+        val source = "M%3.5"
+        val input = listOf(-5.75, -1, 7.5, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-2.25, -1, 0.5, 0", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `modulo dyad with negative value`() {
+        val source = "M%-3"
+        val input = listOf(-2, -1, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-2, -1, 1, 1", program.getCommaSeparatedResult())
+    }
+
+
+    @Test
+    fun `mathematical modulo dyad giving no negative numbers in output`() {
+        val source = "M£3"
+        val input = listOf(-10002, -2, -1, 10, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("0, 1, 2, 1, 1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `mathematical modulo dyad with negative input giving no positive numbers in output`() {
+        val source = "M£-3"
+        val input = listOf(-4, -3, -2, -1, 0, 1, 2, 3, 4)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-1, 0, -2, -1, 0, -2, -1, 0, -2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `mathematical modulo dyad with non integers giving no negative numbers in output`() {
+        val source = "M£3.5"
+        val input = listOf(-5.75, -1, 7.5, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1.25, 2.5, 0.5, 0", program.getCommaSeparatedResult())
+    }
 }
