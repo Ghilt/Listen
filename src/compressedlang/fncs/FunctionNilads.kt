@@ -17,3 +17,6 @@ val constantZeroNilad = Nilad(ContextKey.CONSTANT_0, TYPE.NUMBER)
 
 val currentListNilad = Nilad(ContextKey.CURRENT_LIST, TYPE.LIST_TYPE)
 
+val currentListCount = Nilad(ContextKey.CURRENT_LIST_COUNT, TYPE.NUMBER)
+
+

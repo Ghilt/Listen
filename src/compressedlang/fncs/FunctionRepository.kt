@@ -14,6 +14,7 @@ class FunctionRepository {
 
         // Nilads
         '_' to currentListNilad,
+        'q' to currentListCount,
         'i' to indexNilad,
         'v' to valueNilad,
         ',' to no_opNilad,

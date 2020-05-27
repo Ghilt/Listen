@@ -179,6 +179,7 @@ class FunctionContext(
                 ContextKey.CONSTANT_0 -> 0
                 ContextKey.VALUE_THEN_CURRENT_LIST -> if (targets[0].typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) targets[0][index] else targets[0]
                 ContextKey.NOP -> ContextKey.NOP // This is treated specially down the line
+                ContextKey.CURRENT_LIST_COUNT -> targets.size
             }
         }
     }

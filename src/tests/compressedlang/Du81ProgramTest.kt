@@ -198,6 +198,16 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `count list count returns correct count`() {
+        val source = "M0M0M0Mq"
+        val input = listOf("a")
+        val program = Du81Program(source, source.lex(), input)
+        program.runForInput()
+
+        assertEquals("4", program.getResultAsString())
+    }
+
+    @Test
     fun `create list by taking single item from list`() {
         val source = "e1"
         val input = listOf("a", "b", "c")
