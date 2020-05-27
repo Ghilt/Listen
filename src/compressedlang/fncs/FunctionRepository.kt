@@ -7,7 +7,7 @@ class FunctionRepository {
 
     fun get(ft: FunctionToken) = repo[ft.token]
 
-    private val repo: Map<Char, Function> = mapOf( // TODO I want to crash here if the same key is added twice
+    private val repo: Map<Char, Function> = repoOf(
         // Control flow
         '(' to startInnerFunctionControlFlow,
         ')' to endInnerFunctionControlFlow,
@@ -48,6 +48,13 @@ class FunctionRepository {
         'P' to flatMapDyad,
         '@' to createListOfValueDyad,
     )
+
+    private fun repoOf(vararg pairs: Pair<Char, Function>, ): Map<Char, Function> {
+        val keys = pairs.map { it.first }
+        val duplicates = keys.map { key -> key to keys.count { key == it } }.filter { it.second > 1 }
+        if (duplicates.isNotEmpty()) throw DeveloperError("Duplicate key in function repo: $duplicates")
+        return mapOf(*pairs)
+    }
 
     fun getDiagnosticsString(function: Function): String {
         val diagnosticsChar = repo.entries.firstOrNull {
