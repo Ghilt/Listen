@@ -422,4 +422,15 @@ internal class Du81ProgramTest {
         assertEquals("hej där", program.getResultAsString())
     }
 
+    @Test
+    fun `second most current list nilad built in`() {
+        val source = "MiM(~Fv=\"hej\")"
+        val input = listOf("hej", " ", "där")
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[hej][hej][hej]", program.getResultAsString())
+    }
+
 }

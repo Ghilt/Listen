@@ -3,7 +3,6 @@
 package compressedlang.fncs
 
 import compressedlang.*
-import compressedlang.ContextKey.CURRENT_LIST
 import compressedlang.Precedence.*
 import compressedlang.TYPE.LIST_TYPE
 import java.lang.Exception
@@ -24,7 +23,7 @@ sealed class Function(
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
         try {
-            return exec(values,environmentHook)
+            return exec(values, environmentHook)
         } catch (e: java.lang.ClassCastException) {
             throw createSyntaxError(e, this, values)
         }
@@ -80,13 +79,13 @@ class ResolvedFunction(
 }
 
 class Nilad(
-    val contextKey: ContextKey,
+    private val contextKey: ContextKey,
     override val output: TYPE,
-    private val outputType: (TYPE) -> TYPE = { output },
+    private val contextValues: List<Any> = listOf()
 ) : Function() {
 
     override val defaultImplicitInput: Nilad
-        get() = this
+        get() = no_opNilad
     override val inputs: List<TYPE>
         get() = listOf()
     override val precedence: Precedence
@@ -96,7 +95,7 @@ class Nilad(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
-        return ResolvedFunction(environmentHook(contextKey, listOf()))
+        return ResolvedFunction(environmentHook(contextKey, contextValues))
     }
 }
 

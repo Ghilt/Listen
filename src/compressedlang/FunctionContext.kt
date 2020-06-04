@@ -212,7 +212,7 @@ class FunctionContext(
         val consumablePrevious = getPreviousIfConsumableByFunctionAtIndex(funcs, indexOfFunc)?.value
         val requiredTypeOfNilad = if (function.inputs.isNotEmpty()) function.inputs[0] else null
         val environmentHook = getContextValueProducer(data, indexOfData, requiredTypeOfNilad)
-        val firstInput = consumablePrevious ?: environmentHook(function.defaultImplicitInput.contextKey, consumeList)
+        val firstInput = consumablePrevious ?: function.defaultImplicitInput.execute(listOf(), environmentHook).value
         val inputsToFunction = listOf(firstInput) + consumeList
 
         val output: ResolvedFunction = function.execute(inputsToFunction, environmentHook)

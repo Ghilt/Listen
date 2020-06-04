@@ -14,6 +14,7 @@ class FunctionRepository {
 
         // Nilads
         '_' to currentListNilad,
+        '~' to secondCurrentListNilad,
         'q' to currentListCount,
         'i' to indexNilad,
         'v' to valueNilad,
