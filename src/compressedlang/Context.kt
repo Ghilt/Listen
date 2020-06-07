@@ -35,7 +35,7 @@ class Context(input: List<Any>) {
         log("Du81, outer function ready for execution: ${currentFunctionContext.diagnosticsString()}")
 
         targets.add(0, wrapInListIfNeeded(currentFunctionContext.execute(-1)))
-        functionContext.add(0, FunctionContext(targets).apply { put(currentListNilad) })
+        functionContext.add(0, FunctionContext(targets))
     }
 
     private fun wrapInListIfNeeded(result: ResolvedFunction): List<Any> {

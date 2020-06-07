@@ -25,6 +25,9 @@ class FunctionContext(
         }
 
         when {
+            function.isEnOuterFunction() -> {
+                build()
+            }
             functions.isNotEmpty() && functions[0].willAccept(function) -> {
                 functions[0].put(function)
             }
@@ -40,7 +43,12 @@ class FunctionContext(
                 if (!isInnerFunction) throw SyntaxError("Cannot find an inner function to end")
                 build()
             }
-            contextCreator == null && function is ContextFunction -> contextCreator = function
+            contextCreator == null && function is ContextFunction -> {
+                contextCreator = function
+                if (contextLessElements.isEmpty()) {
+                    contextLessElements.add(currentListNilad)
+                }
+            }
             contextCreator == null -> contextLessElements.add(function)
             else -> {
                 elements.add(function)
@@ -61,7 +69,7 @@ class FunctionContext(
             functions[0].willAcceptContextCreator() && !functions[0].isBuilt
 
     fun build() {
-        functions.forEach { it.build() } // TODO remove
+        functions.forEach { it.build() }
         isBuilt = true
     }
 
