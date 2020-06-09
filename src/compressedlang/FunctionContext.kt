@@ -106,18 +106,22 @@ class FunctionContext(
             if (indexOfContextLessFunc != null) contextLessCommands = executeAt(contextLessCommands, indexOfContextLessFunc, targets[0], outerFunctionIndexOfData)
         }
 
-        val resolvedContextLess = contextLessCommands[0] as ResolvedFunction
+        val resolvedContextLess = contextLessCommands.filterIsInstance<ResolvedFunction>().takeIf { it.size == contextLessCommands.size }
+            ?: throw SyntaxError("Unresolved function in context less part of function")
+
+        val resolvedContextLessList = resolvedContextLess[0]
 
         if (contextCreator == null) {
-            return resolvedContextLess
+            return resolvedContextLessList
         }
 
-        val listToOperateOn: List<Any> = if (resolvedContextLess.output != TYPE.LIST_TYPE) {
+        val listToOperateOn: List<Any> = if (resolvedContextLessList.output != TYPE.LIST_TYPE) {
             // the contextLess command returns a single value, wrap it in a list to let the creator operate on that
-            listOf(resolvedContextLess.value)
+            // Context triads gets values from here?
+            listOf(resolvedContextLessList.value)
         } else {
             @Suppress("UNCHECKED_CAST")
-            resolvedContextLess.value as List<Any>
+            resolvedContextLessList.value as List<Any>
         }
 
         val contextInputSize = (contextCreator?.inputs?.size ?: 0) - 1
@@ -136,11 +140,10 @@ class FunctionContext(
 
             valuesProvidedByContext.add(commands.map { (it as ResolvedFunction) })
         }
-        val finishedCalculations = CalculatedValuesOfContext(valuesProvidedByContext)
+        val finishedCalculations = CalculatedValuesOfContext(listToOperateOn, resolvedContextLess.drop(1), valuesProvidedByContext)
 
-        // TODO Temporary
-        return (contextCreator as ContextFunction).let { dyad ->
-            val result: List<Any> = dyad.executeFromContext(listToOperateOn, finishedCalculations)
+        return (contextCreator as ContextFunction).let { contextConsumer ->
+            val result: List<Any> = contextConsumer.executeFromContext(finishedCalculations)
             val postProcessed = processResultList(result)
             ResolvedFunction(postProcessed)
         }

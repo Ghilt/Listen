@@ -147,11 +147,11 @@ abstract class ContextFunction(
     override val precedence: Precedence = LOWEST,
     override val defaultImplicitInput: Nilad = valueThenCurrentListNilad
 ) : Function(createContext) {
-    fun executeFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
+    fun executeFromContext(inputFromContext: CalculatedValuesOfContext): List<Any> {
         try {
-            return execFromContext(values, inputFromContext)
+            return execFromContext(inputFromContext.listToOperateOn, inputFromContext)
         } catch (e: java.lang.ClassCastException) {
-            throw createSyntaxError(e, this, values)
+            throw createSyntaxError(e, this, inputFromContext.listToOperateOn)
         }
     }
     abstract fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>

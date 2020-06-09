@@ -2,7 +2,7 @@ package compressedlang.fncs
 
 import compressedlang.TYPE
 
-/* DYADS */
+/* MONADS */
 
 val pipeMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
