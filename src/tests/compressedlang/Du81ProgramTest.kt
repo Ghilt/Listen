@@ -257,16 +257,49 @@ internal class Du81ProgramTest {
         assertEquals("[1][2][3][4][5][6][7][8][9]", program.getResultAsString())
     }
 
-
     @Test
-    fun `chunk list into chunks of 3`() {
-        val source = "1+2C"
+    fun `chunk list into chunks of the default value for chunking`() {
+        val source = "C"
         val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
         val program = Du81Program(source, source.lex(), input)
 
         program.runForInput()
 
         assertEquals("[1, 2, 3][4, 5, 6][7, 8, 9]", program.getResultAsString())
+    }
+
+
+    @Test
+    fun `chunk list into chunks of 4`() {
+        val source = "2*1*2C"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3, 4][5, 6, 7, 8][9]", program.getResultAsString())
+    }
+
+    @Test
+    fun `turn list into windowed representation of size 3 with step 2`() {
+        val source = "3,2W"
+        val input = listOf(1, 2, 3, 4, 5)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3][3, 4, 5]", program.getResultAsString())
+    }
+
+    @Test
+    fun `turn list into windowed representation of size 3 with step 1 using default configuration value`() {
+        val source = "3W"
+        val input = listOf(1, 2, 3, 4, 5)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5]", program.getResultAsString())
     }
 
 }

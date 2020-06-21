@@ -12,7 +12,14 @@ val pipeMonad = ContextMonad(
 val chunkMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
+    defaultConfigurationValues = listOf(3)
 ) { a: List<Any>, configValues -> a.chunked(configValues[0]) }
+
+val windowMonad = ContextMonad(
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+    defaultConfigurationValues = listOf(3, 1)
+) { a: List<Any>, configValues -> a.windowed(configValues[0], configValues[1]) }
 
 
 /* DYADS */

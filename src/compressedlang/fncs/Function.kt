@@ -144,10 +144,12 @@ open class Dyad<I : Any, I2 : Any, O : Any>(
 abstract class ContextFunction(
     createContext: Boolean = true,
     override val precedence: Precedence = LOWEST,
-    override val defaultImplicitInput: Nilad = valueThenCurrentListNilad
+    override val defaultImplicitInput: Nilad = valueThenCurrentListNilad,
+    open val defaultConfigurationValues: List<Any> = listOf()
 ) : Function(createContext) {
     fun executeFromContext(inputFromContext: CalculatedValuesOfContext): List<Any> {
         try {
+            inputFromContext.injectDefaultConfigValues(defaultConfigurationValues)
             return execFromContext(inputFromContext.listToOperateOn, inputFromContext)
         } catch (e: java.lang.ClassCastException) {
             throw createSyntaxError(e, this, inputFromContext.listToOperateOn)
@@ -160,12 +162,13 @@ abstract class ContextFunction(
 class ContextMonad<I : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
+    override val defaultConfigurationValues: List<Any> = listOf(),
     private val f: (List<I>, configValues: ConfigValues) -> List<Any>
 ) : ContextFunction() {
     override fun exec(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
-    ) = throw DeveloperError("Executing context function not supported")
+    ) = throw DeveloperError("Executing context function not supported. This has an ugliness value of infinite.")
 
     override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
         return f(values as List<I>, inputFromContext.getConfigValues())
@@ -175,6 +178,7 @@ class ContextMonad<I : Any>(
 class ContextDyad<I : Any, I2 : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
+    override val defaultConfigurationValues: List<Any> = listOf(),
     private val f: (List<I>, List<I2>) -> List<Any>
 ) : ContextFunction() {
     override fun exec(

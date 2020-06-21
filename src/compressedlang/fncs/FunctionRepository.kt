@@ -45,6 +45,7 @@ class FunctionRepository {
         // Context creators
         '|' to pipeMonad,
         'C' to chunkMonad,
+        'W' to windowMonad,
 
         'F' to filterDyad,
         'M' to mapDyad,
