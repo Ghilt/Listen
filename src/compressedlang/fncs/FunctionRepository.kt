@@ -44,6 +44,7 @@ class FunctionRepository {
 
         // Context creators
         '|' to pipeMonad,
+        'C' to chunkMonad,
 
         'F' to filterDyad,
         'M' to mapDyad,
@@ -58,7 +59,7 @@ class FunctionRepository {
         return mapOf(*pairs)
     }
 
-    fun getDiagnosticsString(function: Function): String {
+    fun getDiagnosticsString(function: Function?): String {
         val diagnosticsChar = repo.entries.firstOrNull {
             it.value == function
         }?.key ?: when (function) {

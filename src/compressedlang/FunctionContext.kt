@@ -117,7 +117,7 @@ class FunctionContext(
 
         val listToOperateOn: List<Any> = if (resolvedContextLessList.output != TYPE.LIST_TYPE) {
             // the contextLess command returns a single value, wrap it in a list to let the creator operate on that
-            // Context triads gets values from here?
+            // Subsequent values can be used to configure ContextMonads currently
             listOf(resolvedContextLessList.value)
         } else {
             @Suppress("UNCHECKED_CAST")
@@ -136,7 +136,9 @@ class FunctionContext(
             }
 
             if (commands.any { !it.isResolved() }) throw DeveloperError("Unresolved function ${commands.joinToString()}")
-            if (commands.size != contextInputSize) throw SyntaxError("Disallowed resolution of tokens: ${commands.joinToString()}")
+            if (commands.size != contextInputSize) throw SyntaxError("Disallowed resolution of tokens: ${commands.joinToString()}, " +
+                    "The function ${Du81ProgramEnvironment.getDiagnosticsString(contextCreator)} " +
+                    "has inputsize $contextInputSize but actual input length was: ${commands.size}")
 
             valuesProvidedByContext.add(commands.map { (it as ResolvedFunction) })
         }

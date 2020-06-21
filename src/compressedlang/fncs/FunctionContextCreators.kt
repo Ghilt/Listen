@@ -7,7 +7,13 @@ import compressedlang.TYPE
 val pipeMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
-) { a: List<Any> -> a }
+) { a: List<Any>, _: Any -> a }
+
+val chunkMonad = ContextMonad(
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+) { a: List<Any>, size: Int -> a.chunked(size) }
+
 
 /* DYADS */
 

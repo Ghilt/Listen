@@ -157,10 +157,10 @@ abstract class ContextFunction(
     abstract fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
 }
 
-class ContextMonad<I : Any>(
+class ContextMonad<I : Any, C : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val f: (List<I>) -> List<Any>
+    private val f: (List<I>, configParameter: C /* TODO Make more general and add default config values */) -> List<Any>
 ) : ContextFunction() {
     override fun exec(
         values: List<Any>,
@@ -168,7 +168,13 @@ class ContextMonad<I : Any>(
     ) = throw DeveloperError("Executing context function not supported")
 
     override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
-        return f(values as List<I>)
+        // TODO A bit cheap to have config values limited like this. But how to do it
+        val configValue = if (inputFromContext.configValuesForFunction.isEmpty()) {
+            1 as C // TODO config values with type, not just int, and also default values
+        } else {
+            inputFromContext.configValuesForFunction[0].value as C
+        }
+        return f(values as List<I>, configValue)
     }
 }
 

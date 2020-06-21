@@ -23,7 +23,7 @@ object Du81ProgramEnvironment {
     val repo
         get() = repository ?: throw DeveloperError("")
 
-    fun getDiagnosticsString(func: Function) = repository?.getDiagnosticsString(func)
+    fun getDiagnosticsString(func: Function?) = repository?.getDiagnosticsString(func)
         ?: throw DeveloperError("What are you even doing? You forgot to initialize functionRepository")
 
     internal fun for_test_only_resetEnvironment() {

@@ -2,13 +2,14 @@ package tests.compressedlang
 
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
-import compressedlang.SyntaxError
 import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import tests.*
+import tests.assertAllEquals
+import tests.getResultAsString
+import tests.runSeveralProgramsOnTheSameInput
 
 internal class Du81ProgramTest {
 
@@ -243,6 +244,29 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("[hej][hej][hej]", program.getResultAsString())
+    }
+
+    @Test
+    fun `chunk list into chunks of 1`() {
+        val source = "1C"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1][2][3][4][5][6][7][8][9]", program.getResultAsString())
+    }
+
+
+    @Test
+    fun `chunk list into chunks of 3`() {
+        val source = "1+2C"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3][4, 5, 6][7, 8, 9]", program.getResultAsString())
     }
 
 }

@@ -34,7 +34,9 @@ class Context(input: List<Any>) {
     fun execute() {
         log("Du81, outer function ready for execution: ${currentFunctionContext.diagnosticsString()}")
 
-        targets.add(0, wrapInListIfNeeded(currentFunctionContext.execute(-1)))
+        val newResult = wrapInListIfNeeded(currentFunctionContext.execute(-1))
+        log("Du81, adding new result to stack: $newResult")
+        targets.add(0, newResult)
         functionContext.add(0, FunctionContext(targets))
     }
 
