@@ -5,7 +5,6 @@ package compressedlang.fncs
 import compressedlang.*
 import compressedlang.Precedence.*
 import compressedlang.TYPE.LIST_TYPE
-import java.lang.Exception
 
 sealed class Function(
     val createsContext: Boolean = false, // TODO likely remove
@@ -124,7 +123,7 @@ class Monad<I : Any, O : Any>(
 }
 
 open class Dyad<I : Any, I2 : Any, O : Any>(
-    private val createContext: Boolean = false,
+    createContext: Boolean = false,
     override val precedence: Precedence = LOWEST,
     override val defaultImplicitInput: Nilad,
     override val inputs: List<TYPE>,
@@ -136,7 +135,7 @@ open class Dyad<I : Any, I2 : Any, O : Any>(
         values: List<Any>,
         environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
     ): ResolvedFunction {
-        // TODO support environmentHook
+        // TODO support environmentHook as monad does
         val value = f(values[0] as I, values[1] as I2)
         return ResolvedFunction(value)
     }
@@ -154,13 +153,14 @@ abstract class ContextFunction(
             throw createSyntaxError(e, this, inputFromContext.listToOperateOn)
         }
     }
+
     abstract fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any>
 }
 
-class ContextMonad<I : Any, C : Any>(
+class ContextMonad<I : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
-    private val f: (List<I>, configParameter: C /* TODO Make more general and add default config values */) -> List<Any>
+    private val f: (List<I>, configValues: ConfigValues) -> List<Any>
 ) : ContextFunction() {
     override fun exec(
         values: List<Any>,
@@ -168,13 +168,7 @@ class ContextMonad<I : Any, C : Any>(
     ) = throw DeveloperError("Executing context function not supported")
 
     override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
-        // TODO A bit cheap to have config values limited like this. But how to do it
-        val configValue = if (inputFromContext.configValuesForFunction.isEmpty()) {
-            1 as C // TODO config values with type, not just int, and also default values
-        } else {
-            inputFromContext.configValuesForFunction[0].value as C
-        }
-        return f(values as List<I>, configValue)
+        return f(values as List<I>, inputFromContext.getConfigValues())
     }
 }
 
@@ -213,8 +207,10 @@ class InnerFunction(
 
 fun Number.toResolvedFunction() = ResolvedFunction(this)
 
-fun createSyntaxError(exception: Exception,f: Function, values: List<Any>) : SyntaxError {
+fun createSyntaxError(exception: Exception, f: Function, values: List<Any>): SyntaxError {
 
-    return SyntaxError("Error with [ ${Du81ProgramEnvironment.getDiagnosticsString(f)} ] function, input arguments not matching its requirements. " +
-            "\nRequired: ${f.inputs} but got: ${values}\n\n$exception")
+    return SyntaxError(
+        "Error with [ ${Du81ProgramEnvironment.getDiagnosticsString(f)} ] function, input arguments not matching its requirements. " +
+                "\nRequired: ${f.inputs} but got: ${values}\n\n$exception"
+    )
 }

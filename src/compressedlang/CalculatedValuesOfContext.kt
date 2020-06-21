@@ -1,5 +1,8 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package compressedlang
 
+import compressedlang.fncs.ConfigValues
 import compressedlang.fncs.ResolvedFunction
 
 class CalculatedValuesOfContext(
@@ -8,4 +11,6 @@ class CalculatedValuesOfContext(
     val calculatedValuesOfContext: List<List<ResolvedFunction>>
 ){
     fun conformToDyad(): List<Any> = calculatedValuesOfContext.map { it.first().value }
+
+    fun getConfigValues() = ConfigValues(configValuesForFunction)
 }

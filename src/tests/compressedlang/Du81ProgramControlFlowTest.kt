@@ -8,7 +8,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import tests.*
+import tests.expectException
+import tests.getResultAsString
 
 internal class Du81ProgramControlFlowTest {
 
@@ -230,5 +231,16 @@ internal class Du81ProgramControlFlowTest {
         program.runForInput()
 
         assertEquals("hej", program.getResultAsString())
+    }
+
+    @Test
+    fun `throw syntax error if config value is of wrong type`() {
+        val source = "\"k\"C"
+        val input = listOf("a", "b", "c")
+        val program = Du81Program(source, source.lex(), input)
+
+        val exception = expectException { program.runForInput() }
+
+        assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
     }
 }
