@@ -13,13 +13,13 @@ val chunkMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
     defaultConfigurationValues = listOf(3)
-) { a: List<Any>, configValues -> a.chunked(configValues[0]) }
+) { a: List<Any>, cv -> a.chunked(size = cv[0]) }
 
 val windowMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
-    defaultConfigurationValues = listOf(3, 1)
-) { a: List<Any>, configValues -> a.windowed(configValues[0], configValues[1]) }
+    defaultConfigurationValues = listOf(3, 1, false)
+) { a: List<Any>, cv -> a.windowed(size = cv[0], step = cv[1], partialWindows = cv.getBool(2)) }
 
 
 /* DYADS */

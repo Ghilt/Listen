@@ -302,4 +302,15 @@ internal class Du81ProgramTest {
         assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5]", program.getResultAsString())
     }
 
+    @Test
+    fun `turn list into windowed representation with trailing windows`() {
+        val source = "3,1,1W"
+        val input = listOf(1, 2, 3, 4, 5)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5][4, 5][5]", program.getResultAsString())
+    }
+
 }

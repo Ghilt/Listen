@@ -215,6 +215,7 @@ fun createSyntaxError(exception: Exception, f: Function, values: List<Any>): Syn
 
     return SyntaxError(
         "Error with [ ${Du81ProgramEnvironment.getDiagnosticsString(f)} ] function, input arguments not matching its requirements. " +
-                "\nRequired: ${f.inputs} but got: ${values}\n\n$exception"
+                "\nRequired: ${f.inputs} but got: $values\n" +
+                "\n$exception\n\n${exception.stackTrace.joinToString("\n")}"
     )
 }
