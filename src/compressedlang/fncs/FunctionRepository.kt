@@ -29,6 +29,8 @@ class FunctionRepository {
         // Dyads
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
+        '=' to equalToDyad,
+        '&' to andDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -38,7 +40,6 @@ class FunctionRepository {
         '¤' to wholeDivisionDyad,
         '%' to moduloDyad, /* Programming standard, negative numbers possible in output */
         '£' to moduloMathematicalDyad, /* second input decides sign of output */
-        '=' to equalToDyad,
 
         'e' to elementByIndexDyad,
 

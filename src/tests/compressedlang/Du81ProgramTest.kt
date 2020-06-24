@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tests.assertAllEquals
+import tests.getCommaSeparatedResult
 import tests.getResultAsString
 import tests.runSeveralProgramsOnTheSameInput
 
@@ -311,6 +312,28 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5][4, 5][5]", program.getResultAsString())
+    }
+
+    @Test
+    fun `consecutive truthy values yields true`() {
+        val source = "2WM(e0)&e1"
+        val input = listOf(0, 2, 7, 0, 5, 0, 1, 1)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("false, true, false, false, false, false, true", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `empty string is falsy value`() {
+        val source = "@4&\"\""
+        val input = listOf(0, 2, 7)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("false", program.getCommaSeparatedResult())
     }
 
 }
