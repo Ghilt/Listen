@@ -30,6 +30,13 @@ val andDyad = Dyad<Any, Any, Boolean>(
     output = TYPE.BOOL,
 ) { a, b -> toBool(a) && toBool(b) }
 
+val orDyad = Dyad<Any, Any, Boolean>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
+    output = TYPE.BOOL,
+) { a, b -> toBool(a) || toBool(b) }
+
 val elementByIndexDyad = Dyad<List<Any>, Int, Any>(
     defaultImplicitInput = valueThenCurrentListNilad,
     precedence = Precedence.LOW,

@@ -206,7 +206,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `| pipe works correctly`() {
-        val source = "|||||M0\$e2"
+        val source = "§§§§M0\$e2"
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), input)
         program.runForInput()
@@ -334,6 +334,17 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("false", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `consecutive values need at least one truthy value to yield true`() {
+        val source = "2WM(e0)|e1"
+        val input = listOf(0, 2, 7, 0, 0, 0, 1, 1)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("true, true, true, false, false, true, true", program.getCommaSeparatedResult())
     }
 
 }

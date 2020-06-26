@@ -31,6 +31,7 @@ class FunctionRepository {
         '>' to largerThanDyad,
         '=' to equalToDyad,
         '&' to andDyad,
+        '|' to orDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -44,7 +45,7 @@ class FunctionRepository {
         'e' to elementByIndexDyad,
 
         // Context creators
-        '|' to pipeMonad,
+        '§' to pipeMonad,
         'C' to chunkMonad,
         'W' to windowMonad,
 
