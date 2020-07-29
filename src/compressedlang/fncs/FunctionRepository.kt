@@ -22,6 +22,7 @@ class FunctionRepository {
         ',' to no_opNilad,
 
         // Monads
+        '!' to notMonad,
         'l' to lengthMonad,
         '$' to listByIndexMonad,
         'p' to sumMonad,

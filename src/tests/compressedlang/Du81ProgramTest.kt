@@ -136,6 +136,17 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `not monad inverts boolean value`() {
+        val source = "M!"
+        val input = listOf(false, true, 0, -2, 3)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1, 0, 1, 0, 0", program.getCommaSeparatedResult())
+    }
+
+    @Test
     fun `map to nilad value`() {
         val source = "MvF=3"
         val input = listOf(1, 2, 3, 2, 1)
