@@ -36,6 +36,18 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `filters numbers in list which appear not on their own index`() {
+        val source = "F≠i"
+        val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
+        val lexed = source.lex()
+        val program = Du81Program(source, lexed, input)
+        program.runForInput()
+
+        assertEquals(listOf(2, 4, 6, 8), program.getResult()[0])
+    }
+
+
+    @Test
     fun `filters numbers in list which appear on their own index works the same with explicit input`() {
         val source1 = "Fv=i"
         val source2 = "F=i"
@@ -349,7 +361,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `filter sectioned splits list into sections with filtered values removed`() {
-        val source = "S>0"
+        val source = "S≠0"
         val input = listOf(0, 2, 7, 0, 902, 0, 1, 1)
         val program = Du81Program(source, source.lex(), input)
 

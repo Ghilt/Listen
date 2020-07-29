@@ -30,6 +30,7 @@ class FunctionRepository {
         '<' to smallerThanDyad,
         '>' to largerThanDyad,
         '=' to equalToDyad,
+        '≠' to notEqualToDyad,
         '&' to andDyad,
         '|' to orDyad,
 
