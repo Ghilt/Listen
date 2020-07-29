@@ -1,9 +1,9 @@
 package tests
 
-import filterBasedOnNeighbors
-import filterBasedOnNeighborsCyclic
-import filterSectioned
-import filterWithNeighbors
+import collectionlib.filterBasedOnNeighbors
+import collectionlib.filterBasedOnNeighborsCyclic
+import collectionlib.filterSectioned
+import collectionlib.filterWithNeighbors
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

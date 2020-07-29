@@ -1,3 +1,5 @@
+package collectionlib
+
 // TODO: should not need to produce a collection of the input type
 fun <T> Collection<T>.extendEntries(
     length: Int,

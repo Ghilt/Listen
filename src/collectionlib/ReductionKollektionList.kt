@@ -1,3 +1,5 @@
+package collectionlib
+
 // TODO clean up generics to use list as return value
 
 fun <T> Collection<T>.reduceConsecutive() : Collection<T> { // Add possibility to exclude characters? or specify max consecs?
@@ -23,7 +25,12 @@ fun <T> Collection<T>.reduceBasedOnNeighbors(
     rightEdgeValue: T = leftEdgeValue,
     predicate: (T, T, T) -> Boolean
 ): Collection<T> {
-    val func = bindArgs(Collection<T>::filterBasedOnNeighbors, leftEdgeValue, rightEdgeValue, predicate)
+    val func = bindArgs(
+        Collection<T>::filterBasedOnNeighbors,
+        leftEdgeValue,
+        rightEdgeValue,
+        predicate
+    )
     return reduceByFunction(finalSize, maxIterations, func)
 }
 

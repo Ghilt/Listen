@@ -1,3 +1,5 @@
+package collectionlib
+
 operator fun Number.plus(v: Int): Number {
     // I wonder if this hacky thing is really needed
     return when (this) {

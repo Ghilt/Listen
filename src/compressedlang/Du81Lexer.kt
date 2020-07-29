@@ -1,7 +1,7 @@
 package compressedlang
 
-import joinNeighbors
-import toGroupedStringList
+import collectionlib.joinNeighbors
+import collectionlib.toGroupedStringList
 import java.nio.file.Files
 import java.nio.file.Paths
 

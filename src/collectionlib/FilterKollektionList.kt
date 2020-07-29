@@ -1,3 +1,5 @@
+package collectionlib
+
 fun <T> Collection<T>.filterSectioned(predicate: (T) -> Boolean) : List<List<T>> {
     var newSection = true
     return fold(mutableListOf<MutableList<T>>()) { acc, v ->

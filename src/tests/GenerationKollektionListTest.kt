@@ -1,9 +1,9 @@
 package tests
 
-import extendEntries
-import growEntries
-import growEntriesBothDirections
-import growFractal
+import collectionlib.extendEntries
+import collectionlib.growEntries
+import collectionlib.growEntriesBothDirections
+import collectionlib.growFractal
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

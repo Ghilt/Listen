@@ -2,9 +2,9 @@ package tests
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import reduceBasedOnNeighbors
-import reduceBasedOnNeighborsCyclic
-import reduceConsecutive
+import collectionlib.reduceBasedOnNeighbors
+import collectionlib.reduceBasedOnNeighborsCyclic
+import collectionlib.reduceConsecutive
 
 internal class ReductionKollektionListTest {
 

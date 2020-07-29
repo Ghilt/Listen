@@ -1,11 +1,11 @@
 package tests
 
-import deferFlatMap
-import deferMap
-import joinNeighbors
+import collectionlib.deferFlatMap
+import collectionlib.deferMap
+import collectionlib.joinNeighbors
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import toGroupedStringList
+import collectionlib.toGroupedStringList
 
 internal class TransformationKollektionListTest {
 

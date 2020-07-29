@@ -1,3 +1,5 @@
+package collectionlib
+
 class DeferAccumulator<T, R>(
     private val deferPredicate: (T) -> Boolean,
     private val deferPredicateIsByToggle: Boolean = false,
