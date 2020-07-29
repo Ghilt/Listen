@@ -347,4 +347,15 @@ internal class Du81ProgramTest {
         assertEquals("true, true, true, false, false, true, true", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `filter sectioned splits list into sections with filtered values removed`() {
+        val source = "S>0"
+        val input = listOf(0, 2, 7, 0, 902, 0, 1, 1)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[2, 7], [902], [1, 1]", program.getCommaSeparatedResult())
+    }
+
 }

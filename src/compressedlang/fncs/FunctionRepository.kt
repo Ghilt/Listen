@@ -49,6 +49,7 @@ class FunctionRepository {
         'C' to chunkMonad,
         'W' to windowMonad,
 
+        'S' to filterSectionedDyad,
         'F' to filterDyad,
         'M' to mapDyad,
         'P' to flatMapDyad,

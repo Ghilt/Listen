@@ -1,5 +1,6 @@
 package compressedlang.fncs
 
+import collectionlib.filterSectioned
 import compressedlang.TYPE
 
 /* MONADS */
@@ -33,6 +34,15 @@ val filterDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
 ) { a: List<Any>, b: List<Boolean> -> a.filterIndexed { i, _ -> b[i] } }
+
+val filterSectionedDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { a: List<Any>, b: List<Boolean> -> a
+    .withIndex() // This messes it up a bit, leads to the double map at the end
+    .toList()
+    .filterSectioned { wi -> b[wi.index] }
+    .map { it.map { indexed -> indexed.value } } }
 
 val mapDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
