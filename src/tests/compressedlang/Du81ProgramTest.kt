@@ -358,4 +358,26 @@ internal class Du81ProgramTest {
         assertEquals("[2, 7], [902], [1, 1]", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `filter with neighbors brings with neighbors around the filtered items`() {
+        val source = "N<0"
+        val input = listOf(1, 2, 3, -2, 3, -1, -1, 2, 3, 0, -10)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("3, -2, 3, -1, -1, 2, 0, -10", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `filter with neighbors with configured hood bring with neighbors around the filtered items`() {
+        val source = "2,0N<0"
+        val input = listOf(1, 2, 3, -2, 3, -1, -1, 2, 3, 0, -10)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("2, 3, -2, 3, -1, -1, 3, 0, -10", program.getCommaSeparatedResult())
+    }
+
 }

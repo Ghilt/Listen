@@ -49,8 +49,10 @@ class FunctionRepository {
         'C' to chunkMonad,
         'W' to windowMonad,
 
-        'S' to filterSectionedDyad,
         'F' to filterDyad,
+        'S' to filterSectionedDyad,
+        'N' to filterWithNeighborsDyad,
+
         'M' to mapDyad,
         'P' to flatMapDyad,
         '@' to createListOfValueDyad,

@@ -1,6 +1,7 @@
 package compressedlang.fncs
 
 import collectionlib.filterSectioned
+import collectionlib.filterWithNeighbors
 import compressedlang.TYPE
 
 /* MONADS */
@@ -8,19 +9,19 @@ import compressedlang.TYPE
 val pipeMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
-) { a: List<Any>, _ -> a }
+) { data: List<Any>, _ -> data }
 
 val chunkMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
     defaultConfigurationValues = listOf(3)
-) { a: List<Any>, cv -> a.chunked(size = cv[0]) }
+) { data: List<Any>, cv -> data.chunked(size = cv[0]) }
 
 val windowMonad = ContextMonad(
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
     defaultConfigurationValues = listOf(3, 1, false)
-) { a: List<Any>, cv -> a.windowed(size = cv[0], step = cv[1], partialWindows = cv.getBool(2)) }
+) { data: List<Any>, cv -> data.windowed(size = cv[0], step = cv[1], partialWindows = cv.getBool(2)) }
 
 
 /* DYADS */
@@ -28,29 +29,43 @@ val windowMonad = ContextMonad(
 val createListOfValueDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,
-) { _: List<Any>, b: List<Any> -> listOf(b.first()) }
+) { _: List<Any>, preCalc: List<Any>, _ -> listOf(preCalc.first()) }
 
 val filterDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
-) { a: List<Any>, b: List<Boolean> -> a.filterIndexed { i, _ -> b[i] } }
+) { data: List<Any>, preCalc: List<Boolean>, _ -> data.filterIndexed { i, _ -> preCalc[i] } }
 
 val filterSectionedDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
-) { a: List<Any>, b: List<Boolean> -> a
-    .withIndex() // This messes it up a bit, leads to the double map at the end
-    .toList()
-    .filterSectioned { wi -> b[wi.index] }
-    .map { it.map { indexed -> indexed.value } } }
+) { data: List<Any>, preCalc: List<Boolean>, _ ->
+    data
+        .withIndex() // This messes it up a bit, leads to the double map at the end
+        .toList()
+        .filterSectioned { wi -> preCalc[wi.index] }
+        .map { it.map { indexed -> indexed.value } }
+}
+
+val filterWithNeighborsDyad = ContextDyad(
+    defaultConfigurationValues = listOf(1, 1),
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Boolean>, cv: ConfigValues ->
+    data
+        .withIndex() // This messes it up a bit, leads to the double map at the end
+        .toList()
+        .filterWithNeighbors(cv[0], cv[1]) { wi -> preCalc[wi.index] }
+        .map { indexed -> indexed.value }
+}
 
 val mapDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,
-) { a: List<Any>, b: List<Any> -> a.mapIndexed { i, _ -> b[i] } }
+) { data: List<Any>, preCalc: List<Any>, _ -> data.mapIndexed { i, _ -> preCalc[i] } }
 
 val flatMapDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
-) { a: List<Any>, b: List<List<Any>> -> a.withIndex().flatMap { (i, _) -> b[i] } }
+) { data: List<Any>, preCalc: List<List<Any>>, _ -> data.withIndex().flatMap { (i, _) -> preCalc[i] } }
 

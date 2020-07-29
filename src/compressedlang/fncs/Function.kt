@@ -179,7 +179,7 @@ class ContextDyad<I : Any, I2 : Any>(
     override val inputs: List<TYPE>,
     override val output: TYPE,
     override val defaultConfigurationValues: List<Any> = listOf(),
-    private val f: (List<I>, List<I2>) -> List<Any>
+    private val f: (List<I>, List<I2>, configValues: ConfigValues) -> List<Any>
 ) : ContextFunction() {
     override fun exec(
         values: List<Any>,
@@ -187,7 +187,7 @@ class ContextDyad<I : Any, I2 : Any>(
     ) = throw DeveloperError("Executing context function not supported")
 
     override fun execFromContext(values: List<Any>, inputFromContext: CalculatedValuesOfContext): List<Any> {
-        return f(values as List<I>, inputFromContext.conformToDyad() as List<I2>)
+        return f(values as List<I>, inputFromContext.conformToDyad() as List<I2>, inputFromContext.getConfigValues())
     }
 }
 
