@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tests.expectException
+import tests.getCommaSeparatedResult
 import tests.getResultAsString
 
 internal class Du81ProgramControlFlowTest {
@@ -242,5 +243,16 @@ internal class Du81ProgramControlFlowTest {
         val exception = expectException { program.runForInput() }
 
         assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
+    }
+
+    @Test
+    fun `triad behaves`() {
+        val source = "Mg1,i"
+        val input = listOf(0,1)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[0, 0, 1, 1], [0, 1, 1, 2]", program.getCommaSeparatedResult())
     }
 }

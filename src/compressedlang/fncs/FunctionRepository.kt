@@ -46,6 +46,9 @@ class FunctionRepository {
 
         'e' to elementByIndexDyad,
 
+        // Triads
+        'g' to growEntriesTriad,
+
         // Context creators
         '§' to pipeMonad,
         'C' to chunkMonad,
@@ -60,6 +63,7 @@ class FunctionRepository {
         '@' to createListOfValueDyad,
 
         'E' to extendEntriesDyad
+
     )
 
     private fun repoOf(vararg pairs: Pair<Char, Function>, ): Map<Char, Function> {

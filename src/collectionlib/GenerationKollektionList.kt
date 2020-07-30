@@ -16,10 +16,10 @@ fun String.extendEntries(
     fillFunction: (Int, Char) -> Char = { _, v -> v }
 ): String = toList().extendEntries(length, fillFunction).joinToString("")
 
-fun Collection<Number>.growEntries(
+fun List<Number>.growEntries(
     length: Int,
     step: Int = 1
-): Collection<Number> = flatMap { x -> List(1 + length) { i -> x + i * step } }
+): List<Number> = flatMap { x -> List(1 + length) { i -> x + i * step } }
 
 fun String.growEntries(
     length: Int,

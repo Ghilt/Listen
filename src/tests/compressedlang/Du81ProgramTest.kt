@@ -2,15 +2,13 @@ package tests.compressedlang
 
 import compressedlang.Du81Program
 import compressedlang.Du81ProgramEnvironment
+import compressedlang.SyntaxError
 import compressedlang.lex
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import tests.assertAllEquals
-import tests.getCommaSeparatedResult
-import tests.getResultAsString
-import tests.runSeveralProgramsOnTheSameInput
+import tests.*
 
 internal class Du81ProgramTest {
 
@@ -414,4 +412,36 @@ internal class Du81ProgramTest {
         assertEquals("hej, 1, 1, 2.3, 2.3, 2.3", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `grow entries of number list`() {
+        val source = "g1,2"
+        val input = listOf(-1,9,0.5)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-1, 1, 9, 11, 0.5, 2.5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `grow entries of string list`() {
+        val source = "g2,1"
+        val input = listOf("a", "3", "&z")
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("abc, 345, &'(z{|", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `grow entries throws exception if there is a mixed list as input`() {
+        val source = "g2,1"
+        val input = listOf("a", 1)
+        val program = Du81Program(source, source.lex(), input)
+
+        val exception = expectException { program.runForInput() }
+
+        assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
+    }
 }

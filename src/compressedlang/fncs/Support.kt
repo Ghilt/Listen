@@ -7,3 +7,7 @@ fun toBool(value: Any): Boolean = when (value) {
     listOf<Any>() -> false
     else -> true
 }
+
+fun isFilledWithNumbers(list: List<Any>): Boolean = list.all { it is Number }
+
+fun isFilledWithStrings(list: List<Any>): Boolean = list.all { it is String }

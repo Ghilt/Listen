@@ -141,6 +141,25 @@ open class Dyad<I : Any, I2 : Any, O : Any>(
     }
 }
 
+open class Triad<I : Any, I2 : Any, I3 : Any, O : Any>(
+    createContext: Boolean = false,
+    override val precedence: Precedence = LOWEST,
+    override val defaultImplicitInput: Nilad,
+    override val inputs: List<TYPE>,
+    override val output: TYPE,
+    private val outputType: (TYPE, TYPE) -> TYPE = { _, _ -> output },
+    private val f: (I, I2, I3) -> O
+) : Function(createContext) {
+    override fun exec(
+        values: List<Any>,
+        environmentHook: (contextKey: ContextKey, contextValues: List<Any>) -> Any
+    ): ResolvedFunction {
+        // TODO support environmentHook as monad does
+        val value = f(values[0] as I, values[1] as I2, values[2] as I3)
+        return ResolvedFunction(value)
+    }
+}
+
 abstract class ContextFunction(
     createContext: Boolean = true,
     override val precedence: Precedence = LOWEST,
