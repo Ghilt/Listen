@@ -17,7 +17,9 @@ class CalculatedValuesOfContext(
         this.defaultConfigValues = defaultConfigValues
     }
 
-    fun conformToDyad(): List<Any> = calculatedValuesOfContext.map { it.first().value }
+    fun listOfFirstCalculatedValues(): List<Any> = calculatedValuesOfContext.map { it.first().value }
+
+    fun listOfSecondCalculatedValues(): List<Any> = calculatedValuesOfContext.map { it[1].value }
 
     fun getConfigValues() = ConfigValues(configValuesForFunction, defaultConfigValues)
 }
