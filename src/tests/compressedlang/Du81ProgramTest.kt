@@ -403,4 +403,15 @@ internal class Du81ProgramTest {
         assertEquals("2, 3, -2, 3, -1, -1, 3, 0, -10", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `extend entries by the index they are on`() {
+        val source = "Ei"
+        val input = listOf("hej", 1, 2.3)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("hej, 1, 1, 2.3, 2.3, 2.3", program.getCommaSeparatedResult())
+    }
+
 }

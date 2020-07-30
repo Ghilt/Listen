@@ -58,6 +58,8 @@ class FunctionRepository {
         'M' to mapDyad,
         'P' to flatMapDyad,
         '@' to createListOfValueDyad,
+
+        'E' to extendEntriesDyad
     )
 
     private fun repoOf(vararg pairs: Pair<Char, Function>, ): Map<Char, Function> {

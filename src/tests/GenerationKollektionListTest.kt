@@ -31,6 +31,13 @@ internal class GenerationKollektionListTest {
     }
 
     @Test
+    fun `extendEntries by variable length on each extension`() {
+        val original = listOf(10, 20, 30)
+        val result = original.extendEntries(listOf(1, 2, 3))
+        assertEquals(listOf(10, 10, 20, 20, 20, 30, 30, 30, 30), result)
+    }
+
+    @Test
     fun `growEntries grows by correct step`() {
         val original = listOf(1, 3, 8)
         val result = original.growEntries(3, 2)

@@ -3,8 +3,13 @@ package collectionlib
 // TODO: should not need to produce a collection of the input type
 fun <T> Collection<T>.extendEntries(
     length: Int,
-    fillFunction: (Int, T) -> T = { _, v -> v }
+    fillFunction: (index: Int, T) -> T = { _, v -> v }
 ): Collection<T> = flatMap { x -> List(1 + length) { i -> fillFunction(i, x) } }
+
+fun <T> List<T>.extendEntries(
+    lengths: List<Int>,
+    fillFunction: (index: Int, T) -> T = { _, v -> v }
+): List<T> = withIndex().flatMap { x -> List(1 + lengths[x.index % lengths.size]) { i -> fillFunction(i, x.value) } }
 
 fun String.extendEntries(
     length: Int,

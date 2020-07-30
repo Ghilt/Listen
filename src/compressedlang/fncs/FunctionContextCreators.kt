@@ -1,5 +1,6 @@
 package compressedlang.fncs
 
+import collectionlib.extendEntries
 import collectionlib.filterSectioned
 import collectionlib.filterWithNeighbors
 import compressedlang.TYPE
@@ -69,3 +70,7 @@ val flatMapDyad = ContextDyad(
     output = TYPE.LIST_TYPE,
 ) { data: List<Any>, preCalc: List<List<Any>>, _ -> data.withIndex().flatMap { (i, _) -> preCalc[i] } }
 
+val extendEntriesDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Int>, _ -> data.extendEntries(preCalc) }
