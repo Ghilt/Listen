@@ -74,3 +74,8 @@ val extendEntriesDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
     output = TYPE.LIST_TYPE,
 ) { data: List<Any>, preCalc: List<Int>, _ -> data.extendEntries(preCalc) }
+
+val zipInsertionDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Any>, _ -> data.zip(preCalc).map { listOf(it.first, it.second) }  }

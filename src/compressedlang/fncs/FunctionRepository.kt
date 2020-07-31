@@ -36,6 +36,7 @@ class FunctionRepository {
         '|' to orDyad,
 
         'e' to elementByIndexDyad,
+        'z' to zipDyad,
         'a' to appendToStringDyad,
 
         // Mathematical Dyads on the form number, number -> number
@@ -63,7 +64,8 @@ class FunctionRepository {
         'P' to flatMapDyad,
         '@' to createListOfValueDyad,
 
-        'E' to extendEntriesDyad
+        'E' to extendEntriesDyad,
+        'Z' to zipInsertionDyad
 
     )
 

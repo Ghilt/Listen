@@ -57,3 +57,10 @@ val appendToStringDyad = Dyad<Any, Any, String>(
     inputs = listOf(TYPE.STRING, TYPE.ANY),
     output = TYPE.STRING,
 ) { a, b -> a.toString() + b.toString() }
+
+val zipDyad = Dyad<List<Any>, List<Any>, List<Any>>(
+    defaultImplicitInput = currentListNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+) { a, b -> a.zip(b).map { listOf(it.first, it.second) } }

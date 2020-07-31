@@ -156,12 +156,13 @@ internal class Du81ProgramTest {
 
     @Test
     fun `list by index monad fetches correct list`() {
-        val source = "M100M200M300Mi\$"
+        val source = "M10M20M30Mi\$"
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), input)
         program.runForInput()
 
-        assertEquals("300, 300, 300, 200, 200, 200, 100, 100, 100",
+        assertEquals(
+            "30, 30, 30, 20, 20, 20, 10, 10, 10",
             program.getResult()[0].flatMap { it as ArrayList<*> }.joinToString()
         )
     }
@@ -415,7 +416,7 @@ internal class Du81ProgramTest {
     @Test
     fun `grow entries of number list`() {
         val source = "g1,2"
-        val input = listOf(-1,9,0.5)
+        val input = listOf(-1, 9, 0.5)
         val program = Du81Program(source, source.lex(), input)
 
         program.runForInput()
@@ -448,11 +449,33 @@ internal class Du81ProgramTest {
     @Test
     fun `append strings`() {
         val source = "Ma\"s\"ai"
-        val input = listOf(1 ,-1, 900)
+        val input = listOf(1, -1, 900)
         val program = Du81Program(source, source.lex(), input)
 
         program.runForInput()
 
         assertEquals("1s0, -1s1, 900s2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `zip insert to double every element`() {
+        val source = "Z+1"
+        val input = listOf(1, -1, 90)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 2], [-1, 0], [90, 91]", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `zip to double every element`() {
+        val source = "z_"
+        val input = listOf(1, -1, true)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[1, 1], [-1, -1], [true, true]", program.getCommaSeparatedResult())
     }
 }
