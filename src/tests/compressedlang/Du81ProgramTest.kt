@@ -444,4 +444,15 @@ internal class Du81ProgramTest {
 
         assertEquals(true, exception is SyntaxError, "Correct exception was not thrown: $exception")
     }
+
+    @Test
+    fun `append strings`() {
+        val source = "Ma\"s\"ai"
+        val input = listOf(1 ,-1, 900)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1s, -1s, 900s", program.getCommaSeparatedResult())
+    }
 }

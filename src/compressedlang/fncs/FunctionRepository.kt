@@ -35,6 +35,9 @@ class FunctionRepository {
         '&' to andDyad,
         '|' to orDyad,
 
+        'e' to elementByIndexDyad,
+        'a' to appendToStringDyad,
+
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
         '-' to subtractionDyad,
@@ -43,8 +46,6 @@ class FunctionRepository {
         '¤' to wholeDivisionDyad,
         '%' to moduloDyad, /* Programming standard, negative numbers possible in output */
         '£' to moduloMathematicalDyad, /* second input decides sign of output */
-
-        'e' to elementByIndexDyad,
 
         // Triads
         'g' to growEntriesTriad,

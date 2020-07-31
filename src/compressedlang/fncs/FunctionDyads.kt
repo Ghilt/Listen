@@ -50,3 +50,10 @@ val elementByIndexDyad = Dyad<List<Any>, Int, Any>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.ANY,
 ) { a, b -> a[b] }
+
+val appendToStringDyad = Dyad<Any, Any, String>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.STRING, TYPE.ANY),
+    output = TYPE.STRING,
+) { a, b -> a.toString() + b.toString() }
