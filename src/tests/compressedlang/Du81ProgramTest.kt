@@ -453,6 +453,6 @@ internal class Du81ProgramTest {
 
         program.runForInput()
 
-        assertEquals("1s, -1s, 900s", program.getCommaSeparatedResult())
+        assertEquals("1s0, -1s1, 900s2", program.getCommaSeparatedResult())
     }
 }
