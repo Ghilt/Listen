@@ -78,4 +78,14 @@ val extendEntriesDyad = ContextDyad(
 val zipInsertionDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,
-) { data: List<Any>, preCalc: List<Any>, _ -> data.zip(preCalc).map { listOf(it.first, it.second) }  }
+) { data: List<Any>, preCalc: List<Any>, _ -> data.zip(preCalc).map { listOf(it.first, it.second) } }
+
+val allDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Boolean>, _ -> if (data.withIndex().all { preCalc[it.index] }) data else listOf() }
+
+val anyDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Boolean>, _ -> if (data.withIndex().any { preCalc[it.index] }) data else listOf() }

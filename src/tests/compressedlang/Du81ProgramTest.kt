@@ -478,4 +478,48 @@ internal class Du81ProgramTest {
 
         assertEquals("[1, 1], [-1, -1], [true, true]", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `all dyad returns empty list(which is falsy) if all false`() {
+        val source = "A>0"
+        val input = listOf(1, -1, 90)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `all dyad returns the list as is(which is truthy) if all true`() {
+        val source = "A>0"
+        val input = listOf(1, 13, 9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1, 13, 9", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `any dyad returns empty list(which is falsy) if any false`() {
+        val source = "Ä>0"
+        val input = listOf(-1, -1, -5)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `any dyad returns the list as is(which is truthy) if any true`() {
+        val source = "Ä>0"
+        val input = listOf(-1, 13, -9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("-1, 13, -9", program.getCommaSeparatedResult())
+    }
 }

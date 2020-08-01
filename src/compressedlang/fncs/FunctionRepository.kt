@@ -60,6 +60,9 @@ class FunctionRepository {
         'S' to filterSectionedDyad,
         'N' to filterWithNeighborsDyad,
 
+        'A' to allDyad,
+        'Ä' to anyDyad,
+
         'M' to mapDyad,
         'P' to flatMapDyad,
         '@' to createListOfValueDyad,
