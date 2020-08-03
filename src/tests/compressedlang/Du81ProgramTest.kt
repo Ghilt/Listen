@@ -123,6 +123,17 @@ internal class Du81ProgramTest {
     }
 
     @Test
+    fun `zip reversed list with original`() {
+        val source = "rz_"
+        val input = listOf(1, 2, 90, 100)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[100, 1], [90, 2], [2, 90], [1, 100]", program.getCommaSeparatedResult())
+    }
+
+    @Test
     fun `filter all a characters`() {
         val source = "F=\"a\""
         val input = "aabbac".split("")
