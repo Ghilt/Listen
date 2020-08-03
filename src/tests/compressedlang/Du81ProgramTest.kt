@@ -533,4 +533,6 @@ internal class Du81ProgramTest {
 
         assertEquals("-1, 13, -9", program.getCommaSeparatedResult())
     }
+
+    // I want an if triad which if a thruthy value in, then second value, else third value
 }

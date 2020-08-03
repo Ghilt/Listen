@@ -42,7 +42,7 @@ class FunctionRepository {
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
-        '-' to subtractionDyad,
+        '-' to subtractionDyad, // Todo, power dyad please
         '*' to multiplicationDyad,
         '/' to divisionDyad,
         '¤' to wholeDivisionDyad,

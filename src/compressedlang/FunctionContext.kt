@@ -179,6 +179,16 @@ class FunctionContext(
         requiredType: TYPE?
     ): (contextKey: ContextKey, contextValues: List<Any>) -> Any {
         return { contextKey: ContextKey, contextValues: List<Any> ->
+
+            if (index == -1 && setOf(
+                    ContextKey.VALUE_THEN_INDEX,
+                    ContextKey.VALUE,
+                    ContextKey.INDEX,
+                    ContextKey.VALUE_THEN_CURRENT_LIST
+                ).contains(contextKey)) {
+                throw SyntaxError("Attempting to retrieve information from a context outside of a context")
+            }
+
             when (contextKey) {
                 ContextKey.CURRENT_LIST -> data
                 ContextKey.LIST_BY_INDEX -> {
