@@ -24,6 +24,19 @@ val growEntriesTriad = Triad<List<Any>, Int, Int, List<Any>>(
         val castToStrings = data as List<String>
         castToStrings.map { it.growEntries(length, step) }
     } else {
-        throw SyntaxError("Grow entries given illegal argument: [${data.joinToString() }]. Lists of mixed strings and numbers are not supported")
+        throw SyntaxError("Grow entries given illegal argument: [${data.joinToString()}]. Lists of mixed strings and numbers are not supported")
+    }
+}
+
+val ifBranchTriad = Triad<Any, Any, Any, Any>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.ANY, TYPE.ANY, TYPE.ANY),
+    output = TYPE.ANY,
+) { condition: Any, branch1: Any, branch2: Any ->
+    if (toBool(condition)) {
+        branch1
+    } else {
+        branch2
     }
 }

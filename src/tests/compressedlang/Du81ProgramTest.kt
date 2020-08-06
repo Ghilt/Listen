@@ -534,5 +534,15 @@ internal class Du81ProgramTest {
         assertEquals("-1, 13, -9", program.getCommaSeparatedResult())
     }
 
-    // I want an if triad which if a thruthy value in, then second value, else third value
+    @Test
+    fun `if else branch`() {
+        val source = "Mv>0f\"above zero\"\"below zero\""
+        val input = listOf(-1, 13, -9)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("below zero, above zero, below zero", program.getCommaSeparatedResult())
+    }
+
 }

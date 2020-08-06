@@ -51,6 +51,7 @@ class FunctionRepository {
 
         // Triads
         'g' to growEntriesTriad,
+        'f' to ifBranchTriad,
 
         // Context creators
         '§' to pipeMonad,
