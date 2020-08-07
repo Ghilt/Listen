@@ -35,6 +35,8 @@ class FunctionRepository {
         '≠' to notEqualToDyad,
         '&' to andDyad,
         '|' to orDyad,
+        '[' to takeDyad,
+        ']' to dropDyad,
 
         'e' to elementByIndexDyad,
         'z' to zipDyad,

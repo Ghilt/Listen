@@ -1,6 +1,8 @@
 package compressedlang.fncs
 
-import compressedlang.*
+import compressedlang.Precedence
+import compressedlang.TYPE
+import compressedlang.alphabets
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
@@ -74,3 +76,17 @@ val alphabetGenerationDyad = Dyad(
     val alphabet = alphabets[whichAlphabet]
     alphabet.repeat(1 + length / alphabet.length).take(length).toList()
 }
+
+val takeDyad = Dyad<List<Any>, Int, List<Any>>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { a, b -> a.take(b) }
+
+val dropDyad = Dyad<List<Any>, Int, List<Any>>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { a, b -> a.drop(b) }

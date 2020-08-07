@@ -560,4 +560,26 @@ internal class Du81ProgramTest {
             program.getCommaSeparatedResult()
         )
     }
+
+    @Test
+    fun `take 5 elements`() {
+        val source = "s_[5"
+        val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("1, 1, 1, 1, 2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `drop 5 elements`() {
+        val source = "s_]5"
+        val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("2, 2, 2", program.getCommaSeparatedResult())
+    }
 }
