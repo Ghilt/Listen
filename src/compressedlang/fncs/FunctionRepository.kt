@@ -11,7 +11,7 @@ class FunctionRepository {
         // Control flow
         '(' to startInnerFunctionControlFlow,
         ')' to endInnerFunctionControlFlow,
-        '.' to endOuterFunction,
+        ';' to endOuterFunction,
 
         // Nilads
         '_' to currentListNilad,

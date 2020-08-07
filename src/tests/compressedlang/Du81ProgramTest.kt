@@ -549,7 +549,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `generate alphabet loops if size is longer than alphabet`() {
-        val source = ".2b30"
+        val source = ";2b30"
         val input = listOf(1)
         val program = Du81Program(source, source.lex(), listOf(input))
 
