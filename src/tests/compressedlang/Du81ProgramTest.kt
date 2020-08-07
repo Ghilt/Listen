@@ -534,6 +534,8 @@ internal class Du81ProgramTest {
         assertEquals("-1, 13, -9", program.getCommaSeparatedResult())
     }
 
+    //https://math.stackexchange.com/questions/2848284/oeis-database-download
+
     @Test
     fun `if else branch`() {
         val source = "Mv>0f\"above zero\"\"below zero\""
@@ -545,4 +547,17 @@ internal class Du81ProgramTest {
         assertEquals("below zero, above zero, below zero", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `generate alphabet loops if size is longer than alphabet`() {
+        val source = "s2b30"
+        val input = listOf(1)
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals(
+            "Α, Β, Γ, Δ, Ε, Ζ, Η, Θ, Ι, Κ, Λ, Μ, Ν, Ξ, Ο, Π, Ρ, Σ, Τ, Υ, Φ, Χ, Ψ, Ω, Α, Β, Γ, Δ, Ε, Ζ",
+            program.getCommaSeparatedResult()
+        )
+    }
 }

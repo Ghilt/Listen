@@ -64,3 +64,13 @@ val zipDyad = Dyad<List<Any>, List<Any>, List<Any>>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
 ) { a, b -> a.zip(b).map { listOf(it.first, it.second) } }
+
+val alphabetGenerationDyad = Dyad(
+    defaultImplicitInput = constantZeroNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { whichAlphabet: Int, length: Int ->
+    val alphabet = alphabets[whichAlphabet]
+    alphabet.repeat(1 + length / alphabet.length).take(length).toList()
+}

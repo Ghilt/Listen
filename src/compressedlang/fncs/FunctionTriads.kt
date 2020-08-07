@@ -28,8 +28,8 @@ val growEntriesTriad = Triad<List<Any>, Int, Int, List<Any>>(
     }
 }
 
-val ifBranchTriad = Triad<Any, Any, Any, Any>(
-    defaultImplicitInput = valueThenCurrentListNilad,
+val ifBranchTriad = Triad(
+    defaultImplicitInput = valueNilad,
     precedence = Precedence.LOW,
     inputs = listOf(TYPE.ANY, TYPE.ANY, TYPE.ANY),
     output = TYPE.ANY,
