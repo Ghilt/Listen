@@ -4,8 +4,6 @@ L=tn (read as the english word 'listen', with the 't' extra silent) is an instru
 
 ## Overview
 
-The main building blocks in the language can be thought of as functions. These constructs can have different number of inputs and are then referred to as Nilad (0 inputs), Monad (1 input),  (2 inputs), Triad (3 inputs ) etc. These functions are then combined into larger structures called chimes. It will be clearer with an example:
-
 Let's take a program that takes a list of integers and multiplies them with 2 and outputs them, it would look like this (it consists of a single chime):
 
     _M*2

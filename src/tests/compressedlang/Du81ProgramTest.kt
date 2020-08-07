@@ -549,7 +549,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `generate alphabet loops if size is longer than alphabet`() {
-        val source = "s2b30"
+        val source = ".2b30"
         val input = listOf(1)
         val program = Du81Program(source, source.lex(), input)
 
@@ -563,7 +563,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `take 5 elements`() {
-        val source = "s_[5"
+        val source = "[5"
         val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
         val program = Du81Program(source, source.lex(), input)
 
@@ -574,7 +574,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `drop 5 elements`() {
-        val source = "s_]5"
+        val source = "]5"
         val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
         val program = Du81Program(source, source.lex(), input)
 

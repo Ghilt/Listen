@@ -214,7 +214,7 @@ internal class Du81ProgramControlFlowTest {
 
     @Test
     fun `end outer function to start new one`() {
-        val source = "Mis~F=\"hej\""
+        val source = "Mi.~F=\"hej\""
         val input = listOf("hej", " ", "där")
         val program = Du81Program(source, source.lex(), input)
 
@@ -225,7 +225,7 @@ internal class Du81ProgramControlFlowTest {
 
     @Test
     fun `end outer function with unfinished inner function in it`() {
-        val source = "M(is~Fv=\"hej\""
+        val source = "M(i.~Fv=\"hej\""
         val input = listOf("hej", " ", "där")
         val program = Du81Program(source, source.lex(), input)
 
