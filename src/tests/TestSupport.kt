@@ -5,7 +5,7 @@ import compressedlang.lex
 
 fun runSeveralProgramsOnTheSameInput(input: List<Int>, vararg programs: String): List<List<Any>> {
     return programs.map {
-        Du81Program(it, it.lex(), input).apply { runForInput() }.getResult()[0]
+        Du81Program(it, it.lex(), listOf(input)).apply { runForInput() }.getResult()[0]
     }
 }
 

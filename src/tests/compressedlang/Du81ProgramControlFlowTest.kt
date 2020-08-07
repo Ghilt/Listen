@@ -28,8 +28,8 @@ internal class Du81ProgramControlFlowTest {
     fun `chain filters`() {
         val source = "F>100F>100F>200F>300"
         val input = listOf(100, 200, 300, 400)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(400), program.getResult()[0])
@@ -39,8 +39,8 @@ internal class Du81ProgramControlFlowTest {
     fun `chain maps`() {
         val source = "M+1M+1M+1M+1M+1M+1"
         val input = listOf(-1, 0, 1, 2)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(5, 6, 7, 8), program.getResult()[0])
@@ -50,8 +50,8 @@ internal class Du81ProgramControlFlowTest {
     fun `consumes weak inputs`() {
         val source = "M1+1+1"
         val input = listOf(-123, 213123, 12312)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(3, 3, 3), program.getResult()[0])
@@ -61,8 +61,8 @@ internal class Du81ProgramControlFlowTest {
     fun `mixes consuming and not consuming previous input`() {
         val source = "M+1+1"
         val input = listOf(-123, 213123, 12312)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(-121, 213125, 12314), program.getResult()[0])
@@ -72,7 +72,7 @@ internal class Du81ProgramControlFlowTest {
     fun `complex filters with pointless inner function output should be the same as input`() {
         val source = "F(_F=\"a\")e0=\"a\""
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("abc", program.getResultAsString())
@@ -82,7 +82,7 @@ internal class Du81ProgramControlFlowTest {
     fun `throw syntax error if function have too many resolved values`() {
         val source = "F1,1,1,1"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
 
         val exception = expectException { program.runForInput() }
@@ -94,7 +94,7 @@ internal class Du81ProgramControlFlowTest {
     fun `syntax error thrown if ending inner function without having started one`() {
         val source = "Fv=i)"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         val exception = expectException { program.runForInput() }
 
@@ -106,7 +106,7 @@ internal class Du81ProgramControlFlowTest {
     fun `perform some calculation in inner function`() {
         val source = "M(_M+i)ei"
         val input = listOf(1, 2, 3, 0)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -117,7 +117,7 @@ internal class Du81ProgramControlFlowTest {
     fun `inner function is calculated first and taken as argument to monad`() {
         val source = "Mv+(_Mv)p"
         val input = listOf(1, 2, 3, 0)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -128,7 +128,7 @@ internal class Du81ProgramControlFlowTest {
     fun `perform some calculation in consecutive inner functions`() {
         val source = "M(_M+i)p+(_M+v)p+(_M+2)pFi=0"
         val input = listOf(1, 2, 3, 0)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -139,7 +139,7 @@ internal class Du81ProgramControlFlowTest {
     fun `inner function returns single value`() {
         val source = "Mi+(_p)"
         val input = listOf(1, -52, 3, 0)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -150,7 +150,7 @@ internal class Du81ProgramControlFlowTest {
     fun `override precedence rules by making inner functions`() {
         val source = "M(5+5)*(5+5)*(5+5)"
         val input = listOf(1, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -161,7 +161,7 @@ internal class Du81ProgramControlFlowTest {
     fun `new outer function immediately after inner function`() {
         val source = "M(5+5)F0=i"
         val input = listOf(1, 2, 3, 4)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -172,7 +172,7 @@ internal class Du81ProgramControlFlowTest {
     fun `access outer context from inner function contextless part`() {
         val source = "M(v+5)"
         val input = listOf(1, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -183,7 +183,7 @@ internal class Du81ProgramControlFlowTest {
     fun `append lists with flatmap with inner function providing implicit input`() {
         val source = "M+1Mv-1P(v-1)\$"
         val input = listOf(1, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -194,7 +194,7 @@ internal class Du81ProgramControlFlowTest {
     fun `append lists with flatmap with nested inner function supplying list provider`() {
         val source = "M+1Mv-1P((v-1)\$Fi=0)"
         val input = listOf(1, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -205,7 +205,7 @@ internal class Du81ProgramControlFlowTest {
     fun `nested inner functions`() {
         val source = "M(((v)))"
         val input = listOf("hej", " ", "där")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -216,7 +216,7 @@ internal class Du81ProgramControlFlowTest {
     fun `end outer function to start new one`() {
         val source = "Mi.~F=\"hej\""
         val input = listOf("hej", " ", "där")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -227,7 +227,7 @@ internal class Du81ProgramControlFlowTest {
     fun `end outer function with unfinished inner function in it`() {
         val source = "M(i.~Fv=\"hej\""
         val input = listOf("hej", " ", "där")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -238,7 +238,7 @@ internal class Du81ProgramControlFlowTest {
     fun `throw syntax error if config value is of wrong type`() {
         val source = "\"k\"C"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         val exception = expectException { program.runForInput() }
 
@@ -248,11 +248,22 @@ internal class Du81ProgramControlFlowTest {
     @Test
     fun `triad behaves`() {
         val source = "Mg1,i"
-        val input = listOf(0,1)
-        val program = Du81Program(source, source.lex(), input)
+        val input = listOf(0, 1)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
         assertEquals("[0, 0, 1, 1], [0, 1, 1, 2]", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `multiple input lists are put on stack`() {
+        val source = "z~"
+        val input = listOf(listOf(0, 1), listOf(3, 4))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[0, 3], [1, 4]", program.getCommaSeparatedResult())
     }
 }

@@ -4,9 +4,9 @@ import compressedlang.fncs.Function
 import compressedlang.fncs.ResolvedFunction
 import compressedlang.fncs.currentListNilad
 
-class Context(input: List<Any>) {
+class Context(input: List<List<Any>>) {
 
-    private val targets: MutableList<List<Any>> = mutableListOf(input)
+    private val targets: MutableList<List<Any>> = input.toMutableList()
     private val functionContext = mutableListOf(FunctionContext(targets).apply { put(currentListNilad) })
     private val currentFunctionContext
         get() = functionContext[0]

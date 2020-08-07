@@ -4,5 +4,6 @@
     <inspection_tool class="FunctionName" enabled="false" level="WEAK WARNING" enabled_by_default="false">
       <scope name="Tests" level="ERROR" enabled="false" />
     </inspection_tool>
+    <inspection_tool class="PrivatePropertyName" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
   </profile>
 </component>

@@ -25,8 +25,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `filters doubles larger than 0,001`() {
         val source = "Fv>0.001"
         val input = listOf(-1.5, -1.4, 1.3, -2.1, 2.1, -3.2, -5.3, 0.1, 0.0, 8.2)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(1.3, 2.1, 0.1, 8.2), program.getResult()[0])
@@ -36,8 +35,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `filters numbers larger than 0`() {
         val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(1, 2, 8), program.getResult()[0])
@@ -47,8 +45,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `filters numbers larger than 0 with nilad fetching value`() {
         val source = "Fv>0"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(1, 2, 8), program.getResult()[0])
@@ -58,8 +55,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `filters away negative numbers`() {
         val source = "F>-1"
         val input = listOf(-1, -1, 1, -2, 2, -3, -5, 0, 8)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(1, 2, 0, 8), program.getResult()[0])
@@ -69,8 +65,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `maps to one higher`() {
         val source = "M+1"
         val input = listOf(-1, 0, 1, 2, 3)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(0, 1, 2, 3, 4), program.getResult()[0])
@@ -80,8 +75,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `maps to one lower`() {
         val source = "Mv-1" // Does not use implicit values with (-) sign as it is a dyad in all cases. Zero is its implicit input
         val input = listOf(-1, 0, 1, 2, 3)
-        val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(listOf(-2, -1, 0, 1, 2), program.getResult()[0])
@@ -91,7 +85,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `division dyad`() {
         val source = "M/2"
         val input = listOf(10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -102,7 +96,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `division dyad with a non int`() {
         val source = "M/2.5"
         val input = listOf(0.8, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -113,7 +107,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `whole number division dyad`() {
         val source = "M¤2"
         val input = listOf(-3, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -124,7 +118,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `whole number division dyad a non int in input should still only return integers`() {
         val source = "M¤2.3"
         val input = listOf(-1, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -135,7 +129,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `modulo dyad`() {
         val source = "M%3"
         val input = listOf(-2, -1, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -146,7 +140,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `modulo dyad with non integers`() {
         val source = "M%3.5"
         val input = listOf(-5.75, -1, 7.5, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -157,7 +151,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `modulo dyad with negative value`() {
         val source = "M%-3"
         val input = listOf(-2, -1, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -169,7 +163,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `mathematical modulo dyad giving no negative numbers in output`() {
         val source = "M£3"
         val input = listOf(-10002, -2, -1, 10, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -180,7 +174,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `mathematical modulo dyad with negative input giving no positive numbers in output`() {
         val source = "M£-3"
         val input = listOf(-4, -3, -2, -1, 0, 1, 2, 3, 4)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -191,7 +185,7 @@ internal class Du81ProgramMathFunctionsTest {
     fun `mathematical modulo dyad with non integers giving no negative numbers in output`() {
         val source = "M£3.5"
         val input = listOf(-5.75, -1, 7.5, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 

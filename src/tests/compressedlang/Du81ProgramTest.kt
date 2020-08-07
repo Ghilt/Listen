@@ -27,7 +27,7 @@ internal class Du81ProgramTest {
         val source = "F=i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf(0, 2, 5, 7), program.getResult()[0])
@@ -38,7 +38,7 @@ internal class Du81ProgramTest {
         val source = "F≠i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf(2, 4, 6, 8), program.getResult()[0])
@@ -50,8 +50,8 @@ internal class Du81ProgramTest {
         val source1 = "Fv=i"
         val source2 = "F=i"
         val input = listOf(0, 2, 2, 4, 6, 5, 8, 7)
-        val program1 = Du81Program(source1, source1.lex(), input).apply { runForInput() }
-        val program2 = Du81Program(source2, source2.lex(), input).apply { runForInput() }
+        val program1 = Du81Program(source1, source1.lex(), listOf(input)).apply { runForInput() }
+        val program2 = Du81Program(source2, source2.lex(), listOf(input)).apply { runForInput() }
 
         assertEquals(listOf(0, 2, 5, 7), program1.getResult()[0])
         assertEquals(program1.getResult(), program2.getResult())
@@ -83,7 +83,7 @@ internal class Du81ProgramTest {
         val source = "M+iF>0"
         val input = listOf(0, 10, 100)
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf(11, 102), program.getResult()[0])
@@ -94,7 +94,7 @@ internal class Du81ProgramTest {
         val source = "F1=i"
         val input = listOf(100, 202, 300, 400)
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf(202), program.getResult()[0])
@@ -105,7 +105,7 @@ internal class Du81ProgramTest {
         val source = "F>1"
         val input = listOf<Int>()
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf<Int>(), program.getResult()[0])
@@ -116,7 +116,7 @@ internal class Du81ProgramTest {
         val source = "F>1M=0"
         val input = listOf(0, 0, 0, 0)
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals(listOf<Int>(), program.getResult()[0])
@@ -126,7 +126,7 @@ internal class Du81ProgramTest {
     fun `zip reversed list with original`() {
         val source = "rz_"
         val input = listOf(1, 2, 90, 100)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -138,7 +138,7 @@ internal class Du81ProgramTest {
         val source = "F=\"a\""
         val input = "aabbac".split("")
         val lexed = source.lex()
-        val program = Du81Program(source, lexed, input)
+        val program = Du81Program(source, lexed, listOf(input))
         program.runForInput()
 
         assertEquals("aaa", program.getResultAsString())
@@ -148,7 +148,7 @@ internal class Du81ProgramTest {
     fun `not monad inverts boolean value`() {
         val source = "M!"
         val input = listOf(false, true, 0, -2, 3)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -159,7 +159,7 @@ internal class Du81ProgramTest {
     fun `map to nilad value`() {
         val source = "MvF=3"
         val input = listOf(1, 2, 3, 2, 1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("3", program.getResultAsString())
@@ -169,7 +169,7 @@ internal class Du81ProgramTest {
     fun `list by index monad fetches correct list`() {
         val source = "M10M20M30Mi\$"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals(
@@ -182,7 +182,7 @@ internal class Du81ProgramTest {
     fun `get element of list by index dyad`() {
         val source = "M100M200M300Mi\$e0"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("300200100", program.getResultAsString())
@@ -192,7 +192,7 @@ internal class Du81ProgramTest {
     fun `count list count returns correct count`() {
         val source = "M0M0M0Mq"
         val input = listOf("a")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("4", program.getResultAsString())
@@ -202,7 +202,7 @@ internal class Du81ProgramTest {
     fun `create list by taking single item from list`() {
         val source = "e1"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("b", program.getResultAsString())
@@ -212,7 +212,7 @@ internal class Du81ProgramTest {
     fun `flatmap list into a list of copies of itself`() {
         val source = "P_"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
         assertEquals("abcabcabc", program.getResultAsString())
     }
@@ -221,7 +221,7 @@ internal class Du81ProgramTest {
     fun `flatmap different past results together`() {
         val source = "M11M22M33Mi\$Pv"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("333333222222111111", program.getResultAsString())
@@ -231,7 +231,7 @@ internal class Du81ProgramTest {
     fun `create list from value works correctly`() {
         val source = "@112121229"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("112121229", program.getResultAsString())
@@ -241,7 +241,7 @@ internal class Du81ProgramTest {
     fun `| pipe works correctly`() {
         val source = "§§§§M0\$e2"
         val input = listOf("a", "b", "c")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
 
         assertEquals("ccc", program.getResultAsString())
@@ -251,7 +251,7 @@ internal class Du81ProgramTest {
     fun `nop resolves to nothingness`() {
         val source = "F,,,,,,=,,,,,1,,,,,,+,,,,,1,,,,,,,,"
         val input = listOf(1, 2, 3, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -262,7 +262,7 @@ internal class Du81ProgramTest {
     fun `sum monad sums list`() {
         val source = "Mp"
         val input = listOf(1, 2, 3, -2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -273,7 +273,7 @@ internal class Du81ProgramTest {
     fun `second most current list nilad built in`() {
         val source = "MiM(~Fv=\"hej\")"
         val input = listOf("hej", " ", "där")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -284,7 +284,7 @@ internal class Du81ProgramTest {
     fun `chunk list into chunks of 1`() {
         val source = "1C"
         val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -295,7 +295,7 @@ internal class Du81ProgramTest {
     fun `chunk list into chunks of the default value for chunking`() {
         val source = "C"
         val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -307,7 +307,7 @@ internal class Du81ProgramTest {
     fun `chunk list into chunks of 4`() {
         val source = "2*1*2C"
         val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -318,7 +318,7 @@ internal class Du81ProgramTest {
     fun `turn list into windowed representation of size 3 with step 2`() {
         val source = "3,2W"
         val input = listOf(1, 2, 3, 4, 5)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -329,7 +329,7 @@ internal class Du81ProgramTest {
     fun `turn list into windowed representation of size 3 with step 1 using default configuration value`() {
         val source = "3W"
         val input = listOf(1, 2, 3, 4, 5)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -340,7 +340,7 @@ internal class Du81ProgramTest {
     fun `turn list into windowed representation with trailing windows`() {
         val source = "3,1,1W"
         val input = listOf(1, 2, 3, 4, 5)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -351,7 +351,7 @@ internal class Du81ProgramTest {
     fun `consecutive truthy values yields true`() {
         val source = "2WM(e0)&e1"
         val input = listOf(0, 2, 7, 0, 5, 0, 1, 1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -362,7 +362,7 @@ internal class Du81ProgramTest {
     fun `empty string is falsy value`() {
         val source = "@4&\"\""
         val input = listOf(0, 2, 7)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -373,7 +373,7 @@ internal class Du81ProgramTest {
     fun `consecutive values need at least one truthy value to yield true`() {
         val source = "2WM(e0)|e1"
         val input = listOf(0, 2, 7, 0, 0, 0, 1, 1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -384,7 +384,7 @@ internal class Du81ProgramTest {
     fun `filter sectioned splits list into sections with filtered values removed`() {
         val source = "S≠0"
         val input = listOf(0, 2, 7, 0, 902, 0, 1, 1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -395,7 +395,7 @@ internal class Du81ProgramTest {
     fun `filter with neighbors brings with neighbors around the filtered items`() {
         val source = "N<0"
         val input = listOf(1, 2, 3, -2, 3, -1, -1, 2, 3, 0, -10)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -406,7 +406,7 @@ internal class Du81ProgramTest {
     fun `filter with neighbors with configured hood bring with neighbors around the filtered items`() {
         val source = "2,0N<0"
         val input = listOf(1, 2, 3, -2, 3, -1, -1, 2, 3, 0, -10)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -417,7 +417,7 @@ internal class Du81ProgramTest {
     fun `extend entries by the index they are on`() {
         val source = "Ei"
         val input = listOf("hej", 1, 2.3)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -428,7 +428,7 @@ internal class Du81ProgramTest {
     fun `grow entries of number list`() {
         val source = "g1,2"
         val input = listOf(-1, 9, 0.5)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -439,7 +439,7 @@ internal class Du81ProgramTest {
     fun `grow entries of string list`() {
         val source = "g2,1"
         val input = listOf("a", "3", "&z")
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -450,7 +450,7 @@ internal class Du81ProgramTest {
     fun `grow entries throws exception if there is a mixed list as input`() {
         val source = "g2,1"
         val input = listOf("a", 1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         val exception = expectException { program.runForInput() }
 
@@ -461,7 +461,7 @@ internal class Du81ProgramTest {
     fun `append strings`() {
         val source = "Ma\"s\"ai"
         val input = listOf(1, -1, 900)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -472,7 +472,7 @@ internal class Du81ProgramTest {
     fun `zip insert to double every element`() {
         val source = "Z+1"
         val input = listOf(1, -1, 90)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -483,7 +483,7 @@ internal class Du81ProgramTest {
     fun `zip to double every element`() {
         val source = "z_"
         val input = listOf(1, -1, true)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -494,7 +494,7 @@ internal class Du81ProgramTest {
     fun `all dyad returns empty list(which is falsy) if all false`() {
         val source = "A>0"
         val input = listOf(1, -1, 90)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -505,7 +505,7 @@ internal class Du81ProgramTest {
     fun `all dyad returns the list as is(which is truthy) if all true`() {
         val source = "A>0"
         val input = listOf(1, 13, 9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -516,7 +516,7 @@ internal class Du81ProgramTest {
     fun `any dyad returns empty list(which is falsy) if any false`() {
         val source = "Ä>0"
         val input = listOf(-1, -1, -5)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -527,7 +527,7 @@ internal class Du81ProgramTest {
     fun `any dyad returns the list as is(which is truthy) if any true`() {
         val source = "Ä>0"
         val input = listOf(-1, 13, -9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -540,7 +540,7 @@ internal class Du81ProgramTest {
     fun `if else branch`() {
         val source = "Mv>0f\"above zero\"\"below zero\""
         val input = listOf(-1, 13, -9)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -551,7 +551,7 @@ internal class Du81ProgramTest {
     fun `generate alphabet loops if size is longer than alphabet`() {
         val source = ".2b30"
         val input = listOf(1)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -565,7 +565,7 @@ internal class Du81ProgramTest {
     fun `take 5 elements`() {
         val source = "[5"
         val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
@@ -576,10 +576,14 @@ internal class Du81ProgramTest {
     fun `drop 5 elements`() {
         val source = "]5"
         val input = listOf(1, 1, 1, 1, 2, 2, 2, 2)
-        val program = Du81Program(source, source.lex(), input)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
         assertEquals("2, 2, 2", program.getCommaSeparatedResult())
     }
+
+    // fix dot being in ints and stop op
+
+
 }
