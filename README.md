@@ -39,3 +39,8 @@ Let's leave example-land for a minute and present the full structure of the chim
     [<list input for context creator><configuration values for context creator><context creator><inputs to context creator>]   
      
     [<functions without context creator>]
+    
+    
+### TODO
+
+Credit to https://oeis.org/ for being a great resource

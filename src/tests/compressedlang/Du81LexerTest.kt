@@ -59,7 +59,7 @@ internal class Du81LexerTest {
     @Test
     fun `read program from file per default`() {
         val args =
-            listOf("D:\\Files\\Code\\IntelliJ\\Kollektion\\testFiles\\automatic_test_001.du81", "198").toTypedArray()
+            listOf("testFiles\\automatic_test_001.du81", "198").toTypedArray()
 
         val manager = InterpreterFlagManager(args)
 
@@ -67,5 +67,4 @@ internal class Du81LexerTest {
         assertEquals(1, manager.inputs.size)
         assertEquals(listOf(198), manager.inputs[0])
     }
-
 }

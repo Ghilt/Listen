@@ -3,6 +3,7 @@ package compressedlang.fncs
 import compressedlang.Precedence
 import compressedlang.TYPE
 import compressedlang.alphabets
+import compressedlang.readOeisSequence
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
@@ -76,6 +77,20 @@ val alphabetGenerationDyad = Dyad(
     val alphabet = alphabets[whichAlphabet]
     alphabet.repeat(1 + length / alphabet.length).take(length).toList()
 }
+
+val oeisGenerationDyad = Dyad(
+    defaultImplicitInput = constantZeroNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { sequenceId: Int, length: Int ->
+    val sequence = readOeisSequence(sequenceId)
+    if (length > sequence.size) {
+        throw IllegalArgumentException("Length($length) requested of oeis sequence $sequenceId requested is longer than available data(${sequence.size}). For more info visit https://oeis.org, It is a great resource.")
+    }
+    sequence.take(length)
+}
+
 
 val takeDyad = Dyad<List<Any>, Int, List<Any>>(
     defaultImplicitInput = valueThenCurrentListNilad,

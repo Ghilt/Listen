@@ -583,7 +583,17 @@ internal class Du81ProgramTest {
         assertEquals("2, 2, 2", program.getCommaSeparatedResult())
     }
 
-    // fix dot being in ints and stop op
+    @Test
+    fun `oeis generation generates sequence of correct size`() {
+        val source = ";145o5"
+        val input = listOf(1)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
+        program.runForInput()
+
+        assertEquals("1, 24, 264, 1760, 7944", program.getCommaSeparatedResult())
+    }
+
+    //want padStart padEnd
 
 }
