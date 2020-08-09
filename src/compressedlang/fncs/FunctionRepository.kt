@@ -36,7 +36,8 @@ class FunctionRepository {
         'm' to isPrimeMonad,
         'h' to absoluteValueMonad,
         'j' to signMonad,
-        'k' to floorMonad,
+        'u' to floorMonad,
+        'ö' to roundMonad,
 
         // Dyads
         '<' to smallerThanDyad,
@@ -96,13 +97,13 @@ class FunctionRepository {
     private fun repoOf(vararg pairs: Pair<Char, Function>): Map<Char, Function> {
         val keys = pairs.map { it.first }
         val duplicates = keys.map { key -> key to keys.count { key == it } }.filter { it.second > 1 }
-        if (duplicates.isNotEmpty()) throw DeveloperError("Duplicate key in function repo: $duplicates")
+        if (duplicates.isNotEmpty()) throw DeveloperError("Duplicate key in function repo: $duplicates. Free Chars: ${getCharacterUsedDiagnostic(keys.toSet())}")
         return mapOf(*pairs)
     }
 
-    fun getCharacterUsedDiagnostic(): String {
+    fun getCharacterUsedDiagnostic(usedKeys: Set<Char> = repo.keys): String {
         val all = "!#¤%&/()=?`@£$€{[]}\\^*'¨-.,_:;<>|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzåäöÅÄÖ§½~"
-        return all.filterNot { repo.keys.contains(it) }
+        return all.filterNot { usedKeys.contains(it) }
     }
 
     fun getDiagnosticsString(function: Function?): String {

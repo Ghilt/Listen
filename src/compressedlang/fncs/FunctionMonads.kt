@@ -6,6 +6,7 @@ import compressedlang.Precedence
 import compressedlang.TYPE
 import compressedlang.isPrime
 import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 import kotlin.math.sign
 
 // this could be thought of as a nilad
@@ -109,3 +110,10 @@ val floorMonad = Monad(
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.toInt() }
+
+val roundMonad = Monad(
+    defaultImplicitInput = valueThenIndexNilad,
+    inputs = listOf(TYPE.NUMBER),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { v: Double -> v.roundToInt() }

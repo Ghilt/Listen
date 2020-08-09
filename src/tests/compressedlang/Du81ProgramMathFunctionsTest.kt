@@ -250,13 +250,24 @@ internal class Du81ProgramMathFunctionsTest {
 
     @Test
     fun `floor of number`() {
-        val source = "Mk"
+        val source = "Mu"
         val input = listOf(-2, -3.4, 0, 1.2)
         val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
         assertEquals("-2, -3, 0, 1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `round double to int`() {
+        val source = "Mö"
+        val input = listOf(-2.7, -3.4, 0.5, 1.2, 6.4999999)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("-3, -3, 1, 1, 6", program.getCommaSeparatedResult())
     }
 
     @Test
