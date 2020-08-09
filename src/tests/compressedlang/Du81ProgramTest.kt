@@ -652,4 +652,15 @@ internal class Du81ProgramTest {
 
         assertEquals("a, b, c, d, e", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `remove consecutive identical elements`() {
+        val source = "c"
+        val input = listOf(4, 2, 1, 2, 2, 4, 5, 5)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("4, 2, 1, 2, 4, 5", program.getCommaSeparatedResult())
+    }
 }

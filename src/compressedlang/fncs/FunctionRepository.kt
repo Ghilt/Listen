@@ -30,6 +30,7 @@ class FunctionRepository {
         'p' to sumMonad,
         'r' to reverseListMonad,
         't' to stringToListMonad,
+        'c' to removeConsecutiveElementsMonad,
 
         // Dyads
         '<' to smallerThanDyad,

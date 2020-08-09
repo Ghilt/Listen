@@ -1,5 +1,6 @@
 package compressedlang.fncs
 
+import collectionlib.reduceConsecutive
 import compressedlang.ContextKey
 import compressedlang.Precedence
 import compressedlang.TYPE
@@ -63,3 +64,10 @@ val stringToListMonad = Monad(
     output = TYPE.LIST_TYPE,
     precedence = Precedence.HIGHEST
 ) { text: String -> text.toList().map { "$it" } }
+
+val removeConsecutiveElementsMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { list: List<*> -> list.reduceConsecutive() }
