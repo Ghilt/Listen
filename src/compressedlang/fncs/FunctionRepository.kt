@@ -41,6 +41,8 @@ class FunctionRepository {
         'e' to elementByIndexDyad,
         'z' to zipDyad,
         'a' to appendToStringDyad,
+        'b' to alphabetGenerationDyad,
+        'o' to oeisGenerationDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -54,8 +56,7 @@ class FunctionRepository {
         // Triads
         'g' to growEntriesTriad,
         'f' to ifBranchTriad,
-        'b' to alphabetGenerationDyad,
-        'o' to oeisGenerationDyad,
+        '#' to padTriad,
 
         // Context creators
         '§' to pipeMonad,

@@ -9,6 +9,7 @@ import collectionlib.growEntries
 import compressedlang.Precedence
 import compressedlang.SyntaxError
 import compressedlang.TYPE
+import kotlin.math.absoluteValue
 
 val growEntriesTriad = Triad<List<Any>, Int, Int, List<Any>>(
     defaultImplicitInput = valueThenCurrentListNilad,
@@ -39,4 +40,16 @@ val ifBranchTriad = Triad(
     } else {
         branch2
     }
+}
+
+/* If supplied negative length then pad from the end*/
+val padTriad = Triad<List<Any>, Int, Int, List<Any>>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY, TYPE.NUMBER),
+    output = TYPE.ANY,
+) { list: List<Any>, value: Any, length: Int ->
+    val additionalElements = length.absoluteValue - list.size
+    val padding = List(additionalElements) { value }
+    if (length < 0) list + padding else padding + list
 }

@@ -594,6 +594,30 @@ internal class Du81ProgramTest {
         assertEquals("1, 24, 264, 1760, 7944", program.getCommaSeparatedResult())
     }
 
-    //want padStart padEnd
+    @Test
+    fun `pad start to size`() {
+        val source = "#1,4"
+        val input = listOf(2)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
+        program.runForInput()
+
+        assertEquals("1, 1, 1, 2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `pad end to size`() {
+        // Pad end by supplying negative length
+        val source = "#\"abc\"-4"
+        val input = listOf(2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("2, abc, abc, abc", program.getCommaSeparatedResult())
+    }
+
+    //convert string to list
+
+    // distinct
 }

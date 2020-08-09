@@ -67,4 +67,17 @@ internal class Du81LexerTest {
         assertEquals(1, manager.inputs.size)
         assertEquals(listOf(198), manager.inputs[0])
     }
+
+    @Test
+    fun `flag for different separators`() {
+        val args = listOf("-c", "Mv", "1,2,3,4", "-s", " ", "a b c", "e f g").toTypedArray()
+
+        val manager = InterpreterFlagManager(args)
+
+        assertEquals("Mv", manager.program)
+        assertEquals(3, manager.inputs.size)
+        assertEquals(listOf(1, 2, 3, 4), manager.inputs[0])
+        assertEquals(listOf("a", "b", "c"), manager.inputs[1])
+        assertEquals(listOf("e", "f", "g"), manager.inputs[2])
+    }
 }
