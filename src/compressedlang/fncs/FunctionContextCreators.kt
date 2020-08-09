@@ -26,12 +26,6 @@ val windowMonad = ContextMonad(
 
 
 /* DYADS */
-
-val createListOfValueDyad = ContextDyad( // TODO this is not idiomatic anymore
-    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
-    output = TYPE.LIST_TYPE,
-) { _: List<Any>, preCalc: List<Any>, _ -> listOf(preCalc.first()) }
-
 val filterDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,

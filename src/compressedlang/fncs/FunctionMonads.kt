@@ -65,6 +65,13 @@ val stringToListMonad = Monad(
     precedence = Precedence.HIGHEST
 ) { text: String -> text.toList().map { "$it" } }
 
+val createListOfValueMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { v: Any -> listOf(v) }
+
 val removeConsecutiveElementsMonad = Monad(
     defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),

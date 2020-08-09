@@ -22,7 +22,6 @@ internal class ReductionKollektionListTest {
         assertEquals(listOf<Int>(), empty)
     }
 
-
     @Test
     fun `reduceBasedOnNeighbors reduces to single value`() {
         val equalToNextValue = listOf(1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3)

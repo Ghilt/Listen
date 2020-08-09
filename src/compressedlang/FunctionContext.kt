@@ -184,7 +184,6 @@ class FunctionContext(
                     ContextKey.VALUE_THEN_INDEX,
                     ContextKey.VALUE,
                     ContextKey.INDEX,
-                    ContextKey.VALUE_THEN_CURRENT_LIST
                 ).contains(contextKey)) {
                 throw SyntaxError("Attempting to retrieve information from a context outside of a context")
             }
@@ -201,7 +200,7 @@ class FunctionContext(
                 ContextKey.VALUE -> data[index]
                 ContextKey.INDEX -> index
                 ContextKey.CONSTANT_0 -> 0
-                ContextKey.VALUE_THEN_CURRENT_LIST -> if (data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
+                ContextKey.VALUE_THEN_CURRENT_LIST -> if (index != -1 && data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
                 ContextKey.NOP -> ContextKey.NOP // This is treated specially down the line
                 ContextKey.CURRENT_LIST_COUNT -> targets.size
             }

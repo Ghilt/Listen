@@ -31,6 +31,7 @@ class FunctionRepository {
         'r' to reverseListMonad,
         't' to stringToListMonad,
         'c' to removeConsecutiveElementsMonad,
+        '@' to createListOfValueMonad,
 
         // Dyads
         '<' to smallerThanDyad,
@@ -47,6 +48,7 @@ class FunctionRepository {
         'a' to appendToStringDyad,
         'b' to alphabetGenerationDyad,
         'o' to oeisGenerationDyad,
+        's' to joinToStringDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -77,7 +79,6 @@ class FunctionRepository {
 
         'M' to mapDyad,
         'P' to flatMapDyad,
-        '@' to createListOfValueDyad,
 
         'E' to extendEntriesDyad,
         'Z' to zipInsertionDyad

@@ -91,7 +91,6 @@ val oeisGenerationDyad = Dyad(
     sequence.take(length)
 }
 
-
 val takeDyad = Dyad<List<Any>, Int, List<Any>>(
     defaultImplicitInput = valueThenCurrentListNilad,
     precedence = Precedence.LOW,
@@ -105,3 +104,10 @@ val dropDyad = Dyad<List<Any>, Int, List<Any>>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
     output = TYPE.LIST_TYPE,
 ) { a, b -> a.drop(b) }
+
+val joinToStringDyad = Dyad<List<Any>, String, String>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.STRING),
+    output = TYPE.STRING,
+) { a, b -> a.joinToString(b) }

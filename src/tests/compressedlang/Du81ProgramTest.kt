@@ -217,7 +217,7 @@ internal class Du81ProgramTest {
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
-        assertEquals("abcabcabc", program.getResultAsString())
+        assertEquals("a, b, c, a, b, c, a, b, c", program.getCommaSeparatedResult())
     }
 
     @Test
@@ -232,7 +232,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `create list from value works correctly`() {
-        val source = "@112121229"
+        val source = ";112121229@"
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()
@@ -363,7 +363,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `empty string is falsy value`() {
-        val source = "@4&\"\""
+        val source = ";4&\"\""
         val input = listOf(0, 2, 7)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -662,5 +662,27 @@ internal class Du81ProgramTest {
         program.runForInput()
 
         assertEquals("4, 2, 1, 2, 4, 5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `join list to hyphen separated string`() {
+        val source = "s\"-\""
+        val input = listOf(4, 2, 5)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("4-2-5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `join list to string`() {
+        val source = "s\"\""
+        val input = listOf(4, 2, true, " hi")
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("42true hi", program.getCommaSeparatedResult())
     }
 }
