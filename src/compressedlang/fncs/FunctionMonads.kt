@@ -56,3 +56,10 @@ val removeDistinctMonad = Monad(
 ) { list: List<*> ->
     list.filterNot { list.count { element -> it == element } == 1 }
 }
+
+val stringToListMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.STRING),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { text: String -> text.toList().map { "$it" } }

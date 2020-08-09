@@ -642,7 +642,16 @@ internal class Du81ProgramTest {
         assertEquals("2, 2, 5, 5", program.getCommaSeparatedResult())
     }
 
-    // convert string to list
+    @Test
+    fun `string to list monad`() {
+        val source = ";\"abcde\"t"
+        val input = listOf(2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("a, b, c, d, e", program.getCommaSeparatedResult())
+    }
 
     // POWER ^
 }

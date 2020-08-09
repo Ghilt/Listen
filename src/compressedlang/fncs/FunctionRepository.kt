@@ -29,6 +29,7 @@ class FunctionRepository {
         '$' to listByIndexMonad,
         'p' to sumMonad,
         'r' to reverseListMonad,
+        't' to stringToListMonad,
 
         // Dyads
         '<' to smallerThanDyad,
