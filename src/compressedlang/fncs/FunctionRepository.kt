@@ -27,12 +27,18 @@ class FunctionRepository {
         'd' to distinctMonad,
         'n' to removeDistinctMonad,
         '$' to listByIndexMonad,
-        'p' to sumMonad,
         'r' to reverseListMonad,
         't' to stringToListMonad,
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
 
+        // String Monads
+        'k' to toUpperCaseMonad,
+        'w' to toLowerCaseMonad,
+        'y' to isUpperCaseMonad,
+
+        // Number monads
+        'p' to sumMonad,
         'm' to isPrimeMonad,
         'h' to absoluteValueMonad,
         'j' to signMonad,

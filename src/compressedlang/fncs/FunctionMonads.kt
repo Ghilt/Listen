@@ -91,29 +91,50 @@ val isPrimeMonad = Monad(
 ) { v: Int -> isPrime(v) }
 
 val absoluteValueMonad = Monad(
-    defaultImplicitInput = valueThenIndexNilad,
+    defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.NUMBER),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.absoluteValue }
 
 val signMonad = Monad(
-    defaultImplicitInput = valueThenIndexNilad,
+    defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.NUMBER),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.sign }
 
 val floorMonad = Monad(
-    defaultImplicitInput = valueThenIndexNilad,
+    defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.NUMBER),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.toInt() }
 
 val roundMonad = Monad(
-    defaultImplicitInput = valueThenIndexNilad,
+    defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.NUMBER),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.roundToInt() }
+
+val toUpperCaseMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.STRING),
+    output = TYPE.STRING,
+    precedence = Precedence.HIGHEST
+) { v: String -> v.toUpperCase() }
+
+val toLowerCaseMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.STRING),
+    output = TYPE.STRING,
+    precedence = Precedence.HIGHEST
+) { v: String -> v.toLowerCase() }
+
+val isUpperCaseMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.STRING),
+    output = TYPE.BOOL,
+    precedence = Precedence.HIGHEST
+) { v: String -> v.all { it.isUpperCase() } }

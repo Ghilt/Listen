@@ -707,4 +707,37 @@ internal class Du81ProgramTest {
 
         assertEquals("1, 2, 345, 6, 7890123, 4", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `to upper case`() {
+        val source = "Mk"
+        val input = listOf("hellO", "there!")
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("HELLO, THERE!", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `to lower case`() {
+        val source = "Mw"
+        val input = listOf("hELlO", "thERe!")
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("hello, there!", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `is upper case`() {
+        val source = "My"
+        val input = listOf("LO", "thERe!", "", "1")
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("true, false, true, false", program.getCommaSeparatedResult())
+    }
 }
