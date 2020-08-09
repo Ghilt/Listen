@@ -24,6 +24,8 @@ class FunctionRepository {
         // Monads
         '!' to notMonad,
         'l' to lengthMonad,
+        'd' to distinctMonad,
+        'n' to removeDistinctMonad,
         '$' to listByIndexMonad,
         'p' to sumMonad,
         'r' to reverseListMonad,

@@ -620,9 +620,29 @@ internal class Du81ProgramTest {
         assertEquals("2, abc, abc, abc", program.getCommaSeparatedResult())
     }
 
-    //convert string to list
+    @Test
+    fun `distinct values of a list removes duplicates `() {
+        val source = "d"
+        val input = listOf(2, 1, 2, 4, 5, 5)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
-    // distinct
+        program.runForInput()
+
+        assertEquals("2, 1, 4, 5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `remove distinct values of only keeps duplicates `() {
+        val source = "n"
+        val input = listOf(2, 1, 2, 4, 5, 5)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("2, 2, 5, 5", program.getCommaSeparatedResult())
+    }
+
+    // convert string to list
 
     // POWER ^
 }

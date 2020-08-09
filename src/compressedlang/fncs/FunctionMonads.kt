@@ -13,7 +13,7 @@ val notMonad = Monad(
 ) { value: Any -> if (toBool(value)) 0 else 1 }
 
 val lengthMonad = Monad(
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
@@ -28,15 +28,31 @@ val listByIndexMonad = Monad(
 ) { list: List<*> -> list }
 
 val sumMonad = Monad(
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
 ) { list: List<Double> -> list.reduce { e0, e1 -> e0 + e1 } }
 
 val reverseListMonad = Monad(
-    defaultImplicitInput = currentListNilad,
+    defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),
     output = TYPE.LIST_TYPE,
     precedence = Precedence.HIGHEST
 ) { list: List<Double> -> list.reversed() }
+
+val distinctMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { list: List<*> -> list.distinct() }
+
+val removeDistinctMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { list: List<*> ->
+    list.filterNot { list.count { element -> it == element } == 1 }
+}
