@@ -1,13 +1,16 @@
 package compressedlang.fncs
 
-import compressedlang.*
+import compressedlang.Precedence
+import compressedlang.TYPE
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.pow
 
 class MathsDyad(
     precedence: Precedence,
     defaultImplicitInput: Nilad = valueThenIndexNilad,
     mathematicalDyad: (Double, Double) -> Double
-): Dyad<Double, Double, Double>(
+) : Dyad<Double, Double, Double>(
     defaultImplicitInput = defaultImplicitInput,
     precedence = precedence,
     inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
@@ -51,3 +54,11 @@ val moduloMathematicalDyad = MathsDyad(
 val powerDyad = MathsDyad(
     precedence = Precedence.HIGHEST,
 ) { a, b -> a.pow(b) }
+
+val minDyad = MathsDyad(
+    precedence = Precedence.HIGHEST,
+) { a, b -> min(a, b) }
+
+val maxDyad = MathsDyad(
+    precedence = Precedence.HIGHEST,
+) { a, b -> max(a, b) }

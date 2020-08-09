@@ -210,4 +210,72 @@ internal class Du81ProgramMathFunctionsTest {
 
         assertEquals("2, 4, NaN", program.getCommaSeparatedResult())
     }
+
+
+    @Test
+    fun `is prime monad`() {
+        val source = "Mm"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 103, 2047, 991)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals(
+            "false, true, true, false, true, false, true, false, false, true, false, true",
+            program.getCommaSeparatedResult()
+        )
+    }
+
+    @Test
+    fun `absolute value`() {
+        val source = "Mh"
+        val input = listOf(-2, -3.4, 0, 1.2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("2, 3.4, 0, 1.2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `sign of number`() {
+        val source = "Mj"
+        val input = listOf(-2, -3.4, 0, 1.2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("-1, -1, 0, 1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `floor of number`() {
+        val source = "Mk"
+        val input = listOf(-2, -3.4, 0, 1.2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("-2, -3, 0, 1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `min dyad`() {
+        val source = "M{i"
+        val input = listOf(3, 3, 3, 3, 3, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+        program.runForInput()
+
+        assertEquals("0, 1, 2, 3, 3, 3", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `max dyad`() {
+        val source = "M}i"
+        val input = listOf(2, 2, 2, 2, 2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+        program.runForInput()
+
+        assertEquals("2, 2, 2, 3, 4", program.getCommaSeparatedResult())
+    }
 }

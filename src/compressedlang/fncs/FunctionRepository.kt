@@ -32,7 +32,11 @@ class FunctionRepository {
         't' to stringToListMonad,
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
+
         'm' to isPrimeMonad,
+        'h' to absoluteValueMonad,
+        'j' to signMonad,
+        'k' to floorMonad,
 
         // Dyads
         '<' to smallerThanDyad,
@@ -60,6 +64,8 @@ class FunctionRepository {
         '%' to moduloDyad, /* Programming standard, negative numbers possible in output */
         '£' to moduloMathematicalDyad, /* second input decides sign of output */
         '^' to powerDyad,
+        '{' to minDyad,
+        '}' to maxDyad,
 
         // Triads
         'g' to growEntriesTriad,

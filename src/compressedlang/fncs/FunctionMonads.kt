@@ -5,6 +5,8 @@ import compressedlang.ContextKey
 import compressedlang.Precedence
 import compressedlang.TYPE
 import compressedlang.isPrime
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 // this could be thought of as a nilad
 val notMonad = Monad(
@@ -86,3 +88,24 @@ val isPrimeMonad = Monad(
     output = TYPE.BOOL,
     precedence = Precedence.HIGHEST
 ) { v: Int -> isPrime(v) }
+
+val absoluteValueMonad = Monad(
+    defaultImplicitInput = valueThenIndexNilad,
+    inputs = listOf(TYPE.NUMBER),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { v: Double -> v.absoluteValue }
+
+val signMonad = Monad(
+    defaultImplicitInput = valueThenIndexNilad,
+    inputs = listOf(TYPE.NUMBER),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { v: Double -> v.sign }
+
+val floorMonad = Monad(
+    defaultImplicitInput = valueThenIndexNilad,
+    inputs = listOf(TYPE.NUMBER),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { v: Double -> v.toInt() }
