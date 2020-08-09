@@ -1,6 +1,7 @@
 package compressedlang.fncs
 
 import compressedlang.*
+import kotlin.math.pow
 
 class MathsDyad(
     precedence: Precedence,
@@ -46,3 +47,7 @@ val moduloMathematicalDyad = MathsDyad(
     val needsToAddTheMod = (b < 0 && programmingModulo > 0) || (b > 0 && programmingModulo < 0)
     if (needsToAddTheMod) b + programmingModulo else programmingModulo
 }
+
+val powerDyad = MathsDyad(
+    precedence = Precedence.HIGHEST,
+) { a, b -> a.pow(b) }

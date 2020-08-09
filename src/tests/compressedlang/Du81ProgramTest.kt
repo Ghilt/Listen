@@ -652,6 +652,4 @@ internal class Du81ProgramTest {
 
         assertEquals("a, b, c, d, e", program.getCommaSeparatedResult())
     }
-
-    // POWER ^
 }

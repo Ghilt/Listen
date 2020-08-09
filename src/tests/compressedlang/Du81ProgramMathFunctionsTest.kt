@@ -175,7 +175,6 @@ internal class Du81ProgramMathFunctionsTest {
         val source = "M£-3"
         val input = listOf(-4, -3, -2, -1, 0, 1, 2, 3, 4)
         val program = Du81Program(source, source.lex(), listOf(input))
-
         program.runForInput()
 
         assertEquals("-1, 0, -2, -1, 0, -2, -1, 0, -2", program.getCommaSeparatedResult())
@@ -186,9 +185,29 @@ internal class Du81ProgramMathFunctionsTest {
         val source = "M£3.5"
         val input = listOf(-5.75, -1, 7.5, 7)
         val program = Du81Program(source, source.lex(), listOf(input))
-
         program.runForInput()
 
         assertEquals("1.25, 2.5, 0.5, 0", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `power dyad`() {
+        val source = "M^3"
+        val input = listOf(-2, -1.10166, 10.5, 7)
+        val program = Du81Program(source, source.lex(), listOf(input))
+        program.runForInput()
+
+        assertEquals("-8, -1.3370348980542963, 1157.625, 343", program.getCommaSeparatedResult())
+    }
+
+
+    @Test
+    fun `power dyad to take square root`() {
+        val source = "M^0.5"
+        val input = listOf(4, 16, -2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+        program.runForInput()
+
+        assertEquals("2, 4, NaN", program.getCommaSeparatedResult())
     }
 }

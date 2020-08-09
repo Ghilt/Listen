@@ -49,12 +49,13 @@ class FunctionRepository {
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
-        '-' to subtractionDyad, // Todo, power dyad please
+        '-' to subtractionDyad,
         '*' to multiplicationDyad,
         '/' to divisionDyad,
         '¤' to wholeDivisionDyad,
         '%' to moduloDyad, /* Programming standard, negative numbers possible in output */
         '£' to moduloMathematicalDyad, /* second input decides sign of output */
+        '^' to powerDyad,
 
         // Triads
         'g' to growEntriesTriad,
