@@ -708,6 +708,18 @@ internal class Du81ProgramTest {
         assertEquals("1, 2, 345, 6, 7890123, 4", program.getCommaSeparatedResult())
     }
 
-    // is prime?
+    @Test
+    fun `is prime monad`() {
+        val source = "Mm"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 103, 2047, 991)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals(
+            "false, true, true, false, true, false, true, false, false, true, false, true",
+            program.getCommaSeparatedResult()
+        )
+    }
 
 }

@@ -4,6 +4,7 @@ import collectionlib.reduceConsecutive
 import compressedlang.ContextKey
 import compressedlang.Precedence
 import compressedlang.TYPE
+import compressedlang.isPrime
 
 // this could be thought of as a nilad
 val notMonad = Monad(
@@ -78,3 +79,10 @@ val removeConsecutiveElementsMonad = Monad(
     output = TYPE.LIST_TYPE,
     precedence = Precedence.HIGHEST
 ) { list: List<*> -> list.reduceConsecutive() }
+
+val isPrimeMonad = Monad(
+    defaultImplicitInput = valueThenIndexNilad,
+    inputs = listOf(TYPE.NUMBER),
+    output = TYPE.BOOL,
+    precedence = Precedence.HIGHEST
+) { v: Int -> isPrime(v) }

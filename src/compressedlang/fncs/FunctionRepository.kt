@@ -32,6 +32,7 @@ class FunctionRepository {
         't' to stringToListMonad,
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
+        'm' to isPrimeMonad,
 
         // Dyads
         '<' to smallerThanDyad,
