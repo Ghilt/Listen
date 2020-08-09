@@ -685,4 +685,29 @@ internal class Du81ProgramTest {
 
         assertEquals("42true hi", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `to grouped string list, groups consecutive items of truthy predicate`() {
+        val source = "G>2&<8"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("1, 2, 34567, 8, 9, 0, 1, 2, 34", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `to grouped string list, groups consecutive items after toggly truthy predicate`() {
+        val source = "1G=3|=5|=7"
+        val input = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("1, 2, 345, 6, 7890123, 4", program.getCommaSeparatedResult())
+    }
+
+    // is prime?
+
 }

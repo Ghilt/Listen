@@ -81,6 +81,7 @@ class FunctionRepository {
         'P' to flatMapDyad,
 
         'E' to extendEntriesDyad,
+        'G' to groupedStringListDyad,
         'Z' to zipInsertionDyad
 
     )

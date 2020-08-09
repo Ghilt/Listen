@@ -1,5 +1,6 @@
 package compressedlang.fncs
 
+import collectionlib.deferMap
 import collectionlib.extendEntries
 import collectionlib.filterSectioned
 import collectionlib.filterWithNeighbors
@@ -83,3 +84,19 @@ val anyDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
     output = TYPE.LIST_TYPE,
 ) { data: List<Any>, preCalc: List<Boolean>, _ -> if (data.withIndex().any { preCalc[it.index] }) data else listOf() }
+
+val groupedStringListDyad = ContextDyad(
+    defaultConfigurationValues = listOf(false),
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Any>, cv: ConfigValues ->
+    data.withIndex()
+        .toList()
+        .deferMap(
+            deferPredicate = { toBool(preCalc[it.index]) },
+            deferPredicateIsByToggle = toBool(cv[0]),
+            transform = { it.value.toString() },
+            transformDeferred = { items -> items.map { it.value }.joinToString("") }
+        )
+}
+
