@@ -79,11 +79,16 @@ class FunctionRepository {
 
     )
 
-    private fun repoOf(vararg pairs: Pair<Char, Function>, ): Map<Char, Function> {
+    private fun repoOf(vararg pairs: Pair<Char, Function>): Map<Char, Function> {
         val keys = pairs.map { it.first }
         val duplicates = keys.map { key -> key to keys.count { key == it } }.filter { it.second > 1 }
         if (duplicates.isNotEmpty()) throw DeveloperError("Duplicate key in function repo: $duplicates")
         return mapOf(*pairs)
+    }
+
+    fun getCharacterUsedDiagnostic(): String {
+        val all = "!#¤%&/()=?`@£$€{[]}\\^*'¨-.,_:;<>|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzåäöÅÄÖ§½~"
+        return all.filterNot { repo.keys.contains(it) }
     }
 
     fun getDiagnosticsString(function: Function?): String {

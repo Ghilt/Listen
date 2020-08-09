@@ -1,9 +1,6 @@
 package tests.compressedlang
 
-import compressedlang.Du81Program
-import compressedlang.Du81ProgramEnvironment
-import compressedlang.SyntaxError
-import compressedlang.lex
+import compressedlang.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -20,6 +17,12 @@ internal class Du81ProgramTest {
     @AfterEach
     fun makeStaticSingletonTestable() {
         Du81ProgramEnvironment.for_test_only_resetEnvironment()
+    }
+
+    @Test
+    fun `diagnostics print`() {
+        log("\nDu81 characters free: ${Du.repo.getCharacterUsedDiagnostic()}")
+        assert(true)
     }
 
     @Test
@@ -620,4 +623,6 @@ internal class Du81ProgramTest {
     //convert string to list
 
     // distinct
+
+    // POWER ^
 }
