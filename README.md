@@ -36,13 +36,13 @@ This program stores its result on the stack. When a program finishes it prints t
 
 ### Functions
 
-Functions are the bread and butter of the language. You cannot create your own, your programs are a sequence of the predefiend functions.
+Functions are the bread and butter of the language. You cannot create your own, your programs are a sequence of the predefiend functions. All functions are a single character.
 
 Lets examine the following program which only holds regular functions: 
 
     2-3+4*5a" apples"
 
-It has three functions and 4 number literals. It evaluates from left to right if all functions have the same precedence value. The precedence values of the functions above are what you would expect. Each function's precedence value is listed in the function list section.
+It has 4 functions, 4 number literals and 1 string literal. It evaluates from left to right if all functions have the same precedence value. The precedence values of the functions above are what you would expect. Each function's precedence value is listed in the function list section.
 
 What happens when evaluating this program is that first the multiplication gets executed and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed wer are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
 
@@ -70,7 +70,7 @@ The list provider above is a bit of a special hack for optimising the brevity of
     _M*2
     _1+2+3M*2
     
-The above programs gives the same result. The reason is that the values between a list provider and a context function are classified as configuration values to the context function. So the longer program above becomes -> `_6M*2` and then the value `6` is thrown away, because the map function does not take any configuration value.
+The above programs gives the same result. The reason is that the values between a list provider and a context function are used as configuration values to the context function. So the longer program above becomes -> `_6M*2` and then the value `6` is thrown away, because the map function does not take any configuration value.
 
 This is in stark contrast to the following:
 
@@ -78,7 +78,28 @@ This is in stark contrast to the following:
     
 The above code will throw an exception. The reason is that it supplies 2 inputs in the context of the context function. And the Map function only takes one input (of type ANY) and hence it violently protests. So the takeaway is this, configuration values are optional and not checked whilst the inputs from the context are checked for both type and for the correct number of them.
 
-    
-### TODO
+When a function context is resolved, the result is put on the stack in form of a list. If it is a single value, it is put in a list first and then put on the stack. Let's examine the following program:
 
+    M*2M*2M*2
+
+It will multiply the input to the program by two 3 times. The resulting stack will have 4 lists, the original one and then the 3 results of the 3 function contexts.
+
+#### Configuration values
+
+Some context functions take configuration values to modify their behavior. The values are then taken in order from after the list provider. If the context function requires two configuration values it will use the first two values and discard the rest. Regular functions can not have any configuration values.
+
+## Types
+
+L=tn uses the following types:
+
+* ANY - No restrictions, can be anything
+* STRING - The language does not differentiate between chars and strings.
+* NUMBER - The langauge does not make a bigg fuzz about the difference of Integer and Doubles, It converts happily from and to.
+* BOOL - Everything can be interpreted as a boolean
+* LIST_TYPE - Lists
+  
+## Context Functions
+todo
+## Functions
+todo
 Credit to https://oeis.org/ for being a great resource
