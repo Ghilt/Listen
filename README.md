@@ -34,11 +34,23 @@ With this information we can rewrite the above program, since all context creati
     
 This program stores its result on the stack. When a program finishes it prints the value on the stack. 
 
-### Context function
+### Functions
 
-Let's leave example-land for a minute and talk about the structure that is imposed by L=tn syntax. There are two types of functions, regular ones and ones that produce a context, called context functions. As can be seen in the initial example, a context is like a lambda starting directly after the function. The differecne from a lambda is that it is more closely tied to the concept of a list and provides shortcuts like that an index is always fetchable from within a context.
+Functions are the bread and butter of the language. You cannot create your own, your programs are a sequence of the predefiend functions.
 
-A L=tn program can be thought of as a string of functions optimised for a flow like `list.map{ it * 2 }.filter{ it < 10}.flatMap{ listOf(0, it)}`. The previous is written as `M*2F<10P(0av)t` (TODO check precedence && fix list append function... also maybe context key for function values/index nearer surface). To support this with as few characters as possible the paranthesis are scrapped in favor of ending a context when a new context creator is found.
+Lets examine the following program which only holds regular functions: 
+
+    2-3+4*5a" apples"
+
+It has three functions and 4 number literals. It evaluates from left to right if all functions have the same precedence value. The precedence values of the functions above are what you would expect. Each function's precedence value is listed in the function list section.
+
+What happens when evaluating this program is that first the multiplication gets executed and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed wer are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
+
+### Context function and Function context
+
+Let's leave example-land for a minute and talk about the structure that is imposed by L=tn syntax. The two types of functions, regular ones which just discussed and ones that produce a context, they are called context functions. As can be seen in the initial example, a context is like a lambda starting directly after the function. The differecne from a lambda is that it is more closely tied to the concept of a list and provides shortcuts like that an index is always fetchable from within a context.
+
+A L=tn program can be thought of as a string of functions optimised for a flow like `list.map{ it * 2 }.filter{ it < 10}.flatMap{ listOf(0, it)}`. The previous is written as `M*2F<10P(0av)t` (TODO check precedence && fix list append function, add some static variables... also maybe context key for function values/index nearer surface). To support this with as few characters as possible the paranthesis are scrapped in favor of ending a context when a new context creator is found.
 
 That was only half the truth (a quarter of it in fact). A context can be ended in 4 ways:
 
@@ -49,10 +61,22 @@ That was only half the truth (a quarter of it in fact). A context can be ended i
 
 Since the language is built around the context functions and lists the syntax becomes more awkward if you do not use them. The context function is part of a larger internal structure, lets call it FunctionContext. A FunctionContext can contain the following (everything is optional):
 
-`listProvider---configurationValues---contextFunction---contextFunctionInputs`
+`listProvider---contextLessFunctions---contextFunction---contextFunctionInputs`
 
 And it really is that entire thing you end in the 4 ways outlined above.
 
+The list provider above is a bit of a special hack for optimising the brevity of context functions. It was stated before that all functions are infix, context functions are special in that their first input is always the list provider of the function context. There can be values/functions in between the list provider and the context function.  
+
+    _M*2
+    _1+2+3M*2
+    
+The above programs gives the same result. The reason is that the values between a list provider and a context function are classified as configuration values to the context function. So the longer program above becomes -> `_6M*2` and then the value `6` is thrown away, because the map function does not take any configuration value.
+
+This is in stark contrast to the following:
+
+    _M*2"A string"
+    
+The above code will throw an exception. The reason is that it supplies 2 inputs in the context of the context function. And the Map function only takes one input (of type ANY) and hence it violently protests. So the takeaway is this, configuration values are optional and not checked whilst the inputs from the context are checked for both type and for the correct number of them.
 
     
 ### TODO
