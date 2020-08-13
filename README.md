@@ -44,22 +44,26 @@ Lets examine the following program which only holds regular functions:
 
 It has 4 functions, 4 number literals and 1 string literal. It evaluates from left to right if all functions have the same precedence value. The precedence values of the functions above are what you would expect. Each function's precedence value is listed in the function list section.
 
-What happens when evaluating this program is that first the multiplication gets executed and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed wer are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
+What happens when evaluating this program is that first the multiplication gets executed and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed we are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
 
 ### Context function and Function context
 
-Let's leave example-land for a minute and talk about the structure that is imposed by L=tn syntax. The two types of functions, regular ones which just discussed and ones that produce a context, they are called context functions. As can be seen in the initial example, a context is like a lambda starting directly after the function. The differecne from a lambda is that it is more closely tied to the concept of a list and provides shortcuts like that an index is always fetchable from within a context.
+Let's leave example-land for a minute and talk about the structure that is imposed by L=tn. The two types of functions, regular ones which was just discussed and ones that provide a context, they are called context functions. As can be seen in the initial example, a context is like a lambda-scope starting directly after the function. The differecne from a lambda is that the context is more closely tied to the concept of a list and provides shortcuts like that an index is always fetchable from within a context.
 
-A L=tn program can be thought of as a string of functions optimised for a flow like `list.map{ it * 2 }.filter{ it < 10}.flatMap{ listOf(0, it)}`. The previous is written as `M*2F<10P(0av)t` (TODO check precedence && fix list append function, add some static variables... also maybe context key for function values/index nearer surface). To support this with as few characters as possible the paranthesis are scrapped in favor of ending a context when a new context creator is found.
+A L=tn program can be thought of as a string of functions optimised for a flow like 
 
-That was only half the truth (a quarter of it in fact). A context can be ended in 4 ways:
+    list.map{ it * 2 }.filter{ it < 10}.flatMap{ listOf(0, it)}`
+    
+The above is written as `M*2F<10P(0av)t` (TODO trim all whitespace check precedence && fix list append function, add some static variables... also maybe context key for function values/index nearer surface). To support this with as few characters as possible the paranthesis are optional in favor of ending a context under certain predefined circumstances.
 
-* New context creator ends the context.
+A context can be ended in 4 ways:
+
+* New context creator function ends the context. `M*2F>8`
 * Special end function character: `;`
-* The context creator is within paranthesis, then the context exists until the closing paranthesis. `M(F>4)
+* The context creator is within paranthesis, then the context exists until the closing paranthesis. `(M*4)*2`
 * End of the program
 
-Since the language is built around the context functions and lists the syntax becomes more awkward if you do not use them. The context function is part of a larger internal structure, lets call it FunctionContext. A FunctionContext can contain the following (everything is optional):
+The context function is part of a larger internal structure, lets call it FunctionContext. A FunctionContext can contain the following (everything is optional):
 
 `listProvider---contextLessFunctions---contextFunction---contextFunctionInputs`
 
@@ -87,6 +91,10 @@ It will multiply the input to the program by two 3 times. The resulting stack wi
 #### Configuration values
 
 Some context functions take configuration values to modify their behavior. The values are then taken in order from after the list provider. If the context function requires two configuration values it will use the first two values and discard the rest. Regular functions can not have any configuration values.
+
+#### Inner functions
+
+The function context can have inner functions in both the contextless part and in the context function's context. An inner function is just like a regular function context, except that it resolves its value to the outer function and not to the stack. An inner function is defined by being inside paranthesis. So `M(M*2)` means 'map every item in the input list to every item in the input list mutliplied by 2'. Examine the following valid code: `((M*2)((M*2)M*2)M*2)M*2`, it runs, and is innefficient, and throws away all the results of the inner functions since they are all ultimately part of the configuration values of a mapping functions, and mapping functions do not use any configuration.
 
 ## Types
 
