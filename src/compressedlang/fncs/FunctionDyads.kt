@@ -118,3 +118,15 @@ val obliterateDyad = Dyad<Any, Any, Any>(
     inputs = listOf(TYPE.ANY, TYPE.ANY),
     output = TYPE.ANY,
 ) { _, b -> b }
+
+val appendToListDyad = Dyad<Any, Any, List<Any>>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+) { a, b ->
+    when (a) {
+        is List<*> -> a.filterNotNull() + listOf(b)
+        else -> listOf(a) + listOf(b)
+    }
+}

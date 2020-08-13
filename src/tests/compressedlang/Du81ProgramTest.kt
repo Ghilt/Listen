@@ -765,5 +765,14 @@ internal class Du81ProgramTest {
         assertEquals("[2, 2, 3], [3, 2, 3], [4, 2, 3]", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `append to list`() {
+        val source = "M1000'v'i'\"klok\""
+        val input = listOf(1, 2)
+        val program = Du81Program(source, source.lex(), listOf(input))
 
+        program.runForInput()
+
+        assertEquals("[1000, 1, 0, klok], [1000, 2, 1, klok]", program.getCommaSeparatedResult())
+    }
 }
