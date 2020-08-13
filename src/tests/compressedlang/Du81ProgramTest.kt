@@ -742,7 +742,7 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `use static storage to use things from one context in another`() {
+    fun `use static storage stack to use things by peek from one context in another`() {
         // Map (:) -> store value (x) -> obliterate return value from store operation return in favor of inner function resolved value
         val source = "M:x(M+?)"
         val input = listOf(1, 2, 3)
@@ -752,5 +752,18 @@ internal class Du81ProgramTest {
 
         assertEquals("[2, 3, 4], [3, 4, 5], [4, 5, 6]", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `use static storage stack to use things by pop from one context in another`() {
+        // Map (:) -> store value (x) -> obliterate return value from store operation return in favor of inner function resolved value
+        val source = "M:x(M+€)"
+        val input = listOf(1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("[2, 2, 3], [3, 2, 3], [4, 2, 3]", program.getCommaSeparatedResult())
+    }
+
 
 }

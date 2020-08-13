@@ -20,7 +20,8 @@ class FunctionRepository {
         'i' to indexNilad,
         'v' to valueNilad,
         ',' to no_opNilad,
-        '?' to getFromStaticStackNilad,
+        '?' to peekStaticStackNilad,
+        '€' to popStaticStackNilad,
 
         // Monads
         '!' to notMonad,
