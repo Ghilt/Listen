@@ -22,7 +22,7 @@ fun du81Lex(inputRawOrPath: String, isPath: Boolean = true): Pair<String, List<P
 
 private fun readInputFromPath(filePath: String): String {
     val stream = Files.newInputStream(Paths.get(filePath))
-    var input = ""
+    var input: String
     stream.buffered().reader().use { reader ->
         input = reader.readText()
     }
@@ -40,4 +40,4 @@ private fun String.toParsedElement(): ParsedElement {
     }
 }
 
-fun String.lex(path: Boolean = false) = du81Lex(this, path).second
+fun String.lex(path: Boolean = false) = du81Lex(this.filter { !it.isWhitespace() }, path).second

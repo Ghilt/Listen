@@ -4,7 +4,7 @@ L=tn (read as the english word 'listen') is an instrumental programming language
 
 ## Overview
 
-We are going to start wit ha really simple example. Let's take a program that takes a list of integers and multiplies them with 2 and outputs them, it would look like this:
+We are going to start with a really simple example. Let's take a program that takes a list of integers and multiplies them with 2 and outputs them, it would look like this:
 
     _M*2
 
@@ -38,13 +38,13 @@ This program stores its result on the stack. When a program finishes it prints t
 
 Functions are the bread and butter of the language. You cannot create your own, your programs are a sequence of the predefiend functions. All functions are a single character.
 
-Lets examine the following program which only holds regular functions: 
+Let's examine the following program which only holds regular functions: 
 
     2-3+4*5a" apples"
 
 It has 4 functions, 4 number literals and 1 string literal. It evaluates from left to right if all functions have the same precedence value. The precedence values of the functions above are what you would expect. Each function's precedence value is listed in the function list section.
 
-What happens when evaluating this program is that first the multiplication gets executed and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed we are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
+When evaluating this program first the multiplication gets executed, and the result is: `2-3+20a" apples"`. Which after the subtraction becomes `-1+20a" apples"`. After the addition is performed we are left with the `a` function, which is the string append function. So the final result becomes a string `"19 apples"`.
 
 ### Context function and Function context
 
@@ -102,7 +102,7 @@ L=tn uses the following types:
 
 * ANY - No restrictions, can be anything
 * STRING - The language does not differentiate between chars and strings.
-* NUMBER - The langauge does not make a bigg fuzz about the difference of Integer and Doubles, It converts happily from and to.
+* NUMBER - The langauge does not make a big fuzz about the difference of Integer and Doubles, It converts happily from and to.
 * BOOL - Everything can be interpreted as a boolean
 * LIST_TYPE - Lists
   
@@ -111,3 +111,6 @@ todo
 ## Functions
 todo
 Credit to https://oeis.org/ for being a great resource
+
+## Interpreter flags
+todo

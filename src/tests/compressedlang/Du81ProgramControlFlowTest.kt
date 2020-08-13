@@ -266,4 +266,15 @@ internal class Du81ProgramControlFlowTest {
 
         assertEquals("[0, 3], [1, 4]", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `white space have no effect`() {
+        val source = " z ~\n\t"
+        val input = listOf(listOf(0, 1), listOf(3, 4))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("[0, 3], [1, 4]", program.getCommaSeparatedResult())
+    }
 }
