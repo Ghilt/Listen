@@ -1,10 +1,7 @@
 package compressedlang.fncs
 
 import collectionlib.reduceConsecutive
-import compressedlang.ContextKey
-import compressedlang.Precedence
-import compressedlang.TYPE
-import compressedlang.isPrime
+import compressedlang.*
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 import kotlin.math.sign
@@ -138,3 +135,13 @@ val isUpperCaseMonad = Monad(
     output = TYPE.BOOL,
     precedence = Precedence.HIGHEST
 ) { v: String -> v.all { it.isUpperCase() } }
+
+val storeOnStaticStackMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY),
+    output = TYPE.ANY,
+    precedence = Precedence.HIGHESTER
+) { v: Any ->
+    StaticStorageHelper.storeStack(v)
+    v
+}

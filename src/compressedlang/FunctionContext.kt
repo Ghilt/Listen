@@ -203,6 +203,7 @@ class FunctionContext(
                 ContextKey.VALUE_THEN_CURRENT_LIST -> if (index != -1 && data.typeOfList().isSubtypeOf(TYPE.LIST_TYPE)) data[index] else data
                 ContextKey.NOP -> ContextKey.NOP // This is treated specially down the line
                 ContextKey.CURRENT_LIST_COUNT -> targets.size
+                ContextKey.STATIC_STORAGE_HELPER_KEY -> StaticStorageHelper.popStack()
             }
         }
     }

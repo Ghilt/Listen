@@ -16,10 +16,11 @@ class FunctionRepository {
         // Nilads
         '_' to currentListNilad,
         '~' to secondCurrentListNilad,
-        'q' to currentListCount,
+        'q' to currentListCountNilad,
         'i' to indexNilad,
         'v' to valueNilad,
         ',' to no_opNilad,
+        '?' to getFromStaticStackNilad,
 
         // Monads
         '!' to notMonad,
@@ -31,6 +32,7 @@ class FunctionRepository {
         't' to stringToListMonad,
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
+        ':' to storeOnStaticStackMonad,
 
         // String Monads
         'k' to toUpperCaseMonad,
@@ -54,6 +56,7 @@ class FunctionRepository {
         '|' to orDyad,
         '[' to takeDyad,
         ']' to dropDyad,
+        'x' to obliterateDyad,
 
         'e' to elementByIndexDyad,
         'z' to zipDyad,

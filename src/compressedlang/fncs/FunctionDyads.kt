@@ -111,3 +111,10 @@ val joinToStringDyad = Dyad<List<Any>, String, String>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.STRING),
     output = TYPE.STRING,
 ) { a, b -> a.joinToString(b) }
+
+val obliterateDyad = Dyad<Any, Any, Any>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
+    output = TYPE.ANY,
+) { _, b -> b }

@@ -19,6 +19,8 @@ val currentListNilad = Nilad(ContextKey.LIST_BY_INDEX, TYPE.LIST_TYPE, listOf(0)
 
 val secondCurrentListNilad = Nilad(ContextKey.LIST_BY_INDEX, TYPE.LIST_TYPE, listOf(1))
 
-val currentListCount = Nilad(ContextKey.CURRENT_LIST_COUNT, TYPE.NUMBER)
+val currentListCountNilad = Nilad(ContextKey.CURRENT_LIST_COUNT, TYPE.NUMBER)
+
+val getFromStaticStackNilad = Nilad(ContextKey.STATIC_STORAGE_HELPER_KEY, TYPE.ANY, listOf(0))
 
 
