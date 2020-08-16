@@ -351,7 +351,7 @@ These functions mostly take no input and just return a value. Some of them needs
 |-----------|--------|---------|
 | currentList | _   |   This refers to the stack where all results of the function context chain are stored  |
 | secondCurrentList | ~  |  Convenience function   |
-| currentListCount | q   |     |
+| currentListCount | q   |  Returns how many lists are on the stack   |
 | getListByIndex | $   | This function takes a Number input and fetches that list from the stack.   |
 | index | i   |  Needs context   |
 | value | v   |  Needs context   |
