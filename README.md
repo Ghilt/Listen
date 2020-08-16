@@ -98,6 +98,24 @@ Some context functions take configuration values to modify their behavior. The v
 
 The function context can have inner functions in both the contextless part and in the context function's context. An inner function is just like a regular function context, except that it resolves its value to the outer function and not to the stack. An inner function is defined by being inside paranthesis. So `M(M*2)` means 'map every item in the input list to every item in the input list mutliplied by 2'. Examine the following valid code: `((M*2)((M*2)M*2)M*2)M*2`, it runs, and is innefficient, and throws away all the results of the inner functions since they are all ultimately part of the configuration values of a mapping functions, and mapping functions do not use any configuration.
 
+### Control flow
+
+There are four characters which are special control flow commands.
+
+`(` - Start Inner Function
+
+`)` - End Inner Function
+
+Inner functions are useful if you need to manually override precedence of functions.
+
+`;` - End function context
+
+Ending functions are done when you need to use configuration values of succeeding function contexts.  
+
+`,` - No operation
+
+Integer literals after one another in a program needs to be separated to not become one integer(`1,2,3` vs `123`).
+
 ## Types
 
 L=tn uses the following types:
@@ -307,7 +325,110 @@ Output: List
 | 1, 2, 3 | Ö  | 1, 2, 3 |
 
 ## Functions
-todo
+
+Disclaimer: The precedence values for the functions are in a bit of a mess and deserves to be looked at/reworked. They will not be listed in this section, you are referred to the source if you need them.
+
+### Information functions
+
+These functions take no input and just return a value. Some of them needs to be inside a context to not throw exceptions at you.
+
+| Name      | Symbol | Comment |
+|-----------|--------|---------|
+| currentList | _   |   This refers to the stack where all results of the function context chain are stored  |
+| secondCurrentList | ~  |  Convenience function   |
+| currentListCount | q   |     |
+| index | i   |  Needs context   |
+| value | v   |  Needs context   |
+
+### Mathematical functions
+
+These all behave as one would expect. Precedence values mimic the ones for Java.
+
+Inputs: Number, Number
+
+Output: Number
+
+Their default input for the first argument is always first the value of the current item in a context, if that is not a number, then take the current index.
+
+
+| Name      | Symbol | Comment |
+|-----------|--------|---------|
+| addition | +   |     |
+| subtraction | -   |     |
+| multiplication | *   |     |
+| division | /   |     |
+| wholeNumberDivision | ¤   |     |
+| modulo | %   |  Programming standard, negative numbers possible in output   |
+| mathematicalModulo | £   | Mathsy standard, second input decides sign of output   |
+| power | ^   |     |
+| minimum | {   |     |
+| maximum | }   |     |
+
+### Mathematical support functions
+
+These are all functions that take one input.
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| sum | Σ   |  List   | Number  |
+| product | Π   |  List   | Number  |
+| isPrime | m   |  Number   | Boolean  |
+| absoluteValue | h   |  Number   | Number  |
+| sign | j   |  Number   | Number  |
+| floor | u  |  Number   | Number  |
+| round | ö  |  Number   | Number  |
+| toInt | β  |  Any   | Number  |
+
+
+### Boolean functions
+
+These functions return a boolean value (true or false). 
+
+Their default input for first input is value of current item unless stated otherwise.
+
+| Name      | Symbol | Required input |
+|-----------|--------|---------|
+| smallerThan | <   | Number, default is value then index  |
+| greaterThan | >   | Number, default is value then index   |
+| equal | =   | Any |
+| and | ≠   | Any |
+| or | \|   | Any |
+| not | !   | Any, (does not take 2 inputs) |
+
+### Storage functions
+
+These functions can be used as variables. There are no local variables, only static storage which is persisted across the program's lifespan. These storage functions have very high precedence to play nicely with inner functions,
+
+If you attempt to load before having stored anything you will get 0 as result.
+
+#### Static stack
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| storeOnStaticStack | :   | Any  | Any (returns the value just stored)   |
+| popStaticStack     |  p  |  -   |   Any (removes value from on top of static stack)     |
+| peekStaticStack     |  €  |  -   |   Any (value on top of static stack)     |
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | 900:M+p  | 901, 902, 903  |
+
+#### Static map
+
+Save some value under a key, the key is of type Any.
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| storeInStaticMap | ?   | Any, Any (second input is key, to enable use of default values easier)  | Any (returns the previously stored value under that key)   |
+| loadFromStaticMap | ¨   | Any  | Any  |
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2 | M¨"myVar"x(M"myVar"?)  | [1, 1], [2, 2]  |
+| 1, 2, 3 | 900¨"myVar"M¨"myVar"  | 900, 1, 2  |
+
+### Generation functions
+
 Credit to https://oeis.org/ for being a great resource
 
 ## Interpreter flags

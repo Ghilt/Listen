@@ -13,63 +13,32 @@ class FunctionRepository {
         ')' to endInnerFunctionControlFlow,
         ';' to endOuterFunction,
 
-        // Nilads
+        // Environment
         '_' to currentListNilad,
         '~' to secondCurrentListNilad,
         'q' to currentListCountNilad,
         'i' to indexNilad,
         'v' to valueNilad,
         ',' to no_opNilad,
-        '?' to peekStaticStackNilad,
+
+        // Storage
+        'p' to peekStaticStackNilad,
         '€' to popStaticStackNilad,
 
-        // Monads
-        '!' to notMonad,
-        'l' to lengthMonad,
-        'd' to distinctMonad,
-        'n' to removeDistinctMonad,
-        '$' to listByIndexMonad,
-        'r' to reverseListMonad,
-        't' to stringToListMonad,
-        'c' to removeConsecutiveElementsMonad,
-        '@' to createListOfValueMonad,
         ':' to storeOnStaticStackMonad,
-        'α' to loadFromStaticMapMonad,
+        '?' to loadFromStaticMapMonad,
 
-        // String Monads
-        'k' to toUpperCaseMonad,
-        'w' to toLowerCaseMonad,
-        'y' to isUpperCaseMonad,
+        '¨' to storeOnStaticMapDyad,
 
-        // Number monads
-        'p' to sumMonad,
+        // Maths
+        'Σ' to sumMonad,
+        'Π' to productMonad,
         'm' to isPrimeMonad,
         'h' to absoluteValueMonad,
         'j' to signMonad,
         'u' to floorMonad,
         'ö' to roundMonad,
         'β' to toIntMonad,
-
-        // Dyads
-        '<' to smallerThanDyad,
-        '>' to largerThanDyad,
-        '=' to equalToDyad,
-        '≠' to notEqualToDyad,
-        '&' to andDyad,
-        '|' to orDyad,
-        '[' to takeDyad,
-        ']' to dropDyad,
-        'x' to obliterateDyad,
-        '¨' to storeOnStaticMapDyad,
-
-        'e' to elementByIndexDyad,
-        'z' to zipDyad,
-        'a' to appendToStringDyad,
-        'b' to alphabetGenerationDyad,
-        'o' to oeisGenerationDyad,
-        's' to joinToStringDyad,
-        '\'' to appendToListDyad,
-        'γ' to appendListDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -83,10 +52,52 @@ class FunctionRepository {
         '{' to minDyad,
         '}' to maxDyad,
 
-        // Triads
-        'g' to growEntriesTriad,
-        'f' to ifBranchTriad,
+        // Boolean
+        '!' to notMonad,
+
+        '<' to smallerThanDyad,
+        '>' to largerThanDyad,
+        '=' to equalToDyad,
+        '≠' to notEqualToDyad,
+        '&' to andDyad,
+        '|' to orDyad,
+
+        // List related
+        'l' to lengthMonad,
+        'd' to distinctMonad,
+        'n' to removeDistinctMonad,
+        '$' to listByIndexMonad,
+        'r' to reverseListMonad,
+        'c' to removeConsecutiveElementsMonad,
+        '@' to createListOfValueMonad,
+
+        '[' to takeDyad,
+        ']' to dropDyad,
+        'e' to elementByIndexDyad,
+        '\'' to appendToListDyad,
+        'γ' to appendListDyad,
+        'z' to zipDyad,
+
         '#' to padTriad,
+        'g' to growEntriesTriad,
+
+        // String Monads
+        'k' to toUpperCaseMonad,
+        'w' to toLowerCaseMonad,
+        'y' to isUpperCaseMonad,
+        't' to stringToListMonad,
+
+        'a' to appendToStringDyad,
+        's' to joinToStringDyad,
+
+        // Generation
+        'b' to alphabetGenerationDyad,
+        'o' to oeisGenerationDyad,
+
+
+        // other
+        'x' to obliterateDyad,
+        'f' to ifBranchTriad,
 
         // Context creators
         'Ö' to pipeMonad,

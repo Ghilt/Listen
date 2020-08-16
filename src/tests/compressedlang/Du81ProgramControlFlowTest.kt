@@ -115,7 +115,7 @@ internal class Du81ProgramControlFlowTest {
 
     @Test
     fun `inner function is calculated first and taken as argument to monad`() {
-        val source = "Mv+(_Mv)p"
+        val source = "Mv+(_Mv)Σ"
         val input = listOf(1, 2, 3, 0)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -126,7 +126,7 @@ internal class Du81ProgramControlFlowTest {
 
     @Test
     fun `perform some calculation in consecutive inner functions`() {
-        val source = "M(_M+i)p+(_M+v)p+(_M+2)pFi=0"
+        val source = "M(_M+i)Σ+(_M+v)Σ+(_M+2)ΣFi=0"
         val input = listOf(1, 2, 3, 0)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -137,7 +137,7 @@ internal class Du81ProgramControlFlowTest {
 
     @Test
     fun `inner function returns single value`() {
-        val source = "Mi+(_p)"
+        val source = "Mi+(_Σ)"
         val input = listOf(1, -52, 3, 0)
         val program = Du81Program(source, source.lex(), listOf(input))
 

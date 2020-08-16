@@ -36,6 +36,13 @@ val sumMonad = Monad(
     precedence = Precedence.HIGHEST
 ) { list: List<Double> -> list.reduce { e0, e1 -> e0 + e1 } }
 
+val productMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { list: List<Double> -> list.reduce { e0, e1 -> e0 * e1 } }
+
 val reverseListMonad = Monad(
     defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),

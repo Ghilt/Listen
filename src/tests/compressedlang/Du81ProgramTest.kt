@@ -263,13 +263,24 @@ internal class Du81ProgramTest {
 
     @Test
     fun `sum monad sums list`() {
-        val source = "Mp"
+        val source = "MΣ"
         val input = listOf(1, 2, 3, -2)
         val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
         assertEquals("4444", program.getResultAsString())
+    }
+
+    @Test
+    fun `product monad multiplies list`() {
+        val source = ";Π"
+        val input = listOf(1, 2, 3, 4, 5)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("120", program.getResultAsString())
     }
 
     @Test
@@ -744,7 +755,7 @@ internal class Du81ProgramTest {
     @Test
     fun `use static storage stack to use things by peek from one context in another`() {
         // Map (:) -> store value (x) -> obliterate return value from store operation return in favor of inner function resolved value
-        val source = "M:x(M+?)"
+        val source = "M:x(M+p)"
         val input = listOf(1, 2, 3)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -778,7 +789,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `load named static variable`() {
-        val source = "M¨\"varX\"x(M\"varX\"α)"
+        val source = "M¨\"varX\"x(M\"varX\"?)"
         val input = listOf(1, 2)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -800,7 +811,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `to int turn any value to int representation`() {
-        val source = "Mβ;_p"
+        val source = "Mβ;_Σ"
         val input = listOf("1", "2", listOf(1, 2, 3), false, true, 0, 1, 1.9)
         val program = Du81Program(source, source.lex(), listOf(input))
 
