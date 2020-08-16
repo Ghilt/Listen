@@ -277,4 +277,15 @@ internal class Du81ProgramControlFlowTest {
 
         assertEquals("[0, 3], [1, 4]", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `spaces in string are not trimmed away`() {
+        val source = "M\"   \"a\" 4 \n\""
+        val input = listOf("a")
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("    4 \n", program.getCommaSeparatedResult())
+    }
 }

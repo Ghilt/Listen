@@ -120,6 +120,7 @@ If the `+` and `β` above have the same precedence, the `+` should be executed f
 #### Filter
 
 Inputs: List, Boolean
+
 Output: List
 
 | Input   | Code | Output |

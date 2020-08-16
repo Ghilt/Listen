@@ -15,6 +15,7 @@ fun du81Lex(inputRawOrPath: String, isPath: Boolean = true): Pair<String, List<P
     return source to source
         .toList()
         .toGroupedStringList(true) { x -> x == '"' }
+        .filterNot { it.all { c -> c.isWhitespace() } }
         .toGroupedStringList { x -> x.isInt() }
         .joinNeighbors({ a, b, c -> a.isInt() && b == "." && c.isInt() }) { a, b, c -> "$a$b$c" } // TODO this step could be removed(/or kept alongside with) if '.' was made an Int-append dyad, could maybe be cool to append ints for some reason?
         .map { it.toParsedElement() }
@@ -40,4 +41,4 @@ private fun String.toParsedElement(): ParsedElement {
     }
 }
 
-fun String.lex(path: Boolean = false) = du81Lex(this.filter { !it.isWhitespace() }, path).second
+fun String.lex(path: Boolean = false) = du81Lex(this, path).second
