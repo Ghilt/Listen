@@ -472,7 +472,7 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `zip insert to double every element`() {
+    fun `zip insert to make list of lists with first element of old list`() {
         val source = "Z+1"
         val input = listOf(1, -1, 90)
         val program = Du81Program(source, source.lex(), listOf(input))

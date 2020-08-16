@@ -160,7 +160,34 @@ Output: List
 | Input   | Code | Output |
 |---------|------|--------|
 | 1, 2, 0, 3 | N=0  | 2, 0, 3   |
-| 0, -1, 1, 2, 0, 3, 0, 4 | N=0  | 0, -1, 2, 0, 3, 0, 4  |
+| 0, -1, 1, 2, 0, 3, 0, 4 | 1,0N=0  | 0, 2, 0, 3, 0  |
+
+#### All
+
+Character: `A`
+
+Inputs: List, Boolean
+
+Output: List (Input list if true, empty list if false)
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | A>0  | 1, 2, 3   |
+| 1, 2, 3 | A>1  | <empty list>  |
+
+#### All
+
+Character: `Ä`
+
+Inputs: List, Boolean
+
+Output: List (Input list if true, empty list if false)
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | Ä>2  | 1, 2, 3   |
+| 1, 2, 3 | Ä>3  | <empty list>  |
+
 
 #### Map
 
@@ -175,7 +202,7 @@ Output: List
 | 1, 2, 3 | M+100  | 2, 3   |
 | "a", "b", "c" | M=a"!"  | "b!", "c!"   |
 
-#### FlatMapDyad
+#### FlatMap
 
 Character: `P`
 
@@ -185,7 +212,49 @@ Output: List
 
 | Input   | Code | Output |
 |---------|------|--------|
-| [1 , 2], [2, 3], [3, 4] | Pv  | [1, 2, 2, 3, 3, 4]   |
+| [1 , 2], [2, 3], [3, 4] | Pv  | 1, 2, 2, 3, 3, 4  |
+
+#### ExtendEntries
+
+Character: `E`
+
+Inputs: List, Number
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | Ev-1  | 1, 2, 2, 3, 3, 3  |
+
+#### GroupedStringList
+
+Character: `G`
+
+Inputs: List, Boolean
+
+| Configuration value   | Type | Default |
+|-----------------------|------|---------|
+| toggle  | Boolean  | false       |
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4 | G>2&<8  | 1, 2, 34567, 8, 9, 0, 1, 2, 34 |
+| 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4 | 1G=3\|=5\|=7  | 1, 2, 345, 6, 7890123, 4 |
+
+#### ZipInsertion
+
+Character: `Z`
+
+Inputs: List, Any
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | Z+1  | [1, 2], [2, 3], [3, 4] |
+| 1, 2, 3 | Z"ok"  | [1, "ok"], [2, "ok"], [3, "ok"] |
 
 ## Functions
 todo
