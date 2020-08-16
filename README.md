@@ -117,7 +117,11 @@ If the `+` and `β` above have the same precedence, the `+` should be executed f
 
 ## Context Functions
 
+All context functions are capital letters and no regular functions are capital letters. All context functions have the same precedence, and due to the L=tn program structure, they do not compete with regular functions. 
+
 #### Filter
+
+Character: `F`
 
 Inputs: List, Boolean
 
@@ -126,7 +130,32 @@ Output: List
 | Input   | Code | Output |
 |---------|------|--------|
 | 1, 2, 3 | F>1  | 2, 3   |
-| "a", "b", "c" | F="b"\|="c"  | b, c   |
+| "a", "b", "c" | F="b"\|="c"  | "b", "c"   |
+
+#### Map
+
+Character: `M`
+
+Inputs: List, Any
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | M+100  | 2, 3   |
+| "a", "b", "c" | M=a"!"  | "b!", "c!"   |
+
+#### flatMapDyad
+
+Character: `P`
+
+Inputs: List, LIST
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| [1 , 2], [2, 3], [3, 4] | Pv  | [1, 2, 2, 3, 3, 4]   |
 
 ## Functions
 todo

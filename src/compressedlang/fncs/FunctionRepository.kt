@@ -69,6 +69,7 @@ class FunctionRepository {
         'o' to oeisGenerationDyad,
         's' to joinToStringDyad,
         '\'' to appendToListDyad,
+        'γ' to appendListDyad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,

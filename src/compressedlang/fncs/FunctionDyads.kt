@@ -128,6 +128,15 @@ val appendToListDyad = Dyad<Any, Any, List<Any>>(
     }
 }
 
+val appendListDyad = Dyad<List<Any>, List<Any>, List<Any>>(
+    defaultImplicitInput = valueNilad,
+    precedence = Precedence.MEDIUM,
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+) { a, b ->
+    a + b
+}
+
 val storeOnStaticMapDyad = Dyad(
     defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.ANY, TYPE.ANY),

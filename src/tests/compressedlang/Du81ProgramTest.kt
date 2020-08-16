@@ -809,4 +809,16 @@ internal class Du81ProgramTest {
         assertEquals("8", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `list append appends a list on another`() {
+        val source = "Mγ(Pv)"
+        val input = listOf(listOf(1, 3), listOf(2, 3))
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("[1, 3, 1, 3, 2, 3], [2, 3, 1, 3, 2, 3]", program.getCommaSeparatedResult())
+    }
+
+    // a context triad. Maybe an if-else built in triad
 }
