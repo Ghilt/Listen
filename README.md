@@ -98,6 +98,21 @@ Some context functions take configuration values to modify their behavior. The v
 
 The function context can have inner functions in both the contextless part and in the context function's context. An inner function is just like a regular function context, except that it resolves its value to the outer function and not to the stack. An inner function is defined by being inside paranthesis. So `M(M*2)` means 'map every item in the input list to every item in the input list mutliplied by 2'. Examine the following valid code: `((M*2)((M*2)M*2)M*2)M*2`, it runs, and is innefficient, and throws away all the results of the inner functions since they are all ultimately part of the configuration values of a mapping functions, and mapping functions do not use any configuration.
 
+### Default values
+
+A note about default values as they are documented a bit carelessly. Default values follow this pattern generally (exceptions exist)
+
+| First input   | Default value |
+|---------|------|
+| Integer | Current value then index  |
+| Double | Current value  |
+| Any | Current value  |
+| List | Current value then current list  |
+
+Meaning: If a function requires a list as first input, then if it is in a context, it checks if the current value of this context is a list and uses that. If it is not a list, it defaults to the current list on top of the stack.
+
+Integer and Double are not differentiated in the type system, but the actual nature of the numbers are taken into account when assigning default values. E.g. the round function does not default to index, as indexes always are integers.
+
 ### Control flow
 
 There are four characters which are special control flow commands.
@@ -124,14 +139,14 @@ L=tn uses the following types:
 * STRING - The language does not differentiate between chars and strings.
 * NUMBER - The language does not make a big fuzz about the difference of Integer and Doubles, It converts happily from and to.
 * BOOL - Everything can be interpreted as a boolean
-* LIST_TYPE - Lists
+* LIST_TYPE - Lists, all lists and values are immutable
   
 A program resolves step by step and uses its type system to decide what it can resolve. 
 
-    // β - is the toInt function, it turns anything to an int
-    1+"hi there"β
+    // § - is the toInt function, it turns anything to an int
+    1+"hi there"§
   
-If the `+` and `β` above have the same precedence, the `+` should be executed first, but it is skipped since the type of its second argument is of the wrong type. So the string will be converted to an int and then the addition will happen.  
+If the `+` and `§` above have the same precedence, the `+` should be executed first, but it is skipped since the type of its second argument is of the wrong type. So the string will be converted to an int and then the addition will happen.  
 
 ## Context Functions
 
@@ -186,20 +201,20 @@ Character: `A`
 
 Inputs: List, Boolean
 
-Output: List (Input list if true, empty list if false)
+Output: List (Returns input list if true, empty list if false)
 
 | Input   | Code | Output |
 |---------|------|--------|
 | 1, 2, 3 | A>0  | 1, 2, 3   |
 | 1, 2, 3 | A>1  | [empty list] |
 
-#### All
+#### Any
 
 Character: `Ä`
 
 Inputs: List, Boolean
 
-Output: List (Input list if true, empty list if false)
+Output: List (Returns input list if true, empty list if false)
 
 | Input   | Code | Output |
 |---------|------|--------|
@@ -330,13 +345,14 @@ Disclaimer: The precedence values for the functions are in a bit of a mess and d
 
 ### Information functions
 
-These functions take no input and just return a value. Some of them needs to be inside a context to not throw exceptions at you.
+These functions mostly take no input and just return a value. Some of them needs to be inside a context to not throw exceptions at you.
 
 | Name      | Symbol | Comment |
 |-----------|--------|---------|
 | currentList | _   |   This refers to the stack where all results of the function context chain are stored  |
 | secondCurrentList | ~  |  Convenience function   |
 | currentListCount | q   |     |
+| getListByIndex | $   | This function takes a Number input and fetches that list from the stack.   |
 | index | i   |  Needs context   |
 | value | v   |  Needs context   |
 
@@ -348,13 +364,13 @@ Inputs: Number, Number
 
 Output: Number
 
-Their default input for the first argument is always first the value of the current item in a context, if that is not a number, then take the current index.
+Their default input is the current value then index if the list that value is not a number. There is one exception to this, see table below.
 
 
 | Name      | Symbol | Comment |
 |-----------|--------|---------|
 | addition | +   |     |
-| subtraction | -   |     |
+| subtraction | -   |  Default input is 0 (Reason: To work better with number literals)  |
 | multiplication | *   |     |
 | division | /   |     |
 | wholeNumberDivision | ¤   |     |
@@ -370,14 +386,14 @@ These are all functions that take one input.
 
 | Name      | Symbol | Input | Output |
 |-----------|--------|-------|--------|
-| sum | Σ   |  List   | Number  |
-| product | Π   |  List   | Number  |
+| sum | Σ   |  List (throws exception if it is not a list of numbers)   | Number  |
+| product | Π   |  List (throws exception if it is not a list of numbers)   | Number  |
 | isPrime | m   |  Number   | Boolean  |
 | absoluteValue | h   |  Number   | Number  |
 | sign | j   |  Number   | Number  |
 | floor | u  |  Number   | Number  |
 | round | ö  |  Number   | Number  |
-| toInt | β  |  Any   | Number  |
+| toInt | §  |  Any   | Number (text is parsed to int, lists return size, true is 1 and others are 0)  |
 
 
 ### Boolean functions
@@ -391,7 +407,8 @@ Their default input for first input is value of current item unless stated other
 | smallerThan | <   | Number, default is value then index  |
 | greaterThan | >   | Number, default is value then index   |
 | equal | =   | Any |
-| and | ≠   | Any |
+| notEqual | ≠   | Any |
+| and | &   | Any |
 | or | \|   | Any |
 | not | !   | Any, (does not take 2 inputs) |
 
@@ -427,9 +444,88 @@ Save some value under a key, the key is of type Any.
 | 1, 2 | M¨"myVar"x(M"myVar"?)  | [1, 1], [2, 2]  |
 | 1, 2, 3 | 900¨"myVar"M¨"myVar"  | 900, 1, 2  |
 
+### List functions
+
+Functions pertaining to list manipulation.
+
+| Name      | Symbol | Input | Output | Comment |
+|-----------|--------|-------|--------| --------|
+| length |  l   | List  | Number  |      |
+| distinct |  d   | List  | List  |   Returns a list containing only distinct elements   |
+| removeDistinct |  n   | List  | List  |   Returns a list with all distinct elements filtered out  |
+| reverseList |  r   | List  | List  |     |
+| removeConsecutiveEqualElements |  r   | List  | List  |  1,2,2,3,3,1,1,1 ->  1,2,3,1  |
+| toList |  @   | Any  | List  |  Wraps input in a list   |
+| take |  [   | List, Number  | List  |   |
+| drop |  ]   | List, Number  | List  |   |
+| elementByIndex |  e   | List, Number  | Any  |   |
+| appendToList |  '   | Any, Any  | List  | First input is not wrapped in a list if it already is a list. Second input is always wrapped in a new list. |
+| appendList |  γ   | List, List  | List  |   |
+| zip |  z   | List, List  | List  | Produces a list of lists. [1,2,3],[4,5,6] -> [1,4],[2,5],[3,6]   |
+| pad |  #   | List, Any, Number(length)  | List  | If length it negative then pad from the end.  [1,2,3],"x",2 -> "x","x",1,2,3 |
+| growEntries |  g   | List, Number(length), Number(step)  | List  | Requires list of numbers.  [0,20,30],2,1 -> 0,1,2,20,21,22,30,31,32 |
+
+### String functions
+
+Functions pertaining to string manipulation.
+
+| Name      | Symbol | Input | Output | Comment |
+|-----------|--------|-------|--------| --------|
+| toUpperCase |  k   | String  | String  |      |
+| toLowerCase |  w   | String  | String  |      |
+| isUpperCase |  y   | String  | Boolean  |      |
+| stringToList |  t   | String  | List  |      |
+| appendToString |  a   | Any  | Any  |  toString on the arguments before append.   |
+| joinToString |  s   | List  | String(separator)  |  Turns a list into a string, runs toString on elements of list |
+
 ### Generation functions
 
-Credit to https://oeis.org/ for being a great resource
+These functions generate lists of predefined values.
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| alphabetGeneration |  b   | Number (index of alphabet), Number (length) | List  |
+
+Alphabets available are the following:
+
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "abcdefghijklmnopqrstuvwxyz",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ",
+        "abcdefghijklmnopqrstuvwxyzåäö",
+        "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ",
+        "αβγδεζηθικλμνξοπρςτυφχψω",
+        "АБЦДЕФГХИЙКЛМНОПQРСТУВЩХЫЗ",
+        "абцдефгхийклмноп́рстувщхыз"
+        
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| oeisGeneration |  b   | Number (id on https://oeis.org/), Number (length) | List  |
+
+Credit to https://oeis.org/ for being a great resource. The sequences can be downloaded from here https://oeis.org/wiki/Welcome#Compressed_Versions
+
+
+### Other functions
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| obliterate |  x   | Any, Any | Any  |
+
+Obliterate is useful when you are using the static storage functions as they often return values you do not want. Obliterate simply takes to values in and returns the second one. the first value is 'obliterated'.
+
+| Name      | Symbol | Input | Output |
+|-----------|--------|-------|--------|
+| ifBranch |  f   | Any, Any, Any | Any  |
+
+Example of if else function:
+
+| Input   | Code | Output |
+|---------|------|--------|
+| -1, 13, -9 | Mv>0f"above zero""below zero"  | "below zero", "above zero", "below zero"  |
 
 ## Interpreter flags
-todo
+
+When you run the interpreter by default it expects a path to a file containing a program, and then one or more input lists. You can modify this behavior with the following flags. 
+
+    -f read the next input from a file
+    -c read program directly from command line
+    -s change the separator for the lists going forward. The default is ','

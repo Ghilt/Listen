@@ -47,14 +47,14 @@ val orDyad = Dyad<Any, Any, Boolean>(
 val elementByIndexDyad = Dyad<List<Any>, Int, Any>(
     defaultImplicitInput = valueThenCurrentListNilad,
     precedence = Precedence.LOW,
-    inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
     output = TYPE.ANY,
 ) { a, b -> a[b] }
 
 val appendToStringDyad = Dyad<Any, Any, String>(
     defaultImplicitInput = valueNilad,
     precedence = Precedence.MEDIUM,
-    inputs = listOf(TYPE.STRING, TYPE.ANY),
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
     output = TYPE.STRING,
 ) { a, b -> a.toString() + b.toString() }
 

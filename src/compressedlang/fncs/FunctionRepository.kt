@@ -38,7 +38,7 @@ class FunctionRepository {
         'j' to signMonad,
         'u' to floorMonad,
         'ö' to roundMonad,
-        'β' to toIntMonad,
+        '§' to toIntMonad,
 
         // Mathematical Dyads on the form number, number -> number
         '+' to additionDyad,
@@ -93,7 +93,6 @@ class FunctionRepository {
         // Generation
         'b' to alphabetGenerationDyad,
         'o' to oeisGenerationDyad,
-
 
         // other
         'x' to obliterateDyad,
