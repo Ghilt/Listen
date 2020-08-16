@@ -48,6 +48,7 @@ class FunctionRepository {
         'j' to signMonad,
         'u' to floorMonad,
         'ö' to roundMonad,
+        'β' to toIntMonad,
 
         // Dyads
         '<' to smallerThanDyad,
@@ -115,7 +116,7 @@ class FunctionRepository {
     }
 
     fun getCharacterUsedDiagnostic(usedKeys: Set<Char> = repo.keys): String {
-        val all = "!#¤%&/()=?`@£$€{[]}\\^*'¨-.,_:;<>|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzåäöÅÄÖ§½~"
+        val all = "!#¤%&/()=?`@£$€{[]}\\^*'¨-.,_:;<>|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzåäöÅÄÖ§½~αβγδεζηθικλμνξοπρςτυφχψω"
         return all.filterNot { usedKeys.contains(it) }
     }
 

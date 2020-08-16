@@ -115,6 +115,14 @@ val roundMonad = Monad(
     precedence = Precedence.HIGHEST
 ) { v: Double -> v.roundToInt() }
 
+val toIntMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY),
+    output = TYPE.NUMBER,
+    precedence = Precedence.HIGHEST
+) { v: Any -> v.toString().toIntOrNull() ?: (v as? List<*>)?.size ?: if (v == true) 1 else 0 }
+
+
 val toUpperCaseMonad = Monad(
     defaultImplicitInput = valueNilad,
     inputs = listOf(TYPE.STRING),

@@ -797,4 +797,16 @@ internal class Du81ProgramTest {
 
         assertEquals("900, 1, 2", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `to int turn any value to int representation`() {
+        val source = "Mβ;_p"
+        val input = listOf("1", "2", listOf(1, 2, 3), false, true, 0, 1, 1.9)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("8", program.getCommaSeparatedResult())
+    }
+
 }
