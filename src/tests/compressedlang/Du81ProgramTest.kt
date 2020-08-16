@@ -241,8 +241,8 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `| pipe works correctly`() {
-        val source = "§§§§M0\$e2"
+    fun `pipe works correctly`() {
+        val source = "ÖÖÖÖM0\$e2"
         val input = listOf("a", "b", "c")
         val program = Du81Program(source, source.lex(), listOf(input))
         program.runForInput()

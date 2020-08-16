@@ -89,7 +89,7 @@ class FunctionRepository {
         '#' to padTriad,
 
         // Context creators
-        '§' to pipeMonad,
+        'Ö' to pipeMonad,
         'C' to chunkMonad,
         'W' to windowMonad,
 

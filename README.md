@@ -173,7 +173,7 @@ Output: List (Input list if true, empty list if false)
 | Input   | Code | Output |
 |---------|------|--------|
 | 1, 2, 3 | A>0  | 1, 2, 3   |
-| 1, 2, 3 | A>1  | <empty list>  |
+| 1, 2, 3 | A>1  | [empty list] |
 
 #### All
 
@@ -186,7 +186,7 @@ Output: List (Input list if true, empty list if false)
 | Input   | Code | Output |
 |---------|------|--------|
 | 1, 2, 3 | Ä>2  | 1, 2, 3   |
-| 1, 2, 3 | Ä>3  | <empty list>  |
+| 1, 2, 3 | Ä>3  | [empty list]  |
 
 
 #### Map
@@ -255,6 +255,56 @@ Output: List
 |---------|------|--------|
 | 1, 2, 3 | Z+1  | [1, 2], [2, 3], [3, 4] |
 | 1, 2, 3 | Z"ok"  | [1, "ok"], [2, "ok"], [3, "ok"] |
+
+### Context functions without context
+
+This section contains functions which are context functions but they take no context argument. In essence, they could've been normal functions, but are context functions for convenience.
+
+#### Window
+
+Character: `W`
+
+Inputs: List
+
+| Configuration value   | Type | Default |
+|-----------------------|------|---------|
+| windowSize  | Int  | 3       |
+| stepSize  | Int  | 1       |
+| partialWindows  | Boolean  | false      |
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3, 4, 5 | 3,2W  | [1, 2, 3], [3, 4, 5] |
+
+#### Chunked
+
+Character: `W`
+
+Inputs: List
+
+| Configuration value   | Type | Default |
+|-----------------------|------|---------|
+| chunkSize  | Int  | 3       |
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3, 4, 5, 6, 7, 8, 9 | 4C  | [1, 2, 3, 4], [5, 6, 7, 8], [9] |
+
+#### Pipe
+
+Character: `Ö`
+
+Inputs: List
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | Ö  | 1, 2, 3 |
 
 ## Functions
 todo
