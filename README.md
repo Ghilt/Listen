@@ -132,6 +132,36 @@ Output: List
 | 1, 2, 3 | F>1  | 2, 3   |
 | "a", "b", "c" | F="b"\|="c"  | "b", "c"   |
 
+#### FilterSectioned
+
+Character: `S`
+
+Inputs: List, Boolean
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 0, 3 | S≠0  | [1, 2], [3]  |
+
+#### FilterWithNeighbors
+
+Character: `N`
+
+Inputs: List, Boolean
+
+| Configuration value   | Type | Default |
+|-----------------------|------|---------|
+| neighborhoodSizeLeft  | Int  | 1       |
+| neighborhoodSizeRight | Int  | 1       |
+
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 0, 3 | N=0  | 2, 0, 3   |
+| 0, -1, 1, 2, 0, 3, 0, 4 | N=0  | 0, -1, 2, 0, 3, 0, 4  |
+
 #### Map
 
 Character: `M`
@@ -145,11 +175,11 @@ Output: List
 | 1, 2, 3 | M+100  | 2, 3   |
 | "a", "b", "c" | M=a"!"  | "b!", "c!"   |
 
-#### flatMapDyad
+#### FlatMapDyad
 
 Character: `P`
 
-Inputs: List, LIST
+Inputs: List, List
 
 Output: List
 
