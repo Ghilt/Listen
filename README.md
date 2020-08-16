@@ -67,7 +67,7 @@ The context function is part of a larger internal structure, lets call it Functi
 
 `listProvider---contextLessFunctions---contextFunction---contextFunctionInputs`
 
-And it really is that entire thing you end in the 4 ways outlined above.
+It really is that entire thing you end in the 4 ways outlined above.
 
 The list provider above is a bit of a special hack for optimising the brevity of context functions. It was stated before that all functions are infix, context functions are special in that their first input is always the list provider of the function context. There can be values/functions in between the list provider and the context function.  
 
@@ -88,6 +88,8 @@ When a function context is resolved, the result is put on the stack in form of a
 
 It will multiply the input to the program by two 3 times. The resulting stack will have 4 lists, the original one and then the 3 results of the 3 function contexts.
 
+The final thing to say about function contexts is that if the first one of a program will add the current list provider function (`_`) silently at the start. This has the effect that if you do not want this optimization you have to cancel out of it by starting your program with the end-function character (`;`).
+
 #### Configuration values
 
 Some context functions take configuration values to modify their behavior. The values are then taken in order from after the list provider. If the context function requires two configuration values it will use the first two values and discard the rest. Regular functions can not have any configuration values.
@@ -102,12 +104,29 @@ L=tn uses the following types:
 
 * ANY - No restrictions, can be anything
 * STRING - The language does not differentiate between chars and strings.
-* NUMBER - The langauge does not make a big fuzz about the difference of Integer and Doubles, It converts happily from and to.
+* NUMBER - The language does not make a big fuzz about the difference of Integer and Doubles, It converts happily from and to.
 * BOOL - Everything can be interpreted as a boolean
 * LIST_TYPE - Lists
   
+A program resolves step by step and uses its type system to decide what it can resolve. 
+
+    // β - is the toInt function, it turns anything to an int
+    1+"hi there"β
+  
+If the `+` and `β` above have the same precedence, the `+` should be executed first, but it is skipped since the type of its second argument is of the wrong type. So the string will be converted to an int and then the addition will happen.  
+
 ## Context Functions
-todo
+
+#### Filter
+
+Inputs: List, Boolean
+Output: List
+
+| Input   | Code | Output |
+|---------|------|--------|
+| 1, 2, 3 | F>1  | 2, 3   |
+| "a", "b", "c" | F="b"\|="c"  | b, c   |
+
 ## Functions
 todo
 Credit to https://oeis.org/ for being a great resource
