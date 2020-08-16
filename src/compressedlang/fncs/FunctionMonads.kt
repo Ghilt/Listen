@@ -143,5 +143,13 @@ val storeOnStaticStackMonad = Monad(
     precedence = Precedence.HIGHESTER
 ) { v: Any ->
     StaticStorageHelper.storeStack(v)
-    v
+}
+
+val loadFromStaticMapMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY),
+    output = TYPE.ANY,
+    precedence = Precedence.HIGHESTER
+) { key: Any ->
+    StaticStorageHelper.loadMap(key)
 }

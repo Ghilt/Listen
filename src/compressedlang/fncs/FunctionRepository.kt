@@ -34,6 +34,7 @@ class FunctionRepository {
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
         ':' to storeOnStaticStackMonad,
+        'α' to loadFromStaticMapMonad,
 
         // String Monads
         'k' to toUpperCaseMonad,
@@ -58,6 +59,7 @@ class FunctionRepository {
         '[' to takeDyad,
         ']' to dropDyad,
         'x' to obliterateDyad,
+        '¨' to storeOnStaticMapDyad,
 
         'e' to elementByIndexDyad,
         'z' to zipDyad,

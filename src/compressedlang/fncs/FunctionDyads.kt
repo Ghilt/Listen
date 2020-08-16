@@ -1,9 +1,6 @@
 package compressedlang.fncs
 
-import compressedlang.Precedence
-import compressedlang.TYPE
-import compressedlang.alphabets
-import compressedlang.readOeisSequence
+import compressedlang.*
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
@@ -129,4 +126,13 @@ val appendToListDyad = Dyad<Any, Any, List<Any>>(
         is List<*> -> a.filterNotNull() + listOf(b)
         else -> listOf(a) + listOf(b)
     }
+}
+
+val storeOnStaticMapDyad = Dyad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY, TYPE.ANY),
+    output = TYPE.ANY,
+    precedence = Precedence.HIGHESTER
+) { value: Any, key: Any ->
+    StaticStorageHelper.storeMap(key, value)
 }

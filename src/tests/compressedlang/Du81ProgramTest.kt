@@ -775,4 +775,26 @@ internal class Du81ProgramTest {
 
         assertEquals("[1000, 1, 0, klok], [1000, 2, 1, klok]", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `load named static variable`() {
+        val source = "M¨\"varX\"x(M\"varX\"α)"
+        val input = listOf(1, 2)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("[1, 1], [2, 2]", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `storing value in static map returns previously stored value`() {
+        val source = "900¨\"varX\"M¨\"varX\""
+        val input = listOf(1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("900, 1, 2", program.getCommaSeparatedResult())
+    }
 }
