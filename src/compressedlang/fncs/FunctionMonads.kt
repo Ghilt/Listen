@@ -80,6 +80,13 @@ val createListOfValueMonad = Monad(
     precedence = Precedence.HIGHEST
 ) { v: Any -> listOf(v) }
 
+val intToDigitListMonad = Monad(
+    defaultImplicitInput = valueNilad,
+    inputs = listOf(TYPE.ANY),
+    output = TYPE.LIST_TYPE,
+    precedence = Precedence.HIGHEST
+) { v: Number -> v.toString().toList().map { "$it".toIntOrNull() ?: 0 } }
+
 val removeConsecutiveElementsMonad = Monad(
     defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),

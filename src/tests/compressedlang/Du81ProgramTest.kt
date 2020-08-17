@@ -831,5 +831,16 @@ internal class Du81ProgramTest {
         assertEquals("[1, 3, 1, 3, 2, 3], [2, 3, 1, 3, 2, 3]", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `int to digit list`() {
+        val source = "Mα"
+        val input = listOf(123, 4, 0, 7.3456, -12)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("[1, 2, 3], [4], [0], [7, 0, 3, 4, 5, 6], [0, 1, 2]", program.getCommaSeparatedResult())
+    }
+
     // a context triad. Maybe an if-else built in triad
 }

@@ -1,6 +1,8 @@
-# L=tn
+# L=tn &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![create](images/ListnLogo_small.png)
 
 L=tn (read as the english word 'listen') is an instrumental programming language for humanity if we ever hope to reach the stars. The most useful things with languages are list manipulation, and opaqueness of syntax, both of which L=tn brings to the table with anthropomorphic confidence.
+
+
 
 ## Overview
 
@@ -456,6 +458,7 @@ Functions pertaining to list manipulation.
 | reverseList |  r   | List  | List  |     |
 | removeConsecutiveEqualElements |  r   | List  | List  |  1,2,2,3,3,1,1,1 ->  1,2,3,1  |
 | toList |  @   | Any  | List  |  Wraps input in a list   |
+| intToDigitList |  α   | Number  | List  |  12300 -> 1,2,3,0,0   |
 | take |  [   | List, Number  | List  |   |
 | drop |  ]   | List, Number  | List  |   |
 | elementByIndex |  e   | List, Number  | Any  |   |

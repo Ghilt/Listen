@@ -70,6 +70,7 @@ class FunctionRepository {
         'r' to reverseListMonad,
         'c' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
+        'α' to intToDigitListMonad,
 
         '[' to takeDyad,
         ']' to dropDyad,
