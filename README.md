@@ -154,81 +154,81 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 
 | Name                   | Symbol | Input | Output | Default input |
 |------------------------|--------|-------|--------|---------------|
-| currentListNilad       | _      |       |        |               |
-| secondCurrentListNilad | ~      |       |        |               |
-| currentListCountNilad  | q      |       |        |               |
-| indexNilad             | i      |       |        |               |
-| valueNilad             | v      |       |        |               |
-| peekStaticStackNilad   | p      |       |        |               |
-| popStaticStackNilad    | €      |       |        |               |
-| storeOnStaticStackMonad| :      |       |        |               |
-| loadFromStaticMapMonad | ?      |       |        |               |
-| storeOnStaticMapDyad   | ¨      |       |        |               |
-| sumMonad               | Σ      |       |        |               |
-| productMonad           | Π      |       |        |               |
-| isPrimeMonad           | m      |       |        |               |
-| absoluteValueMonad     | h      |       |        |               |
-| signMonad              | j      |       |        |               |
-| floorMonad             | u      |       |        |               |
-| roundMonad             | ö      |       |        |               |
-| toIntMonad             | §      |       |        |               |
-| additionDyad           | +      |       |        |               |
-| subtractionDyad        | -      |       |        |               |
-| multiplicationDyad     | *      |       |        |               |
-| divisionDyad           | /      |       |        |               |
-| wholeDivisionDyad      | ¤      |       |        |               |
-| moduloDyad             | %      |       |        |               |
-| moduloMathematicalDyad | £      |       |        |               |
-| powerDyad              | ^      |       |        |               |
-| minDyad                | {      |       |        |               |
-| maxDyad                | }      |       |        |               |
-| notMonad               | !      |       |        |               |
-| smallerThanDyad        | <      |       |        |               |
-| largerThanDyad         | >      |       |        |               |
-| equalToDyad            | =      |       |        |               |
-| notEqualToDyad         | ≠      |       |        |               |
-| andDyad                | &      |       |        |               |
-| orDyad                 |\|      |       |        |               |
-| lengthMonad            | l      |       |        |               |
-| distinctMonad          | d      |       |        |               |
-| removeDistinctMonad    | n      |       |        |               |
-| listByIndexMonad       | $      |       |        |               |
-| reverseListMonad       | r      |       |        |               |
-|removeConsecutiveElementsMonad | c      |       |        |               |
-| createListOfValueMonad | @      |       |        |               |
-| intToDigitListMonad    | α      |       |        |               |
-| takeDyad               | [      |       |        |               |
-| dropDyad               | ]      |       |        |               |
-| elementByIndexDyad     | e      |       |        |               |
-| appendToListDyad       | '      |       |        |               |
-| appendListDyad         | γ      |       |        |               |
-| zipDyad                | z      |       |        |               |
-| padTriad               | #      |       |        |               |
-| growEntriesTriad       | g      |       |        |               |
-| toUpperCaseMonad       | k      |       |        |               |
-| toLowerCaseMonad       | w      |       |        |               |
-| isUpperCaseMonad       | y      |       |        |               |
-| stringToListMonad      | t      |       |        |               |
-| appendToStringDyad     | a      |       |        |               |
-| joinToStringDyad       | s      |       |        |               |
-| alphabetGenerationDyad | b      |       |        |               |
-| oeisGenerationDyad     | o      |       |        |               |
-| obliterateDyad         | x      |       |        |               |
-| ifBranchTriad          | f      |       |        |               |
-|          Context functions                                       |
-| pipeMonad              | Ö      |       |        |               |
-| chunkMonad             | C      |       |        |               |
-| windowMonad            | W      |       |        |               |
-| filterDyad             | F      |       |        |               |
-| filterSectionedDyad    | S      |       |        |               |
-| filterWithNeighborsDyad| N      |       |        |               |
-| allDyad                | A      |       |        |               |
-| anyDyad                | Ä      |       |        |               |
-| mapDyad                | M      |       |        |               |
-| flatMapDy              | P      |       |        |               |
-| extendEntriesDyad      | E      |       |        |               |
-| groupedStringListDyad  | G      |       |        |               |
-| zipInsertionDyad       | Z      |       |        |               |
+| currentListNilad       | _      |       | List   |               |
+| secondCurrentListNilad | ~      |       | List   |               |
+| currentListCountNilad  | q      |       | Number |               |
+| indexNilad             | i      |       | Number |               |
+| valueNilad             | v      |       | Any    |               |
+| peekStaticStackNilad   | p      |       | Any    |               |
+| popStaticStackNilad    | €      |       | Any    |               |
+| storeOnStaticStackMonad| :      | Any   | Any    |               |
+| loadFromStaticMapMonad | ?      | Any   | Any    |               |
+| storeOnStaticMapDyad   | ¨      | Any   | Any    |               |
+| sumMonad               | Σ      | List  | Number |               |
+| productMonad           | Π      | List  | Number |               |
+| isPrimeMonad           | m      | Number| Boolean|               |
+| absoluteValueMonad     | h      | Number| Number |               |
+| signMonad              | j      | Number| Number |               |
+| floorMonad             | u      | Number| Number |               |
+| roundMonad             | ö      | Number| Number |               |
+| toIntMonad             | §      | Any   | Number |               |
+| additionDyad           | +      | Number, Number | Number |               |
+| subtractionDyad        | -      | Number, Number | Number |               |
+| multiplicationDyad     | *      | Number, Number | Number |               |
+| divisionDyad           | /      | Number, Number | Number |               |
+| wholeDivisionDyad      | ¤      | Number, Number | Number |               |
+| moduloDyad             | %      | Number, Number | Number |               |
+| moduloMathematicalDyad | £      | Number, Number | Number |               |
+| powerDyad              | ^      | Number, Number | Number |               |
+| minDyad                | {      | Number, Number | Number |               |
+| maxDyad                | }      | Number, Number | Number |               |
+| notMonad               | !      | Any            | Boolean|               |
+| smallerThanDyad        | <      | Number, Number | Boolean|               |
+| largerThanDyad         | >      | Number, Number | Boolean|               |
+| equalToDyad            | =      | Any, Any| Boolean|               |
+| notEqualToDyad         | ≠      | Any, Any| Boolean|               |
+| andDyad                | &      | Any, Any| Boolean|               |
+| orDyad                 |\|      | Any, Any| Boolean|               |
+| lengthMonad            | l      | List  | Number |               |
+| distinctMonad          | d      | List  | List   |               |
+| removeDistinctMonad    | n      | List  | List   |               |
+| listByIndexMonad       | $      | Number| List   |               |
+| reverseListMonad       | r      | List  | List   |               |
+|removeConsecutiveElementsMonad |c| List  | List   |               |
+| createListOfValueMonad | @      | Any   | List   |               |
+| intToDigitListMonad    | α      | Number| List   |               |
+| takeDyad               | [      | List  | List   |               |
+| dropDyad               | ]      | List  | List   |               |
+| elementByIndexDyad     | e      | Number| Any    |               |
+| appendToListDyad       | '      | Any, Any            | List   |               |
+| appendListDyad         | γ      | List, List          | List   |               |
+| zipDyad                | z      | List, List          | List   |               |
+| padTriad               | #      | List, Any, Number   | List   |               |
+| growEntriesTriad       | g      | List, Number, Number| List   |               |
+| toUpperCaseMonad       | k      | String| String |               |
+| toLowerCaseMonad       | w      | String| String |               |
+| isUpperCaseMonad       | y      | String| Boolean|               |
+| stringToListMonad      | t      | String| List   |               |
+| appendToStringDyad     | a      | Any, Any      | String |               |
+| joinToStringDyad       | s      | List, String  | String |               |
+| alphabetGenerationDyad | b      | Number, Number| List   |               |
+| oeisGenerationDyad     | o      | Number, Number| List   |               |
+| obliterateDyad         | x      | Any, Any      | Any    |               |
+| ifBranchTriad          | f      | Any, Any, Any | Any    |               |
+| _________Context functions______________________________________         |
+| pipeMonad              | Ö      | List  | List  |               |
+| chunkMonad             | C      | List  | List  |               |
+| windowMonad            | W      | List  | List  |               |
+| filterDyad             | F      | List, Boolean | List  |               |
+| filterSectionedDyad    | S      | List, Boolean | List  |               |
+| filterWithNeighborsDyad| N      | List, Boolean | List  |               |
+| allDyad                | A      | List, Boolean | List  |               |
+| anyDyad                | Ä      | List, Boolean | List  |               |
+| mapDyad                | M      | List, Any     | List  |               |
+| flatMapDyad            | P      | List, List    | List  |               |
+| extendEntriesDyad      | E      | List, Number  | List  |               |
+| groupedStringListDyad  | G      | List, Boolean | List  |               |
+| zipInsertionDyad       | Z      | List, Any     | List  |               |
 
 ## Context Functions
 
