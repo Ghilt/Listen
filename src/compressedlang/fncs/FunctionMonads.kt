@@ -87,6 +87,20 @@ val intToDigitListMonad = Monad(
     precedence = Precedence.HIGHEST
 ) { v: Number -> v.toString().toList().map { "$it".toIntOrNull() ?: 0 } }
 
+val firstElementMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.ANY,
+    precedence = Precedence.HIGHEST
+) { list: List<*> -> list.first() ?: 0 }
+
+val lastElementMonad = Monad(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    inputs = listOf(TYPE.LIST_TYPE),
+    output = TYPE.ANY,
+    precedence = Precedence.HIGHEST
+) { list: List<*> -> list.last() ?: 0 }
+
 val removeConsecutiveElementsMonad = Monad(
     defaultImplicitInput = valueThenCurrentListNilad,
     inputs = listOf(TYPE.LIST_TYPE),

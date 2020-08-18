@@ -666,7 +666,7 @@ internal class Du81ProgramTest {
 
     @Test
     fun `remove consecutive identical elements`() {
-        val source = "c"
+        val source = "β"
         val input = listOf(4, 2, 1, 2, 2, 4, 5, 5)
         val program = Du81Program(source, source.lex(), listOf(input))
 
@@ -832,14 +832,25 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `int to digit list`() {
-        val source = "Mα"
-        val input = listOf(123, 4, 0, 7.3456, -12)
+    fun `get first element of list`() {
+        val source = "c"
+        val input = listOf(1, 2, 3)
         val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
-        assertEquals("[1, 2, 3], [4], [0], [7, 0, 3, 4, 5, 6], [0, 1, 2]", program.getCommaSeparatedResult())
+        assertEquals("1", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `get last element of list`() {
+        val source = "ω"
+        val input = listOf(1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("3", program.getCommaSeparatedResult())
     }
 
     // a context triad. Maybe an if-else built in triad

@@ -159,6 +159,7 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 | currentListCountNilad  | [q](#information-functions)               |                | Number |  .            |
 | indexNilad             | [i](#information-functions)               |                | Number |  .            |
 | valueNilad             | [v](#information-functions)               |                | Any    |  todo, etc    |
+| listByIndexMonad       | [$](#information-functions)               | Number         | List   |               |             
 | peekStaticStackNilad   | [p](#storage-functions)                   |                | Any    |               |
 | popStaticStackNilad    | [€](#storage-functions)                   |                | Any    |               |
 | storeOnStaticStackMonad| [:](#storage-functions)                   | Any            | Any    |               |
@@ -192,11 +193,12 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 | lengthMonad            | [l](#list-functions)                      | List           | Number |               |
 | distinctMonad          | [d](#list-functions)                      | List           | List   |               |
 | removeDistinctMonad    | [n](#list-functions)                      | List           | List   |               |
-| listByIndexMonad       | [$](#list-functions)                      | Number         | List   |               |
 | reverseListMonad       | [r](#list-functions)                      | List           | List   |               |
-|removeConsecutiveElementsMonad |[c](#list-functions)                | List           | List   |               |
+|removeConsecutiveElementsMonad |[β](#list-functions)                | List           | List   |               |
 | createListOfValueMonad | [@](#list-functions)                      | Any            | List   |               |
 | intToDigitListMonad    | [α](#list-functions)                      | Number         | List   |               |
+| firstElementMonad      | [c](#list-functions)                      | List           | List   |               |
+| lastElementMonad       | [ω](#list-functions)                      | List           | List   |               |
 | takeDyad               | [\[](#list-functions)                     | List           | List   |               |
 | dropDyad               | [\]](#list-functions)                     | List           | List   |               |
 | elementByIndexDyad     | [e](#list-functions)                      | Number         | Any    |               |
@@ -431,12 +433,12 @@ These functions mostly take no input and just return a value. Some of them needs
 
 | Name      | Symbol | Comment |
 |-----------|--------|---------|
-| currentList | _   |   This refers to the stack where all results of the function context chain are stored  |
+| currentList       | _   |   This refers to the stack where all results of the function context chain are stored  |
 | secondCurrentList | ~  |  Convenience function   |
-| currentListCount | q   |  Returns how many lists are on the stack   |
-| getListByIndex | $   | This function takes a Number input and fetches that list from the stack.   |
-| index | i   |  Needs context   |
-| value | v   |  Needs context   |
+| currentListCount  | q   |  Returns how many lists are on the stack   |
+| getListByIndex    | $   | This function takes a Number input and fetches that list from the stack.   |
+| index             | i   |  Needs context   |
+| value             | v   |  Needs context   |
 
 ### Mathematical functions
 
@@ -536,9 +538,11 @@ Functions pertaining to list manipulation.
 | distinct |  d   | List  | List  |   Returns a list containing only distinct elements   |
 | removeDistinct |  n   | List  | List  |   Returns a list with all distinct elements filtered out  |
 | reverseList |  r   | List  | List  |     |
-| removeConsecutiveEqualElements |  r   | List  | List  |  1,2,2,3,3,1,1,1 ->  1,2,3,1  |
+| removeConsecutiveEqualElements |  β   | List  | List  |  1,2,2,3,3,1,1,1 ->  1,2,3,1  |
 | toList |  @   | Any  | List  |  Wraps input in a list   |
 | intToDigitList |  α   | Number  | List  |  12300 -> 1,2,3,0,0   |
+| firstElementMonad |  c   | List    | List  |     |
+| lastElementMonad  |  ω   | List    | List  |     |
 | take |  [   | List, Number  | List  |   |
 | drop |  ]   | List, Number  | List  |   |
 | elementByIndex |  e   | List, Number  | Any  |   |

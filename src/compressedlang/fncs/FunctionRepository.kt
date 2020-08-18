@@ -20,6 +20,7 @@ class FunctionRepository {
         'i' to indexNilad,
         'v' to valueNilad,
         ',' to no_opNilad,
+        '$' to listByIndexMonad,
 
         // Storage
         'p' to peekStaticStackNilad,
@@ -66,11 +67,12 @@ class FunctionRepository {
         'l' to lengthMonad,
         'd' to distinctMonad,
         'n' to removeDistinctMonad,
-        '$' to listByIndexMonad,
         'r' to reverseListMonad,
-        'c' to removeConsecutiveElementsMonad,
+        'β' to removeConsecutiveElementsMonad,
         '@' to createListOfValueMonad,
         'α' to intToDigitListMonad,
+        'c' to firstElementMonad,
+        'ω' to lastElementMonad,
 
         '[' to takeDyad,
         ']' to dropDyad,
