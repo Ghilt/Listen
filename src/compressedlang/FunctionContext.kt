@@ -185,7 +185,7 @@ class FunctionContext(
                     ContextKey.VALUE,
                     ContextKey.INDEX,
                 ).contains(contextKey)) {
-                throw SyntaxError("Attempting to retrieve information from a context outside of a context")
+                throw SyntaxError("Attempting to retrieve information from a context outside of a context. $contextKey")
             }
 
             when (contextKey) {

@@ -150,6 +150,86 @@ A program resolves step by step and uses its type system to decide what it can r
   
 If the `+` and `§` above have the same precedence, the `+` should be executed first, but it is skipped since the type of its second argument is of the wrong type. So the string will be converted to an int and then the addition will happen.  
 
+# Function index
+
+| Name                   | Symbol | Input | Output | Default input |
+|------------------------|--------|-------|--------|---------------|
+| currentListNilad       | _      |       |        |               |
+| secondCurrentListNilad | ~      |       |        |               |
+| currentListCountNilad  | q      |       |        |               |
+| indexNilad             | i      |       |        |               |
+| valueNilad             | v      |       |        |               |
+| peekStaticStackNilad   | p      |       |        |               |
+| popStaticStackNilad    | €      |       |        |               |
+| storeOnStaticStackMonad| :      |       |        |               |
+| loadFromStaticMapMonad | ?      |       |        |               |
+| storeOnStaticMapDyad   | ¨      |       |        |               |
+| sumMonad               | Σ      |       |        |               |
+| productMonad           | Π      |       |        |               |
+| isPrimeMonad           | m      |       |        |               |
+| absoluteValueMonad     | h      |       |        |               |
+| signMonad              | j      |       |        |               |
+| floorMonad             | u      |       |        |               |
+| roundMonad             | ö      |       |        |               |
+| toIntMonad             | §      |       |        |               |
+| additionDyad           | +      |       |        |               |
+| subtractionDyad        | -      |       |        |               |
+| multiplicationDyad     | *      |       |        |               |
+| divisionDyad           | /      |       |        |               |
+| wholeDivisionDyad      | ¤      |       |        |               |
+| moduloDyad             | %      |       |        |               |
+| moduloMathematicalDyad | £      |       |        |               |
+| powerDyad              | ^      |       |        |               |
+| minDyad                | {      |       |        |               |
+| maxDyad                | }      |       |        |               |
+| notMonad               | !      |       |        |               |
+| smallerThanDyad        | <      |       |        |               |
+| largerThanDyad         | >      |       |        |               |
+| equalToDyad            | =      |       |        |               |
+| notEqualToDyad         | ≠      |       |        |               |
+| andDyad                | &      |       |        |               |
+| orDyad                 |\|      |       |        |               |
+| lengthMonad            | l      |       |        |               |
+| distinctMonad          | d      |       |        |               |
+| removeDistinctMonad    | n      |       |        |               |
+| listByIndexMonad       | $      |       |        |               |
+| reverseListMonad       | r      |       |        |               |
+|removeConsecutiveElementsMonad | c      |       |        |               |
+| createListOfValueMonad | @      |       |        |               |
+| intToDigitListMonad    | α      |       |        |               |
+| takeDyad               | [      |       |        |               |
+| dropDyad               | ]      |       |        |               |
+| elementByIndexDyad     | e      |       |        |               |
+| appendToListDyad       | '      |       |        |               |
+| appendListDyad         | γ      |       |        |               |
+| zipDyad                | z      |       |        |               |
+| padTriad               | #      |       |        |               |
+| growEntriesTriad       | g      |       |        |               |
+| toUpperCaseMonad       | k      |       |        |               |
+| toLowerCaseMonad       | w      |       |        |               |
+| isUpperCaseMonad       | y      |       |        |               |
+| stringToListMonad      | t      |       |        |               |
+| appendToStringDyad     | a      |       |        |               |
+| joinToStringDyad       | s      |       |        |               |
+| alphabetGenerationDyad | b      |       |        |               |
+| oeisGenerationDyad     | o      |       |        |               |
+| obliterateDyad         | x      |       |        |               |
+| ifBranchTriad          | f      |       |        |               |
+|          Context functions                                       |
+| pipeMonad              | Ö      |       |        |               |
+| chunkMonad             | C      |       |        |               |
+| windowMonad            | W      |       |        |               |
+| filterDyad             | F      |       |        |               |
+| filterSectionedDyad    | S      |       |        |               |
+| filterWithNeighborsDyad| N      |       |        |               |
+| allDyad                | A      |       |        |               |
+| anyDyad                | Ä      |       |        |               |
+| mapDyad                | M      |       |        |               |
+| flatMapDy              | P      |       |        |               |
+| extendEntriesDyad      | E      |       |        |               |
+| groupedStringListDyad  | G      |       |        |               |
+| zipInsertionDyad       | Z      |       |        |               |
+
 ## Context Functions
 
 All context functions are capital letters and no regular functions are capital letters. All context functions have the same precedence, and due to the L=tn program structure, they do not compete with regular functions. 
