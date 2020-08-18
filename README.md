@@ -199,9 +199,10 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 | intToDigitListMonad    | [α](#list-functions)                      | Number         | List   |               |
 | firstElementMonad      | [c](#list-functions)                      | List           | List   |               |
 | lastElementMonad       | [ω](#list-functions)                      | List           | List   |               |
-| takeDyad               | [\[](#list-functions)                     | List           | List   |               |
-| dropDyad               | [\]](#list-functions)                     | List           | List   |               |
-| elementByIndexDyad     | [e](#list-functions)                      | Number         | Any    |               |
+| takeDyad               | [\[](#list-functions)                     | List, Number   | List   |               |
+| dropDyad               | [\]](#list-functions)                     | List, Number   | List   |               |
+| shiftListDyad          | [θ](#list-functions)                      | List, Number   | List   |               |
+| elementByIndexDyad     | [e](#list-functions)                      | List, Number   | Any    |               |
 | appendToListDyad       | ['](#list-functions)                      | Any, Any            | List   |          |
 | appendListDyad         | [γ](#list-functions)                      | List, List          | List   |          |
 | zipDyad                | [z](#list-functions)                      | List, List          | List   |          |
@@ -545,6 +546,7 @@ Functions pertaining to list manipulation.
 | lastElementMonad  |  ω   | List    | List  |     |
 | take |  [   | List, Number  | List  |   |
 | drop |  ]   | List, Number  | List  |   |
+| shiftList |  θ   | List, Number  | List  | [1,2,3],1 -> 3,1,2 |
 | elementByIndex |  e   | List, Number  | Any  |   |
 | appendToList |  '   | Any, Any  | List  | First input is not wrapped in a list if it already is a list. Second input is always wrapped in a new list. |
 | appendList |  γ   | List, List  | List  |   |

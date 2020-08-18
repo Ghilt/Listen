@@ -1,6 +1,7 @@
 package compressedlang.fncs
 
 import compressedlang.*
+import kotlin.math.absoluteValue
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
@@ -101,6 +102,21 @@ val dropDyad = Dyad<List<Any>, Int, List<Any>>(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
     output = TYPE.LIST_TYPE,
 ) { a, b -> a.drop(b) }
+
+val shiftListDyad = Dyad<List<Any>, Int, List<Any>>(
+    defaultImplicitInput = valueThenCurrentListNilad,
+    precedence = Precedence.LOW,
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.NUMBER),
+    output = TYPE.LIST_TYPE,
+) { a, b ->
+    val oneChunk = b.absoluteValue % a.size
+    val otherChunk = a.size - oneChunk
+    if (b >= 0) {
+        a.takeLast(oneChunk) + a.take(otherChunk)
+    } else {
+        a.takeLast(otherChunk) + a.take(oneChunk)
+    }
+}
 
 val joinToStringDyad = Dyad<List<Any>, String, String>(
     defaultImplicitInput = valueThenCurrentListNilad,

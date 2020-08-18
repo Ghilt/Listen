@@ -74,6 +74,7 @@ class FunctionRepository {
         'c' to firstElementMonad,
         'ω' to lastElementMonad,
 
+        'θ' to shiftListDyad,
         '[' to takeDyad,
         ']' to dropDyad,
         'e' to elementByIndexDyad,

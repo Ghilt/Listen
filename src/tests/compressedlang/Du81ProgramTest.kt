@@ -853,5 +853,27 @@ internal class Du81ProgramTest {
         assertEquals("3", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `shift list`() {
+        val source = "θ4"
+        val input = listOf(1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("3, 1, 2", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `shift list backwards`() {
+        val source = "θ-4"
+        val input = listOf(1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("2, 3, 1", program.getCommaSeparatedResult())
+    }
+
     // a context triad. Maybe an if-else built in triad
 }
