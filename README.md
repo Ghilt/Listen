@@ -154,11 +154,11 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 
 | Name                   | Symbol | Input | Output | Default input |
 |------------------------|--------|-------|--------|---------------|
-| currentListNilad       | _      |       | List   |               |
-| secondCurrentListNilad | ~      |       | List   |               |
-| currentListCountNilad  | q      |       | Number |               |
-| indexNilad             | i      |       | Number |               |
-| valueNilad             | v      |       | Any    |               |
+| currentListNilad       | [_](#information-functions)      |       | List   |  [Default values](#default-values)        |
+| secondCurrentListNilad | ~      |       | List   |  .            |
+| currentListCountNilad  | q      |       | Number |  .            |
+| indexNilad             | i      |       | Number |  .            |
+| valueNilad             | v      |       | Any    |  todo, etc    |
 | peekStaticStackNilad   | p      |       | Any    |               |
 | popStaticStackNilad    | €      |       | Any    |               |
 | storeOnStaticStackMonad| :      | Any   | Any    |               |
