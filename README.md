@@ -56,7 +56,7 @@ A L=tn program can be thought of as a string of functions optimised for a flow l
 
     list.map{ it * 2 }.filter{ it < 10}.flatMap{ listOf(0, it)}`
     
-The above is written as `M*2F<10P(0av)t` (TODO trim all whitespace check precedence && fix list append function, add some static variables... also maybe context key for function values/index nearer surface). To support this with as few characters as possible the paranthesis are optional in favor of ending a context under certain predefined circumstances.
+The above is written as `M*2F<10P(0av)t`. To support this with as few characters as possible the paranthesis are optional in favor of ending a context under certain predefined circumstances.
 
 A context can be ended in 4 ways:
 
