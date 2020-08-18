@@ -154,81 +154,81 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 
 | Name                   | Symbol | Input | Output | Default input |
 |------------------------|--------|-------|--------|---------------|
-| currentListNilad       | [_](#information-functions)      |       | List   |  [Default values](#default-values)        |
-| secondCurrentListNilad | ~      |       | List   |  .            |
-| currentListCountNilad  | q      |       | Number |  .            |
-| indexNilad             | i      |       | Number |  .            |
-| valueNilad             | v      |       | Any    |  todo, etc    |
-| peekStaticStackNilad   | p      |       | Any    |               |
-| popStaticStackNilad    | €      |       | Any    |               |
-| storeOnStaticStackMonad| :      | Any   | Any    |               |
-| loadFromStaticMapMonad | ?      | Any   | Any    |               |
-| storeOnStaticMapDyad   | ¨      | Any   | Any    |               |
-| sumMonad               | Σ      | List  | Number |               |
-| productMonad           | Π      | List  | Number |               |
-| isPrimeMonad           | m      | Number| Boolean|               |
-| absoluteValueMonad     | h      | Number| Number |               |
-| signMonad              | j      | Number| Number |               |
-| floorMonad             | u      | Number| Number |               |
-| roundMonad             | ö      | Number| Number |               |
-| toIntMonad             | §      | Any   | Number |               |
-| additionDyad           | +      | Number, Number | Number |               |
-| subtractionDyad        | -      | Number, Number | Number |               |
-| multiplicationDyad     | *      | Number, Number | Number |               |
-| divisionDyad           | /      | Number, Number | Number |               |
-| wholeDivisionDyad      | ¤      | Number, Number | Number |               |
-| moduloDyad             | %      | Number, Number | Number |               |
-| moduloMathematicalDyad | £      | Number, Number | Number |               |
-| powerDyad              | ^      | Number, Number | Number |               |
-| minDyad                | {      | Number, Number | Number |               |
-| maxDyad                | }      | Number, Number | Number |               |
-| notMonad               | !      | Any            | Boolean|               |
-| smallerThanDyad        | <      | Number, Number | Boolean|               |
-| largerThanDyad         | >      | Number, Number | Boolean|               |
-| equalToDyad            | =      | Any, Any| Boolean|               |
-| notEqualToDyad         | ≠      | Any, Any| Boolean|               |
-| andDyad                | &      | Any, Any| Boolean|               |
-| orDyad                 |\|      | Any, Any| Boolean|               |
-| lengthMonad            | l      | List  | Number |               |
-| distinctMonad          | d      | List  | List   |               |
-| removeDistinctMonad    | n      | List  | List   |               |
-| listByIndexMonad       | $      | Number| List   |               |
-| reverseListMonad       | r      | List  | List   |               |
-|removeConsecutiveElementsMonad |c| List  | List   |               |
-| createListOfValueMonad | @      | Any   | List   |               |
-| intToDigitListMonad    | α      | Number| List   |               |
-| takeDyad               | [      | List  | List   |               |
-| dropDyad               | ]      | List  | List   |               |
-| elementByIndexDyad     | e      | Number| Any    |               |
-| appendToListDyad       | '      | Any, Any            | List   |               |
-| appendListDyad         | γ      | List, List          | List   |               |
-| zipDyad                | z      | List, List          | List   |               |
-| padTriad               | #      | List, Any, Number   | List   |               |
-| growEntriesTriad       | g      | List, Number, Number| List   |               |
-| toUpperCaseMonad       | k      | String| String |               |
-| toLowerCaseMonad       | w      | String| String |               |
-| isUpperCaseMonad       | y      | String| Boolean|               |
-| stringToListMonad      | t      | String| List   |               |
-| appendToStringDyad     | a      | Any, Any      | String |               |
-| joinToStringDyad       | s      | List, String  | String |               |
-| alphabetGenerationDyad | b      | Number, Number| List   |               |
-| oeisGenerationDyad     | o      | Number, Number| List   |               |
-| obliterateDyad         | x      | Any, Any      | Any    |               |
-| ifBranchTriad          | f      | Any, Any, Any | Any    |               |
-| _________Context functions______________________________________         |
-| pipeMonad              | Ö      | List  | List  |               |
-| chunkMonad             | C      | List  | List  |               |
-| windowMonad            | W      | List  | List  |               |
-| filterDyad             | F      | List, Boolean | List  |               |
-| filterSectionedDyad    | S      | List, Boolean | List  |               |
-| filterWithNeighborsDyad| N      | List, Boolean | List  |               |
-| allDyad                | A      | List, Boolean | List  |               |
-| anyDyad                | Ä      | List, Boolean | List  |               |
-| mapDyad                | M      | List, Any     | List  |               |
-| flatMapDyad            | P      | List, List    | List  |               |
-| extendEntriesDyad      | E      | List, Number  | List  |               |
-| groupedStringListDyad  | G      | List, Boolean | List  |               |
-| zipInsertionDyad       | Z      | List, Any     | List  |               |
+| currentListNilad       | [_](#information-functions)               |                | List   |  [Default values](#default-values)        |
+| secondCurrentListNilad | [~](#information-functions)               |                | List   |  .            |
+| currentListCountNilad  | [q](#information-functions)               |                | Number |  .            |
+| indexNilad             | [i](#information-functions)               |                | Number |  .            |
+| valueNilad             | [v](#information-functions)               |                | Any    |  todo, etc    |
+| peekStaticStackNilad   | [p](#storage-functions)                   |                | Any    |               |
+| popStaticStackNilad    | [€](#storage-functions)                   |                | Any    |               |
+| storeOnStaticStackMonad| [:](#storage-functions)                   | Any            | Any    |               |
+| loadFromStaticMapMonad | [?](#storage-functions)                   | Any            | Any    |               |
+| storeOnStaticMapDyad   | [¨](#storage-functions)                   | Any            | Any    |               |
+| sumMonad               | [Σ](#mathematical-support-functions)      | List           | Number |               |
+| productMonad           | [Π](#mathematical-support-functions)      | List           | Number |               |
+| isPrimeMonad           | [m](#mathematical-support-functions)      | Number         | Boolean|               |
+| absoluteValueMonad     | [h](#mathematical-support-functions)      | Number         | Number |               |
+| signMonad              | [j](#mathematical-support-functions)      | Number         | Number |               |
+| floorMonad             | [u](#mathematical-support-functions)      | Number         | Number |               |
+| roundMonad             | [ö](#mathematical-support-functions)      | Number         | Number |               |
+| toIntMonad             | [§](#mathematical-support-functions)      | Any            | Number |               |
+| additionDyad           | [+](#mathematical-functions)              | Number, Number | Number |               |
+| subtractionDyad        | [-](#mathematical-functions)              | Number, Number | Number |               |
+| multiplicationDyad     | [*](#mathematical-functions)              | Number, Number | Number |               |
+| divisionDyad           | [/](#mathematical-functions)              | Number, Number | Number |               |
+| wholeDivisionDyad      | [¤](#mathematical-functions)              | Number, Number | Number |               |
+| moduloDyad             | [%](#mathematical-functions)              | Number, Number | Number |               |
+| moduloMathematicalDyad | [£](#mathematical-functions)              | Number, Number | Number |               |
+| powerDyad              | [^](#mathematical-functions)              | Number, Number | Number |               |
+| minDyad                | [{](#mathematical-functions)              | Number, Number | Number |               |
+| maxDyad                | [}](#mathematical-functions)              | Number, Number | Number |               |
+| notMonad               | [!](#boolean-functions)                   | Any            | Boolean|               |
+| smallerThanDyad        | [<](#boolean-functions)                   | Number, Number | Boolean|               |
+| largerThanDyad         | [>](#boolean-functions)                   | Number, Number | Boolean|               |
+| equalToDyad            | [=](#boolean-functions)                   | Any, Any       | Boolean|               |
+| notEqualToDyad         | [≠](#boolean-functions)                   | Any, Any       | Boolean|               |
+| andDyad                | [&](#boolean-functions)                   | Any, Any       | Boolean|               |
+| orDyad                 |[\|](#boolean-functions)                   | Any, Any       | Boolean|               |
+| lengthMonad            | [l](#list-functions)                      | List           | Number |               |
+| distinctMonad          | [d](#list-functions)                      | List           | List   |               |
+| removeDistinctMonad    | [n](#list-functions)                      | List           | List   |               |
+| listByIndexMonad       | [$](#list-functions)                      | Number         | List   |               |
+| reverseListMonad       | [r](#list-functions)                      | List           | List   |               |
+|removeConsecutiveElementsMonad |[c](#list-functions)                | List           | List   |               |
+| createListOfValueMonad | [@](#list-functions)                      | Any            | List   |               |
+| intToDigitListMonad    | [α](#list-functions)                      | Number         | List   |               |
+| takeDyad               | [\[](#list-functions)                     | List           | List   |               |
+| dropDyad               | [\]](#list-functions)                     | List           | List   |               |
+| elementByIndexDyad     | [e](#list-functions)                      | Number         | Any    |               |
+| appendToListDyad       | ['](#list-functions)                      | Any, Any            | List   |          |
+| appendListDyad         | [γ](#list-functions)                      | List, List          | List   |          |
+| zipDyad                | [z](#list-functions)                      | List, List          | List   |          |
+| padTriad               | [#](#list-functions)                      | List, Any, Number   | List   |          |
+| growEntriesTriad       | [g](#list-functions)                      | List, Number, Number| List   |          |
+| toUpperCaseMonad       | [k](#string-functions)                    | String        | String |                |
+| toLowerCaseMonad       | [w](#string-functions)                    | String        | String |                |
+| isUpperCaseMonad       | [y](#string-functions)                    | String        | Boolean|                |
+| stringToListMonad      | [t](#string-functions)                    | String        | List   |                |
+| appendToStringDyad     | [a](#string-functions)                    | Any, Any      | String |                |
+| joinToStringDyad       | [s](#string-functions)                    | List, String  | String |                |
+| alphabetGenerationDyad | [b](#generation-functions)                | Number, Number| List   |                |
+| oeisGenerationDyad     | [o](#generation-functions)                | Number, Number| List   |                |
+| obliterateDyad         | [x](#other-functions)                     | Any, Any      | Any    |                |
+| ifBranchTriad          | [f](#other-functions)                     | Any, Any, Any | Any    |                |
+| _________Context functions______________________________________                                             |
+| pipeMonad              | [Ö](#context-functions)                   | List          | List  |                 |
+| chunkMonad             | [C](#context-functions)                   | List          | List  |                 |
+| windowMonad            | [W](#context-functions)                   | List          | List  |                 |
+| filterDyad             | [F](#context-functions)                   | List, Boolean | List  |                 |
+| filterSectionedDyad    | [S](#context-functions)                   | List, Boolean | List  |                 |
+| filterWithNeighborsDyad| [N](#context-functions)                   | List, Boolean | List  |                 |
+| allDyad                | [A](#context-functions)                   | List, Boolean | List  |                 |
+| anyDyad                | [Ä](#context-functions)                   | List, Boolean | List  |                 |
+| mapDyad                | [M](#context-functions)                   | List, Any     | List  |                 |
+| flatMapDyad            | [P](#context-functions)                   | List, List    | List  |                 |
+| extendEntriesDyad      | [E](#context-functions)                   | List, Number  | List  |                 |
+| groupedStringListDyad  | [G](#context-functions)                   | List, Boolean | List  |                 |
+| zipInsertionDyad       | [Z](#context-functions)                   | List, Any     | List  |                 |
 
 ## Context Functions
 
