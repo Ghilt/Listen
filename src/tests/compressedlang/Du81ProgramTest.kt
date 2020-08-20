@@ -875,5 +875,27 @@ internal class Du81ProgramTest {
         assertEquals("2, 3, 1", program.getCommaSeparatedResult())
     }
 
+    @Test
+    fun `take while not zero`() {
+        val source = "T=0"
+        val input = listOf(0, 0, 0, 1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("0, 0, 0", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `drop while zero`() {
+        val source = "D=0"
+        val input = listOf(0, 0, 0, 1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("1, 2, 3", program.getCommaSeparatedResult())
+    }
+
     // a context triad. Maybe an if-else built in triad
 }

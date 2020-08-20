@@ -1,10 +1,14 @@
 package compressedlang
 
+import compressedlang.OutputMode.*
 import java.nio.file.Files
 import java.nio.file.Paths
 
 class InterpreterFlagManager(args: Array<String>) {
 
+    private val FLAG_OUTPUT_MODE_COMMA_SEPARATED_LIST = "-l"
+    private val FLAG_OUTPUT_MODE_FIRST_ELEMENT = "-a"
+    private val FLAG_OUTPUT_MODE_JUST_LAST_ELEMENT = "-o"
     private val FLAG_FILE_INPUT = "-f"
     private val FLAG_PROGRAM_FROM_COMMAND_LINE = "-c"
     private val FLAG_INPUT_LIST_SEPARATOR = "-s" // Default is ','
@@ -12,6 +16,10 @@ class InterpreterFlagManager(args: Array<String>) {
     var program: String? = null
     val inputs = mutableListOf<List<Any>>()
     private var separator = ","
+    private var _outputMode = STRING
+
+    val outputMode
+        get() = _outputMode
 
     init {
 
@@ -26,6 +34,9 @@ class InterpreterFlagManager(args: Array<String>) {
                 FLAG_FILE_INPUT -> ::consumeFileInput
                 FLAG_PROGRAM_FROM_COMMAND_LINE -> ::consumeProgramDirectly
                 FLAG_INPUT_LIST_SEPARATOR -> ::consumeListSeparator
+                FLAG_OUTPUT_MODE_COMMA_SEPARATED_LIST -> consumeOutputMode(COMMA_SEPARATED_LIST)
+                FLAG_OUTPUT_MODE_FIRST_ELEMENT -> consumeOutputMode(FIRST_ELEMENT)
+                FLAG_OUTPUT_MODE_JUST_LAST_ELEMENT -> consumeOutputMode(LAST_ELEMENT)
                 else -> consumeDirectly(args[index])
             }
         }
@@ -51,7 +62,7 @@ class InterpreterFlagManager(args: Array<String>) {
 
     private fun readFileIntoString(arg: String): String {
         val stream = Files.newInputStream(Paths.get(arg))
-        var fileString = ""
+        var fileString: String
         stream.buffered().reader().use { reader ->
             fileString = reader.readText()
         }
@@ -69,6 +80,11 @@ class InterpreterFlagManager(args: Array<String>) {
         } else {
             addInput(arg)
         }
+        return this::doNotConsume
+    }
+
+    private fun consumeOutputMode(flagArg: OutputMode): (String) -> Boolean {
+        _outputMode = flagArg
         return this::doNotConsume
     }
 
@@ -90,3 +106,5 @@ class InterpreterFlagManager(args: Array<String>) {
         inputs.add(elements)
     }
 }
+
+enum class OutputMode { STRING, COMMA_SEPARATED_LIST, FIRST_ELEMENT, LAST_ELEMENT }

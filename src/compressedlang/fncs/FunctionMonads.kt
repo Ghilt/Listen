@@ -26,7 +26,7 @@ val listByIndexMonad = Monad(
     inputs = listOf(TYPE.NUMBER),
     output = TYPE.LIST_TYPE,
     contextKey = ContextKey.LIST_BY_INDEX, // TODO possible refactor that this monad do not deal with the actual index
-    precedence = Precedence.HIGH // TODO need to fix precedences -> Int
+    precedence = Precedence.HIGHEST // TODO need to fix precedences -> Int
 ) { list: List<*> -> list }
 
 val sumMonad = Monad(

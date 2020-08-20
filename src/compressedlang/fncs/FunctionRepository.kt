@@ -110,6 +110,8 @@ class FunctionRepository {
         'F' to filterDyad,
         'S' to filterSectionedDyad,
         'N' to filterWithNeighborsDyad,
+        'D' to dropWhileDyad,
+        'T' to takeWhileDyad,
 
         'A' to allDyad,
         'Ä' to anyDyad,

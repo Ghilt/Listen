@@ -55,6 +55,20 @@ val filterWithNeighborsDyad = ContextDyad(
         .map { indexed -> indexed.value }
 }
 
+val dropWhileDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Boolean>, _ ->
+    data.withIndex().dropWhile { (i, _) -> preCalc[i] }.map { it.value }
+}
+
+val takeWhileDyad = ContextDyad(
+    inputs = listOf(TYPE.LIST_TYPE, TYPE.BOOL),
+    output = TYPE.LIST_TYPE,
+) { data: List<Any>, preCalc: List<Boolean>, _ ->
+    data.withIndex().takeWhile { (i, _) -> preCalc[i] }.map { it.value }
+}
+
 val mapDyad = ContextDyad(
     inputs = listOf(TYPE.LIST_TYPE, TYPE.ANY),
     output = TYPE.LIST_TYPE,

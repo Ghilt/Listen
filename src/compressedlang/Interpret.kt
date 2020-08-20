@@ -1,5 +1,8 @@
 package compressedlang
 
+import tests.getCommaSeparatedResult
+import tests.getResultAsFirstElement
+import tests.getResultAsLastElement
 import tests.getResultAsString
 import java.lang.IllegalArgumentException
 
@@ -15,6 +18,15 @@ fun main(args: Array<String>) {
     val program = Du81Program(source, tokens, arguments.inputs)
     program.runForInput()
 
-    println(program.getResultAsString())
+    println(getOutput(program, arguments.outputMode))
+}
+
+fun getOutput(program: Du81Program, mode: OutputMode): String{
+    return when (mode){
+        OutputMode.COMMA_SEPARATED_LIST -> program.getCommaSeparatedResult()
+        OutputMode.STRING -> program.getResultAsString()
+        OutputMode.FIRST_ELEMENT -> program.getResultAsFirstElement()
+        OutputMode.LAST_ELEMENT -> program.getResultAsLastElement()
+    }
 }
 

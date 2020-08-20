@@ -1,9 +1,6 @@
 package tests.compressedlang
 
-import compressedlang.InterpreterFlagManager
-import compressedlang.ParsedNumber
-import compressedlang.ParsedStringLiteral
-import compressedlang.lex
+import compressedlang.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -44,6 +41,32 @@ internal class Du81LexerTest {
         assertEquals(listOf(1, 2, 3, 4), manager.inputs[0])
     }
 
+    @Test
+    fun `flag manager handles output mode comma separated`() {
+        val args = listOf("-c", "Mv", "1,2", "-l").toTypedArray()
+
+        val manager = InterpreterFlagManager(args)
+
+        assertEquals(OutputMode.COMMA_SEPARATED_LIST, manager.outputMode)
+    }
+
+    @Test
+    fun `flag manager handles output mode first element`() {
+        val args = listOf("-c", "Mv", "1,2", "-a").toTypedArray()
+
+        val manager = InterpreterFlagManager(args)
+
+        assertEquals(OutputMode.FIRST_ELEMENT, manager.outputMode)
+    }
+
+    @Test
+    fun `flag manager handles output mode last element`() {
+        val args = listOf("-c", "Mv", "1,2", "-o").toTypedArray()
+
+        val manager = InterpreterFlagManager(args)
+
+        assertEquals(OutputMode.LAST_ELEMENT, manager.outputMode)
+    }
     @Test
     fun `flag managers prepares multiple inputs for program`() {
         val args = listOf("-c", "Mv", "1,2,3", "9,9,9.13").toTypedArray()

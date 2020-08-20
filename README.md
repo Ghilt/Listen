@@ -225,6 +225,8 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 | filterDyad             | [F](#context-functions)                   | List, Boolean | List  |                 |
 | filterSectionedDyad    | [S](#context-functions)                   | List, Boolean | List  |                 |
 | filterWithNeighborsDyad| [N](#context-functions)                   | List, Boolean | List  |                 |
+| dropWhileDyad          | [D](#context-functions)                   | List, Boolean | List  |                 |
+| takeWhileDyad          | [T](#context-functions)                   | List, Boolean | List  |                 |
 | allDyad                | [A](#context-functions)                   | List, Boolean | List  |                 |
 | anyDyad                | [Ä](#context-functions)                   | List, Boolean | List  |                 |
 | mapDyad                | [M](#context-functions)                   | List, Any     | List  |                 |
@@ -618,3 +620,6 @@ When you run the interpreter by default it expects a path to a file containing a
     -f read the next input from a file
     -c read program directly from command line
     -s change the separator for the lists going forward. The default is ','
+    -l program prints result as comma separated list instead of as a string
+    -a program prints first element of list as result
+    -o program prints last element of list as result
