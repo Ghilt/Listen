@@ -57,7 +57,9 @@ class FunctionRepository {
         '!' to notMonad,
 
         '<' to smallerThanDyad,
+        '≤' to smallerOrEqualDyad,
         '>' to largerThanDyad,
+        '≥' to largerOrEqualDyad,
         '=' to equalToDyad,
         '≠' to notEqualToDyad,
         '&' to andDyad,

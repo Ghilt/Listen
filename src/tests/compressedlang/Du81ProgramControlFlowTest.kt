@@ -288,4 +288,48 @@ internal class Du81ProgramControlFlowTest {
 
         assertEquals("    4 \n", program.getCommaSeparatedResult())
     }
+
+    @Test
+    fun `inner function in both contextless and context part is indexed correctly`() {
+        val source = "(999)M(123)"
+        val input = listOf(listOf(0, 1))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("123, 123", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `inner function in context is indexed correctly`() {
+        val source = "M(5)/(1)"
+        val input = listOf(listOf(0, 1))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("5, 5", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `inner function in context is indexed correctly many times`() {
+        val source = "M(200)/(2)/(2)/(2)"
+        val input = listOf(listOf(0, 1))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("25, 25", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `inner function in contextless part is indexed correctly`() {
+        val source = "((5)/(1)):Mp"
+        val input = listOf(listOf(0, 1))
+        val program = Du81Program(source, source.lex(), input)
+
+        program.runForInput()
+
+        assertEquals("5, 5", program.getCommaSeparatedResult())
+    }
 }

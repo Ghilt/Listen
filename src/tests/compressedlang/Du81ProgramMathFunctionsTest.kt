@@ -260,6 +260,17 @@ internal class Du81ProgramMathFunctionsTest {
     }
 
     @Test
+    fun `use toInt to get ceiling of doubles`() {
+        val source = "M§"
+        val input = listOf(-2.7, -3.4, 0.5, 1.2, 6.4999999)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("-2, -3, 1, 2, 7", program.getCommaSeparatedResult())
+    }
+
+    @Test
     fun `round double to int`() {
         val source = "Mö"
         val input = listOf(-2.7, -3.4, 0.5, 1.2, 6.4999999)

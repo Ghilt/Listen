@@ -22,7 +22,7 @@ internal class Du81ProgramGolfTest {
 
     // https://codegolf.stackexchange.com/questions/209579/rotate-a-number
     @Test
-    fun `Rotate a number golf`() {
+    fun `rotate a number`() {
         val source = "cα;θ2\$cD=0"
 
         val result = runSeveralTimesForDifferentInput(
@@ -39,6 +39,43 @@ internal class Du81ProgramGolfTest {
                 TestRun("101", listOf(110), listOf(2)),
                 TestRun("123", listOf(123), listOf(0)),
                 TestRun("9899", listOf(9998), listOf(2)),
+            )
+        )
+
+        assertAllSuccessful(result)
+    }
+
+    // https://codegolf.stackexchange.com/questions/132926/triple-balanced-numbers
+    @Test
+    fun `triple balanced numbers`() {
+//  1st attempt      val source = "cα;_0(l/3):Gi≥pö&i≤(2*p-1)öGi≠l¤2MαΣA=c"
+//  2nd attempt      val source = "cα;G(l/3):xi≥pö&i≤(2*p-1)öGi≠l¤2MαΣA=c"
+        val source = "cα;Gi≥l/3ö&i≤(2*l/3-1)öGi≠l¤2MαΣA=c"
+
+        /*
+        *  cα;                   - convert to digit list
+        *  Gi≥l/3ö&i≤(2*l/3-1)ö  - Use maths to discover start and end of middle section to group the middle number
+        *  Gi≠l¤2                - Group every item but the middle one(which is many digits combined in previous step)
+        *  MαΣ                   - Map to digit sum
+        *  A=c                   - All sums equals to first sum of list
+        */
+
+        val result = runSeveralTimesForDifferentInput(
+            source,
+            listOf(
+                TestRun("", listOf(312)),
+                TestRun("", listOf(2312)),
+                TestRun("", listOf(23123)),
+                TestRun("", listOf(231234)),
+                TestRun("", listOf(2312352)),
+                TestRun("", listOf(23123521)),
+                TestRun("", listOf(231235212)),
+                TestRun("333", listOf(333)),
+                TestRun("", listOf(343)),
+                TestRun("333", listOf(3123)),
+                TestRun("777", listOf(34725)),
+                TestRun("", listOf(456456)),
+                TestRun("666", listOf(123222321)),
             )
         )
 

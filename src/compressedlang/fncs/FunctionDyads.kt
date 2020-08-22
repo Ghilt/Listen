@@ -5,17 +5,31 @@ import kotlin.math.absoluteValue
 
 val largerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
-    precedence = Precedence.LOW,
+    precedence = Precedence.HIGH,
     inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
     output = TYPE.BOOL,
 ) { a, b -> a > b }
 
+val largerOrEqualDyad = Dyad<Double, Double, Boolean>(
+    defaultImplicitInput = valueThenIndexNilad,
+    precedence = Precedence.HIGH,
+    inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
+    output = TYPE.BOOL,
+) { a, b -> a >= b }
+
 val smallerThanDyad = Dyad<Double, Double, Boolean>(
     defaultImplicitInput = valueThenIndexNilad,
-    precedence = Precedence.LOW,
+    precedence = Precedence.HIGH,
     inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
     output = TYPE.BOOL,
 ) { a, b -> a < b }
+
+val smallerOrEqualDyad = Dyad<Double, Double, Boolean>(
+    defaultImplicitInput = valueThenIndexNilad,
+    precedence = Precedence.HIGH,
+    inputs = listOf(TYPE.NUMBER, TYPE.NUMBER),
+    output = TYPE.BOOL,
+) { a, b -> a <= b }
 
 val equalToDyad = Dyad<Any, Any, Boolean>(
     defaultImplicitInput = valueNilad,

@@ -817,7 +817,7 @@ internal class Du81ProgramTest {
 
         program.runForInput()
 
-        assertEquals("8", program.getCommaSeparatedResult())
+        assertEquals("10", program.getCommaSeparatedResult())
     }
 
     @Test
@@ -887,14 +887,25 @@ internal class Du81ProgramTest {
     }
 
     @Test
-    fun `drop while zero`() {
-        val source = "D=0"
+    fun `larger than or equal to`() {
+        val source = "F≥1"
         val input = listOf(0, 0, 0, 1, 2, 3)
         val program = Du81Program(source, source.lex(), listOf(input))
 
         program.runForInput()
 
         assertEquals("1, 2, 3", program.getCommaSeparatedResult())
+    }
+
+    @Test
+    fun `smaller than or equal to`() {
+        val source = "F≤0"
+        val input = listOf(0, 0, 0, 1, 2, 3)
+        val program = Du81Program(source, source.lex(), listOf(input))
+
+        program.runForInput()
+
+        assertEquals("0, 0, 0", program.getCommaSeparatedResult())
     }
 
     // a context triad. Maybe an if-else built in triad

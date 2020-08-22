@@ -185,7 +185,9 @@ If the `+` and `§` above have the same precedence, the `+` should be executed f
 | maxDyad                | [}](#mathematical-functions)              | Number, Number | Number |               |
 | notMonad               | [!](#boolean-functions)                   | Any            | Boolean|               |
 | smallerThanDyad        | [<](#boolean-functions)                   | Number, Number | Boolean|               |
+| smallerOrEqualDyad     | [≤](#boolean-functions)                   | Number, Number | Boolean|               |
 | largerThanDyad         | [>](#boolean-functions)                   | Number, Number | Boolean|               |
+| largerOrEqualDyad      | [≥](#boolean-functions)                   | Number, Number | Boolean|               |
 | equalToDyad            | [=](#boolean-functions)                   | Any, Any       | Boolean|               |
 | notEqualToDyad         | [≠](#boolean-functions)                   | Any, Any       | Boolean|               |
 | andDyad                | [&](#boolean-functions)                   | Any, Any       | Boolean|               |
@@ -493,6 +495,8 @@ Their default input for first input is value of current item unless stated other
 |-----------|--------|---------|
 | smallerThan | <   | Number, default is value then index  |
 | greaterThan | >   | Number, default is value then index   |
+| smallerOrEqualThan | ≤   | Number, default is value then index  |
+| greaterOrEqualThan | ≥   | Number, default is value then index   |
 | equal | =   | Any |
 | notEqual | ≠   | Any |
 | and | &   | Any |

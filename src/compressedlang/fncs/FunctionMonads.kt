@@ -3,6 +3,7 @@ package compressedlang.fncs
 import collectionlib.reduceConsecutive
 import compressedlang.*
 import kotlin.math.absoluteValue
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 import kotlin.math.sign
 
@@ -85,7 +86,7 @@ val intToDigitListMonad = Monad(
     inputs = listOf(TYPE.ANY),
     output = TYPE.LIST_TYPE,
     precedence = Precedence.HIGHEST
-) { v: Number -> v.toString().toList().map { "$it".toIntOrNull() ?: 0 } }
+) { v: Any -> v.toString().toList().map { "$it".toIntOrNull() ?: 0 } }
 
 val firstElementMonad = Monad(
     defaultImplicitInput = valueThenCurrentListNilad,
@@ -148,8 +149,7 @@ val toIntMonad = Monad(
     inputs = listOf(TYPE.ANY),
     output = TYPE.NUMBER,
     precedence = Precedence.HIGHEST
-) { v: Any -> v.toString().toIntOrNull() ?: (v as? List<*>)?.size ?: if (v == true) 1 else 0 }
-
+) { v: Any -> v.toString().toIntOrNull() ?: (v as? List<*>)?.size ?: if (v is Double) ceil(v) else null ?: if (v == true) 1 else 0 }
 
 val toUpperCaseMonad = Monad(
     defaultImplicitInput = valueNilad,

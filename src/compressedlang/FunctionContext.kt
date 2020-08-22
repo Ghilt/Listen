@@ -124,6 +124,8 @@ class FunctionContext(
             resolvedContextLessList.value as List<Any>
         }
 
+        log("Du81, Moving on to functions in context, the context less resolved were: ${resolvedContextLess.map { it.value }} and the list of the context is $listToOperateOn")
+
         val contextInputSize = (contextCreator?.inputs?.size ?: 0) - 1
 
         val valuesProvidedByContext = mutableListOf<List<ResolvedFunction>>()
@@ -136,7 +138,7 @@ class FunctionContext(
             }
 
             if (commands.any { !it.isResolved() }) throw DeveloperError("Unresolved function ${commands.joinToString()}")
-            if (commands.size != contextInputSize) throw SyntaxError("Disallowed resolution of tokens: ${commands.joinToString()}, " +
+            if (commands.size != contextInputSize) throw SyntaxError("Disallowed resolution of tokens: ${commands.joinToString() { (if (it is ResolvedFunction) it.value else it).toString() } }, " +
                     "The function ${Du81ProgramEnvironment.getDiagnosticsString(contextCreator)} " +
                     "has inputsize $contextInputSize but actual input length was: ${commands.size}")
 
@@ -219,8 +221,9 @@ class FunctionContext(
 
         if (function is InnerFunction) {
             // TODO Remove this if supporting functions creating functions
-            log("Du81, inner function ready for execution: ${functions[function.index].diagnosticsString()}")
-            val innerFuncResult = functions[function.index].execute(indexOfData)
+            val toExecute = functions[functions.size - 1 - function.index]
+            log("Du81, inner function ready for execution: ${toExecute.diagnosticsString()}")
+            val innerFuncResult = toExecute.execute(indexOfData)
             return reduceByCalculatedFunction(funcs, indexOfFunc, innerFuncResult, null, null, listOf())
         }
 
@@ -281,6 +284,10 @@ class FunctionContext(
             }
         }
         return null
+    }
+
+    fun getContextCreatorDiagnosticsString(): String {
+        return if (contextCreator != null) "(${Du.getDiagnosticsString(contextCreator)})" else ""
     }
 }
 
